@@ -17,7 +17,7 @@ if ($conn->connect_error) {
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
     $product_id = $_POST['product_id'];
     $quantity = $_POST['quantity'];
-    $new_price = $_POST['new_price'];
+    $new_price = empty($_POST['new_price']) ? null : $_POST['new_price'];
     $old_price = empty($_POST['old_price']) ? null : $_POST['old_price'];
     $production_cost = $_POST['production_cost'];
     $production_date = $_POST['production_date'];
@@ -29,7 +29,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("iidddss", $product_id, $quantity, $new_price, $old_price, $production_cost, $production_date, $expiration_date);
     if ($stmt->execute()) {
-        echo "<p>Data added successfully!</p>";
+        // After successfully inserting into product_info, insert into product_info_all table
+        $sql_all = "INSERT INTO product_info_all (product_id, new_price, old_price, production_date) 
+                    VALUES (?, ?, ?, ?)";
+        $stmt_all = $conn->prepare($sql_all);
+        $stmt_all->bind_param("ddds", $product_id, $new_price, $old_price, $production_date);
+        if ($stmt_all->execute()) {
+            echo "<p>Data added successfully!</p>";
+        } else {
+            echo "<p>Error inserting into product_info_all: " . $stmt_all->error . "</p>";
+        }
+        $stmt_all->close();
     } else {
         echo "<p>Error: " . $stmt->error . "</p>";
     }
@@ -41,28 +51,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
     $id = $_POST['id'];
     $product_id = $_POST['product_id'];
     $quantity = $_POST['quantity'];
-    $new_price = $_POST['new_price'];
+    $new_price = empty($_POST['new_price']) ? null : $_POST['new_price'];
     $production_cost = $_POST['production_cost'];
     $production_date = $_POST['production_date'];
     $expiration_date = $_POST['expiration_date'];
 
     // Get the current price before update
-    $get_current_price = "SELECT new_price FROM product_info WHERE id = ?";
+    $get_current_price = "SELECT new_price, old_price FROM product_info WHERE id = ?";
     $stmt = $conn->prepare($get_current_price);
     $stmt->bind_param("i", $id);
     $stmt->execute();
-    $stmt->bind_result($current_price);
+    $stmt->bind_result($current_price, $old_price);
     $stmt->fetch();
     $stmt->close();
 
-    // Update the old price to current price, and set the new price to the updated value
+    // Update the product in product_info table (we are just updating here)
     $sql = "UPDATE product_info SET old_price = ?, new_price = ?, quantity = ?, production_cost = ?, production_date = ?, expiration_date = ? WHERE id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ddiissi", $current_price, $new_price, $quantity, $production_cost, $production_date, $expiration_date, $id);
     if ($stmt->execute()) {
-        // Redirect to reset the form
-        header("Location: " . $_SERVER['PHP_SELF']); // Redirect to the same page
-        exit(); // Stop further code execution after redirect
+        // Insert a new record into product_info_all to keep track of the change
+        $sql_all_insert = "INSERT INTO product_info_all (product_id, new_price, old_price, production_date) 
+                           VALUES (?, ?, ?, ?)";
+        $stmt_all = $conn->prepare($sql_all_insert);
+        $stmt_all->bind_param("ddds", $product_id, $new_price, $current_price, $production_date);
+        if ($stmt_all->execute()) {
+            // Redirect to reset the form
+            header("Location: " . $_SERVER['PHP_SELF']); // Redirect to the same page
+            exit(); // Stop further code execution after redirect
+        } else {
+            echo "<p>Error inserting into product_info_all: " . $stmt_all->error . "</p>";
+        }
+        $stmt_all->close();
     } else {
         echo "<p>Error: " . $stmt->error . "</p>";
     }
@@ -123,6 +143,7 @@ if (isset($_GET['update'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Info Form</title>
+    <link rel="stylesheet" href="../product_db/product_info_style.css">
 </head>
 
 <body>
@@ -152,7 +173,7 @@ if (isset($_GET['update'])) {
         <input type="number" name="quantity" id="quantity" value="<?= $product_data ? htmlspecialchars($product_data['quantity']) : '' ?>" required><br><br>
 
         <label for="new_price">New Price:</label>
-        <input type="number" step="0.01" name="new_price" id="new_price" value="<?= $product_data ? htmlspecialchars($product_data['new_price']) : '' ?>" required><br><br>
+        <input type="number" step="0.01" name="new_price" id="new_price" value="<?= $product_data ? htmlspecialchars($product_data['new_price']) : '' ?>"><br><br>
 
         <label for="old_price">Old Price (optional):</label>
         <input type="number" step="0.01" name="old_price" id="old_price" value="<?= $product_data ? htmlspecialchars($product_data['old_price']) : '' ?>" readonly><br><br>
@@ -180,35 +201,40 @@ if (isset($_GET['update'])) {
     if ($result->num_rows > 0) {
         echo "<table border='1'>";
         echo "<tr>
-                <th>Product ID</th>
-                <th>Product Name</th>
-                <th>Category</th>
-                <th>Quantity</th>
-                <th>New Price</th>
-                <th>Old Price</th>
-                <th>Production Date</th>
-                <th>Expiration Date</th>
-                <th>Actions</th>
-              </tr>";
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th>Quantity</th>
+                    <th>New Price</th>
+                    <th>Old Price</th>
+                    <th>Production Date</th>
+                    <th>Expiration Date</th>
+                    <th>Update</th>
+                    <th>Delete</th>
+                </tr>";
         while ($row = $result->fetch_assoc()) {
             echo "<tr>
                     <td>" . htmlspecialchars($row['product_id']) . "</td>
                     <td>" . htmlspecialchars($row['product_name']) . "</td>
                     <td>" . htmlspecialchars($row['category']) . "</td>
                     <td>" . htmlspecialchars($row['quantity']) . "</td>
-                    <td>" . htmlspecialchars($row['new_price']) . "</td>
+                    <td>" . (is_null($row['new_price']) ? "NULL" : htmlspecialchars($row['new_price'])) . "</td>
                     <td>" . (is_null($row['old_price']) ? "NULL" : htmlspecialchars($row['old_price'])) . "</td>
                     <td>" . htmlspecialchars($row['production_date']) . "</td>
                     <td>" . htmlspecialchars($row['expiration_date']) . "</td>
                     <td>
-                        <a href='?update=" . $row['id'] . "'>Update</a> | 
-                        <a href='?delete=" . $row['id'] . "'>Delete</a>
+                        <a href='?update=" . $row['id'] . "'>Edit</a> 
+                        
+                    </td>
+                    <td>
+                        <a href='?delete=" . $row['id'] . "' onclick=\"return confirm('Are you sure?');\">Delete</a>
+                        
                     </td>
                   </tr>";
         }
         echo "</table>";
     } else {
-        echo "<p>No data available.</p>";
+        echo "<p>No data found.</p>";
     }
     ?>
 
@@ -217,6 +243,6 @@ if (isset($_GET['update'])) {
 </html>
 
 <?php
-// Close database connection
+// Close connection
 $conn->close();
 ?>

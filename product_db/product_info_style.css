@@ -1,0 +1,140 @@
+/* General Page Styling */
+body {
+ font-family: Arial, sans-serif;
+ background-color: #f4f4f9;
+ color: #333;
+ margin: auto;
+ padding: 0;
+ width: 90%;
+ text-align: center;
+}
+
+h1 {
+ text-align: center;
+ color: #333;
+ font-size: 2.5em;
+ margin-bottom: 20px;
+ text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+ /* Text shadow for the header */
+}
+
+/* Form container */
+form {
+ background-color: #fff;
+ padding: 20px;
+ margin: 20px auto;
+ max-width: 600px;
+ border-radius: 10px;
+ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 16px rgba(0, 0, 0, 0.1);
+ transition: box-shadow 0.3s ease;
+}
+
+/* Table styling */
+table {
+ width: 100%;
+ border-collapse: collapse;
+ margin: 20px 0;
+ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+table th,
+table td {
+ padding: 12px;
+ text-align: left;
+ border: 1px solid #ddd;
+}
+
+table th {
+ background-color: #f8f8f8;
+ color: #333;
+ font-weight: bold;
+}
+
+table tr:nth-child(even) {
+ background-color: #f2f2f2;
+}
+
+table tr:hover {
+ background-color: #f1f1f1;
+ box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Form input and select fields */
+input[type="number"],
+input[type="date"],
+select,
+button {
+ width: 100%;
+ padding: 12px;
+ margin: 10px 0;
+ border: 1px solid #ccc;
+ border-radius: 5px;
+ box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+ font-size: 1em;
+ background-color: #fff;
+ transition: box-shadow 0.3s ease, border 0.3s ease;
+}
+
+/* Focus effects */
+input[type="number"]:focus,
+input[type="date"]:focus,
+select:focus,
+button:focus {
+ border-color: #6c63ff;
+ box-shadow: 0 0 8px rgba(108, 99, 255, 0.4);
+ outline: none;
+}
+
+/* Button Styling */
+button {
+ background-color: #6c63ff;
+ color: #fff;
+ border: none;
+ cursor: pointer;
+ font-size: 1.1em;
+ border-radius: 5px;
+ padding: 12px;
+ box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+ transition: background-color 0.3s, box-shadow 0.3s ease;
+}
+
+button:hover {
+ background-color: #5753d1;
+ box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Hover effect for actions in table */
+a {
+ color: #6c63ff;
+ text-decoration: none;
+ font-weight: bold;
+ transition: color 0.3s ease;
+}
+
+a:hover {
+ color: #4a40cc;
+ text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Card-like hover effect for rows */
+tr:hover td {
+ background-color: #f9f9f9;
+ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Shadow for confirmation and alert messages */
+p {
+ text-align: center;
+ font-size: 1.2em;
+ font-weight: bold;
+ color: #333;
+ text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+p.error {
+ color: red;
+}
+
+p.success {
+ color: green;
+}
