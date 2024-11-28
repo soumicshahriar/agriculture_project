@@ -1,12 +1,6 @@
 <?php
-// Database credentials
-$host = "localhost"; // Replace with your database host
-$username = "root"; // Replace with your database username
-$password = ""; // Replace with your database password
-$database = "agriculture_product_data"; // Replace with your database name
-
-// Connect to the database
-$conn = new mysqli($host, $username, $password, $database);
+// Include the database connection file
+include('../config/connect.php');
 
 // Check connection
 if ($conn->connect_error) {

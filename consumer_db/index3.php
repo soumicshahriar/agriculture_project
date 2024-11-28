@@ -1,7 +1,7 @@
 <?php
+
 // Include the database connection file
 include('../config/connect.php');
-
 // Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -26,18 +26,6 @@ $sql = "SELECT
 
 $result = $conn->query($sql);
 
-// Fetch the data for the specific product to update
-$product_data = null;
-if (isset($_GET['update'])) {
-    $id = $_GET['update'];
-    $sql = "SELECT * FROM product_info WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-    $product_data = $stmt->get_result()->fetch_assoc();
-    $stmt->close();
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -53,11 +41,11 @@ if (isset($_GET['update'])) {
         let cartItems = [];
 
         // Add item to the cart
-        function addToCart(product_id, product_name, category, price) {
+        function addToCart(product_id, product_name, category, price, availableQuantity) {
             const quantity = document.getElementById('quantity_' + product_id).value;
 
             // Validate quantity
-            if (quantity > 0) {
+            if (quantity > 0 && quantity <= availableQuantity) {
                 const total_price = price * quantity;
                 const purchaseDate = new Date().toLocaleDateString(); // Get current date
 
@@ -86,7 +74,7 @@ if (isset($_GET['update'])) {
                 // Update the total price of the cart
                 updateTotalPrice(total_price);
             } else {
-                alert("Please select a quantity greater than 0.");
+                alert("Please select a quantity greater than 0 and less than or equal to the available stock.");
             }
         }
 
@@ -163,7 +151,7 @@ if (isset($_GET['update'])) {
                     <input type='number' id='quantity_" . $row['product_id'] . "' min='1' max='" . $row['quantity'] . "' value='1'/>
                 </td>
                 <td>
-                    <button onclick='addToCart(" . $row['product_id'] . ", \"" . addslashes($row['product_name']) . "\", \"" . addslashes($row['category']) . "\", " . $row['new_price'] . ")'>Add to Cart</button>
+                    <button onclick='addToCart(" . $row['product_id'] . ", \"" . addslashes($row['product_name']) . "\", \"" . addslashes($row['category']) . "\", " . $row['new_price'] . ", " . $row['quantity'] . ")'>Add to Cart</button>
                 </td>
               </tr>";
         }
