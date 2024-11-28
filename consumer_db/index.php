@@ -55,45 +55,72 @@ if (isset($_GET['update'])) {
 
   // Add item to the cart
   function addToCart(product_id, product_name, category, price) {
-   const quantity = document.getElementById('quantity_' + product_id).value;
+   const quantity = parseInt(document.getElementById('quantity_' + product_id).value);
 
    // Validate quantity
    if (quantity > 0) {
-    const total_price = price * quantity;
-    const purchaseDate = new Date().toLocaleDateString(); // Get current date
+     // Check if product already exists in cart
+     const existingItem = cartItems.find(item => item.product_id === product_id);
+     
+     if (existingItem) {
+       // Update existing item quantity and total price
+       const oldTotal = existingItem.total_price;
+       existingItem.quantity = parseInt(existingItem.quantity) + quantity;
+       existingItem.total_price = price * existingItem.quantity;
+       
+       // Update the row in the table
+       const cartTable = document.getElementById("cartTable");
+       for (let i = 0; i < cartTable.rows.length; i++) {
+         if (cartTable.rows[i].cells[0].innerHTML === product_name) {
+           cartTable.rows[i].cells[2].innerHTML = existingItem.quantity;
+           cartTable.rows[i].cells[4].innerHTML = existingItem.total_price;
+           break;
+         }
+       }
+       
+       // Update total price (remove old total and add new total)
+       updateTotalPrice(-oldTotal + existingItem.total_price);
+     } else {
+       // Add new item to cart (existing code for new items)
+       const total_price = price * quantity;
+       const purchaseDate = new Date().toLocaleDateString();
 
-    // Add item to cartItems array
-    cartItems.push({
-     product_id: product_id,
-     product_name: product_name,
-     category: category,
-     quantity: quantity,
-     price: price,
-     total_price: total_price,
-     purchase_date: purchaseDate // Pass the purchase date here
-    });
+       cartItems.push({
+         product_id: product_id,
+         product_name: product_name,
+         category: category,
+         quantity: quantity,
+         price: price,
+         total_price: total_price,
+         purchase_date: purchaseDate
+       });
 
-    // Create a new row with the product details
-    const cartTable = document.getElementById("cartTable");
-    const newRow = cartTable.insertRow(cartTable.rows.length);
-    newRow.insertCell(0).innerHTML = product_name;
-    newRow.insertCell(1).innerHTML = category;
-    newRow.insertCell(2).innerHTML = quantity;
-    newRow.insertCell(3).innerHTML = price;
-    newRow.insertCell(4).innerHTML = total_price;
-    newRow.insertCell(5).innerHTML = purchaseDate; // Display the purchase date
-    newRow.insertCell(6).innerHTML = '<button onclick="removeFromCart(this, ' + total_price + ')">Remove</button>';
+       const cartTable = document.getElementById("cartTable");
+       const newRow = cartTable.insertRow(cartTable.rows.length);
+       newRow.insertCell(0).innerHTML = product_name;
+       newRow.insertCell(1).innerHTML = category;
+       newRow.insertCell(2).innerHTML = quantity;
+       newRow.insertCell(3).innerHTML = price;
+       newRow.insertCell(4).innerHTML = total_price;
+       newRow.insertCell(5).innerHTML = purchaseDate;
+       newRow.insertCell(6).innerHTML = '<button onclick="removeFromCart(this, ' + total_price + ')">Remove</button>';
 
-    // Update the total price of the cart
-    updateTotalPrice(total_price);
+       updateTotalPrice(total_price);
+     }
    } else {
-    alert("Please select a quantity greater than 0.");
+     alert("Please select a quantity greater than 0.");
    }
   }
 
   // Remove item from the cart
   function removeFromCart(button, itemPrice) {
    const row = button.parentNode.parentNode;
+   const productName = row.cells[0].innerHTML;
+   
+   // Remove item from cartItems array
+   cartItems = cartItems.filter(item => item.product_name !== productName);
+   
+   // Remove row from table
    row.parentNode.removeChild(row);
 
    // Update the total price
@@ -161,7 +188,9 @@ if (isset($_GET['update'])) {
                 <td>" . htmlspecialchars($row['quantity']) . "</td>
                 <td>" . (is_null($row['new_price']) ? "NULL" : htmlspecialchars($row['new_price'])) . "</td>
                 <td>
+                 
                     <input type='number' id='quantity_" . $row['product_id'] . "' min='1' max='" . $row['quantity'] . "' value='1'/>
+                   
                 </td>
                 <td>
                     <button onclick='addToCart(" . $row['product_id'] . ", \"" . addslashes($row['product_name']) . "\", \"" . addslashes($row['category']) . "\", " . $row['new_price'] . ")'>Add to Cart</button>
