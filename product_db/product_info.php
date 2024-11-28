@@ -119,7 +119,8 @@ $sql = "SELECT
         FROM 
             PRODUCT p
         LEFT JOIN 
-            product_info pi ON p.product_id = pi.product_id";
+            product_info pi ON p.product_id = pi.product_id
+            ORDER BY p.product_id";
 $result = $conn->query($sql);
 
 // Fetch the data for the specific product to update
