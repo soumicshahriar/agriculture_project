@@ -39,6 +39,7 @@ $result = $conn->query($sql);
     <script>
         let totalCartPrice = 0;
         let cartItems = [];
+        //bjjkgyugihuoijoijoij
 
         // Add item to the cart
         function addToCart(product_id, product_name, category, price, availableQuantity) {
