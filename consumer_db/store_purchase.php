@@ -4,6 +4,7 @@ include('../config/connect.php');
 
 // Enable error reporting for debugging
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+//gitnb pill 
 
 // Get the JSON data sent from the frontend
 $data = json_decode(file_get_contents('php://input'), true);
