@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 30, 2024 at 01:33 PM
+-- Generation Time: Nov 30, 2024 at 09:31 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -130,7 +130,7 @@ CREATE TABLE `cropstable` (
 --
 
 INSERT INTO `cropstable` (`id`, `warehouse_manager_employee_id`, `season`, `region`, `quantity`, `price`, `totalPrice`, `inventory`, `storage`, `logistics`, `crop_id`) VALUES
-(0, 5, 'Summer', 'Dhaka', 150, 1000.00, 150000.00, 'medium', 'cold_storage', 'road', 1);
+(0, 5, 'Summer', 'Dhaka', 100, 110.00, 11000.00, 'medium', 'dry_warehouse', 'road', 6);
 
 -- --------------------------------------------------------
 
@@ -580,11 +580,11 @@ CREATE TABLE `seedstable` (
 --
 
 INSERT INTO `seedstable` (`id`, `warehouse_manager_employee_id`, `season`, `region`, `quantity`, `price`, `totalPrice`, `inventory`, `storage`, `logistics`, `seed_id`) VALUES
-(13, 4, 'Summer', 'Dhaka', 100, 80.00, 8000.00, 'low', 'cold_storage', 'road', 8),
-(14, 4, 'Summer', 'Dhaka', 100, 80.00, 8000.00, 'low', 'cold_storage', 'road', 11),
+(13, 4, 'Summer', 'Dhaka', 200, 80.00, 16000.00, 'low', 'cold_storage', 'road', 8),
+(14, 4, 'Summer', 'Dhaka', 100, 100.00, 10000.00, 'low', 'cold_storage', 'road', 11),
 (15, 5, 'Summer', 'Dhaka', 10, 25.00, 250.00, 'low', 'cold_storage', 'rail', 9),
-(16, 4, 'Summer', 'Dhaka', 20, 45.00, 900.00, 'low', 'cold_storage', 'road', 3),
-(17, 4, 'Summer', 'Dhaka', 80, 25.00, 2000.00, 'low', 'cold_storage', 'road', 3);
+(16, 4, 'Summer', 'Dhaka', 80, 45.00, 3600.00, 'low', 'cold_storage', 'road', 3),
+(18, 4, 'Summer', 'Dhaka', 110, 40.00, 4400.00, 'medium', 'cold_storage', 'road', 6);
 
 -- --------------------------------------------------------
 
@@ -876,7 +876,7 @@ ALTER TABLE `seeds`
 -- AUTO_INCREMENT for table `seedstable`
 --
 ALTER TABLE `seedstable`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `warehouse_managers`

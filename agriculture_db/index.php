@@ -72,18 +72,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["update_crop"])) {
 }
 
 // Delete crop from cropstable
-if (isset($_GET["delete_crop"])) {
-        $cropID = $_GET["delete_crop"];
+if (isset($_GET['delete_crop'])) {
+        $cropID = $_GET['delete_crop'];
 
-        $sql = "DELETE FROM cropstable WHERE id='$cropID'";
+        // Delete query to remove the crop record from the database
+        $deleteQuery = "DELETE FROM cropstable WHERE id = '$cropID'";
 
-        if ($conn->query($sql) === TRUE) {
-                header("Location: index.php"); // Refresh the page to update the table
-                exit();
+        if ($conn->query($deleteQuery) === TRUE) {
+                echo "<script>alert('crop deleted successfully.'); window.location.href='index.php';</script>";
         } else {
-                echo "Error: " . $sql . "<br>" . $conn->error;
+                echo "Error deleting record: " . $conn->error;
         }
 }
+
+
+
 
 // Fetch crops for a selected manager
 $selectedManagerID = isset($_POST['managerID']) ? $_POST['managerID'] : null;
@@ -106,7 +109,7 @@ if ($selectedManagerID) {
 
         // Fetch crops related to the selected manager
         $cropsQuery = "
-    SELECT s.crop_name, s.category, ss.quantity, ss.price, ss.totalPrice, ss.inventory, ss.storage, ss.logistics
+    SELECT ss.id, s.crop_name, s.category, ss.quantity, ss.price, ss.totalPrice, ss.inventory, ss.storage, ss.logistics
     FROM cropstable ss
     JOIN crops s ON ss.crop_id = s.crop_id
     WHERE ss.warehouse_manager_employee_id = $selectedManagerID
@@ -191,11 +194,7 @@ if ($selectedManagerID) {
                                         ?>
                                 </select><br><br>
 
-                                <!-- <label for="cropCategory">Category:</label>
-                                <select id="cropCategory" name="cropCategory" required>
-                                        <option value="">Select</option> -->
-                                <!-- Categories will be populated based on selected crop -->
-                                <!-- </select><br> -->
+
 
                                 <label for="cropSeason">Season:</label>
                                 <select id="cropSeason" name="cropSeason" required>
@@ -257,6 +256,7 @@ if ($selectedManagerID) {
                                 <button type="submit" name="add_crop" class="btn">Submit crop</button>
                         </form>
 
+
                         <!-- crop Table -->
                         <?php if ($crops && $crops->num_rows > 0): ?>
                                 <h2>crop Inventory for Manager: <?= htmlspecialchars($managerInfo['employee_name']); ?></h2>
@@ -271,6 +271,8 @@ if ($selectedManagerID) {
                                                         <th>Inventory</th>
                                                         <th>Storage</th>
                                                         <th>Logistics</th>
+                                                        <th>Update</th>
+                                                        <th>Delete</th>
                                                 </tr>
                                         </thead>
                                         <tbody>
@@ -284,6 +286,14 @@ if ($selectedManagerID) {
                                                                 <td><?= htmlspecialchars($row['inventory']); ?></td>
                                                                 <td><?= htmlspecialchars($row['storage']); ?></td>
                                                                 <td><?= htmlspecialchars($row['logistics']); ?></td>
+                                                                <td>
+                                                                        <a href="update_crop.php?id=<?= $row['id']; ?>" class="btn">Update</a>
+
+                                                                </td>
+                                                                <td>
+                                                                        <a href="?delete_crop=<?= $row['id']; ?>" class="btn" onclick="return confirm('Are you sure you want to delete this crop?')">Delete</a>
+
+                                                                </td>
                                                         </tr>
                                                 <?php endwhile; ?>
                                         </tbody>
@@ -291,6 +301,7 @@ if ($selectedManagerID) {
                         <?php else: ?>
                                 <p>No crops found for the selected manager.</p>
                         <?php endif; ?>
+
 
 
                         <script>
