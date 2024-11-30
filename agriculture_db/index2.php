@@ -1,6 +1,5 @@
 <?php
 // Database connection
-// Include the database connection file
 include('../config/connect.php');
 
 // Check connection
@@ -17,12 +16,13 @@ $managersResult = $conn->query("
 ");
 
 
-
 // Insert seed data into seedstable
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["add_seed"])) {
         $managerID = $_POST["managerIDseed"];
-        $name = $_POST["seedName"];
-        $category = $_POST["seedCategory"];
+        // $name = $_POST["seedName"];
+        // $category = $_POST["seedCategory"];
+
+        $seed = $_POST["seed_id"];
         $season = $_POST["seedSeason"];
         $region = $_POST["seedRegion"];
         $quantity = $_POST["seedQuantity"];
@@ -32,8 +32,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["add_seed"])) {
         $storage = $_POST["seedStorage"];
         $logistics = $_POST["seedLogistics"];
 
-        $sql = "INSERT INTO seedstable (warehouse_manager_employee_id, name, category, season, region, quantity, price, totalPrice, inventory, storage, logistics) 
-            VALUES ('$managerID', '$name', '$category', '$season', '$region', '$quantity', '$price', '$totalPrice', '$inventory', '$storage', '$logistics')";
+        $sql = "INSERT INTO seedstable (warehouse_manager_employee_id,  season, region, quantity, price, totalPrice, inventory, storage, logistics, seed_id) 
+            VALUES ('$managerID', '$season', '$region', '$quantity', '$price', '$totalPrice', '$inventory', '$storage', '$logistics', ' $seed')";
 
         if ($conn->query($sql) === TRUE) {
                 header("Location: index2.php"); // Refresh the page to update the table
@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["update_seed"])) {
         $logistics = $_POST["seedLogistics"];
 
         $sql = "UPDATE seedstable SET 
-         name='$name', category='$category', season='$season', region='$region', quantity='$quantity', price='$price',  totalPrice='$totalPrice',
+         name='$name', category='$category', season='$season', region='$region', quantity='$quantity', price='$price', totalPrice='$totalPrice',
          inventory='$inventory', storage='$storage', logistics='$logistics' 
          WHERE id='$seedID'";
 
@@ -90,20 +90,6 @@ $selectedManagerID = isset($_POST['managerID']) ? $_POST['managerID'] : null;
 $seeds = null;
 $managerInfo = null;
 
-// if ($selectedManagerID) {
-//         // Fetch manager information
-//         $managerQuery = "SELECT * FROM warehouse_managers WHERE warehouse_manager_employee_id = $selectedManagerID";
-//         $managerResult = $conn->query($managerQuery);
-//         if ($managerResult->num_rows > 0) {
-//                 $managerInfo = $managerResult->fetch_assoc();
-//         }
-
-
-//         // Fetch seeds related to the selected manager
-//         $seedsQuery = "SELECT * FROM seedstable WHERE warehouse_manager_employee_id = $selectedManagerID";
-//         $seeds = $conn->query($seedsQuery);
-// }
-
 if ($selectedManagerID) {
         // Fetch manager information and employee_id from employee table based on the role 'warehouse manager'
         $managerQuery = "SELECT wm.*, e.employee_id, e.employee_name AS employee_name, e.email, e.phone, e.road_no 
@@ -119,7 +105,12 @@ if ($selectedManagerID) {
         }
 
         // Fetch seeds related to the selected manager
-        $seedsQuery = "SELECT * FROM seedstable WHERE warehouse_manager_employee_id = $selectedManagerID";
+        $seedsQuery = "
+    SELECT s.seed_name, s.category, ss.quantity, ss.price, ss.totalPrice, ss.inventory, ss.storage, ss.logistics
+    FROM seedstable ss
+    JOIN seeds s ON ss.seed_id = s.seed_id
+    WHERE ss.warehouse_manager_employee_id = $selectedManagerID
+";
         $seeds = $conn->query($seedsQuery);
 }
 
@@ -131,7 +122,7 @@ if ($selectedManagerID) {
 <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>seed Management</title>
+        <title>Seed Management</title>
         <link rel="stylesheet" href="styles.css">
 
 </head>
@@ -165,59 +156,48 @@ if ($selectedManagerID) {
                         <p><strong>Phone:</strong> <?= htmlspecialchars($managerInfo['phone']); ?></p>
                 <?php endif; ?>
 
-                <!-- seeds Form -->
+                <!-- Seed Form -->
                 <div class="form-container">
                         <a href="./index.php">
                                 <button class="btn">ADD CROPS</button>
                         </a>
+                        <?php
+                        // Database connection and other code remains the same
+
+                        // Seed form part with updated functionality
+                        ?>
+                        <?php
+                        // Database connection and other code remain the same
+
+                        // Seed form part with updated functionality
+                        ?>
                         <form id="seedForm" method="POST" action="">
                                 <h2>Add Seed</h2>
                                 <label for="managerIDseed">Manager ID:</label>
                                 <input type="number" id="managerIDseed" name="managerIDseed" value="<?= $selectedManagerID; ?>" readonly required>
 
-                                <label for="seedName">Name:</label>
-                                <!-- <input type="text" id="seedName" name="seedName" placeholder="Enter seed name" required> -->
-                                <select id="seedName" name="seedName">
-                                        <option value="Wheat">Wheat</option>
-                                        <option value="Rice">Rice</option>
-                                        <option value="Corn">Corn</option>
-                                        <option value="Soybean">Soybean</option>
-                                        <option value="Barley">Barley</option>
-                                        <option value="Millet">Millet</option>
-                                        <option value="Oats">Oats</option>
-                                        <option value="Sorghum">Sorghum</option>
-                                        <option value="Sunflower">Sunflower</option>
-                                        <option value="Canola">Canola</option>
-                                        <option value="Peas">Peas</option>
-                                        <option value="Lentils">Lentils</option>
-                                        <option value="Alfalfa">Alfalfa</option>
-                                        <option value="Clover">Clover</option>
-                                        <option value="Quinoa">Quinoa</option>
-                                        <option value="Chia">Chia</option>
-                                        <option value="Flaxseed">Flaxseed</option>
-                                        <option value="Hemp">Hemp</option>
-                                        <option value="Sesame">Sesame</option>
-                                        <option value="Safflower">Safflower</option>
-                                </select>
+                                <label for="seed_id">Product ID:</label>
+                                <select name="seed_id" id="seed_id" required>
+                                        <option value="">Select Seed</option>
+                                        <?php
+                                        // Fetch product IDs and categories from the seeds table
+                                        $product_query = "SELECT seed_id, seed_name, category FROM seeds";
+                                        $product_result = $conn->query($product_query);
+                                        if ($product_result->num_rows > 0) {
+                                                while ($row = $product_result->fetch_assoc()) {
+                                                        echo "<option value='" . $row['seed_id'] . "' data-category='" . $row['category'] . "'>" . $row['seed_id'] . " - " . $row['seed_name'] . "</option>";
+                                                }
+                                        }
+                                        ?>
+                                </select><br><br>
 
-                                <label for="seedCategory">Category:</label>
-                                <!-- <input type="text" id="seedCategory" name="seedCategory" placeholder="Enter category" required> -->
+                                <!-- <label for="seedCategory">Category:</label>
                                 <select id="seedCategory" name="seedCategory" required>
-                                        <option value="">Select</option>
-                                        <option value="Grains & Cereals">Grains & Cereals</option>
-                                        <option value="Fruits">Fruits</option>
-                                        <option value="Vegetables">Vegetables</option>
-                                        <option value="Dairy Products">Dairy Products</option>
-                                        <option value="Meat & Poultry"> Meat & Poultry</option>
-                                        <option value="Seafood"> Seafood</option>
-                                        <option value=" Herbs & Spices"> Herbs & Spices</option>
-                                        <option value="Nuts & Seeds"> Nuts & Seeds</option>
-                                        <option value=" Beverages"> Beverages</option>
-                                        <option value="Oils & Fats"> Oils & Fats</option>
-                                </select><br>
+                                        <option value="">Select</option> -->
+                                <!-- Categories will be populated based on selected seed -->
+                                <!-- </select><br> -->
 
                                 <label for="seedSeason">Season:</label>
-                                <!-- <input type="text" id="seedSeason" name="seedSeason" placeholder="Enter season" required> -->
                                 <select id="seedSeason" name="seedSeason" required>
                                         <option value="Summer">Summer</option>
                                         <option value="Monsoon">Monsoon</option>
@@ -239,28 +219,16 @@ if ($selectedManagerID) {
                                         <option value="Rangpur">Rangpur</option>
                                         <option value="Mymensingh">Mymensingh</option>
                                         <option value="Comilla">Comilla</option>
-                                        <option value="Gazipur">Gazipur</option>
-                                        <option value="Narail">Narail</option>
-                                        <option value="Bogra">Bogra</option>
-                                        <option value="Jessore">Jessore</option>
-                                        <option value="Pabna">Pabna</option>
-                                        <option value="Dinajpur">Dinajpur</option>
-                                        <option value="Faridpur">Faridpur</option>
-                                        <option value="Tangail">Tangail</option>
-                                        <option value="Narayanganj">Narayanganj</option>
-                                        <option value="Jamalpur">Jamalpur</option>
-                                        <option value="Kushtia">Kushtia</option>
-                                </select><br>
+                                </select>
 
-                                <label for="seedQuantity">Quantity:</label>
-                                <input type="number" id="seedQuantity" name="seedQuantity" placeholder="Enter seed Quantity" required>
+                                <label for="seedQuantity">Quantity</label>
+                                <input type="number" id="seedQuantity" name="seedQuantity" required>
 
-                                <label for="seedPrice">Price Per Unit:</label>
-                                <input type="number" id="seedPrice" name="seedPrice" placeholder="Enter inventory count" required>
+                                <label for="seedPrice">Price per Quantity</label>
+                                <input type="number" id="seedPrice" name="seedPrice" required>
 
                                 <label for="totalPrice">Total Price:</label>
                                 <input type="number" id="totalPrice" name="totalPrice" placeholder="Total Price" readonly>
-
 
                                 <label for="seedInventory">Inventory:</label>
                                 <select id="seedInventory" name="seedInventory">
@@ -285,104 +253,117 @@ if ($selectedManagerID) {
                                         <option value="sea">Sea Freight</option>
                                         <option value="air">Air Freight</option>
                                 </select>
-                                <!-- <input type="text" id="seedLogistics" name="seedLogistics" placeholder="Enter logistics details" required> -->
 
-                                <button type="submit" name="add_seed">Add seed</button>
+                                <button type="submit" name="add_seed" class="btn">Submit Seed</button>
                         </form>
-                </div>
 
-                <script>
-                        // Function to calculate total price based on quantity and price per unit
-                        function calculateTotalPrice() {
-                                var quantity = document.getElementById('seedQuantity').value;
-                                var price = document.getElementById('seedPrice').value;
-                                var totalPriceField = document.getElementById('totalPrice');
-
-                                // Calculate total price if both quantity and price are provided
-                                if (quantity && price) {
-                                        var totalPrice = parseFloat(quantity) * parseFloat(price);
-                                        totalPriceField.value = totalPrice.toFixed(2); // Set the total price (fixed to 2 decimals)
-                                } else {
-                                        totalPriceField.value = ''; // Clear the total price if input is invalid
-                                }
-                        }
-
-                        // Add event listeners to update total price when quantity or price changes
-                        document.getElementById('seedQuantity').addEventListener('input', calculateTotalPrice);
-                        document.getElementById('seedPrice').addEventListener('input', calculateTotalPrice);
-                </script>
-
-
-                <!-- Display seeds Table -->
-                <?php if ($seeds && $seeds->num_rows > 0): ?>
-                        <h2>seeds Table for Manager ID <?= $selectedManagerID ?></h2>
-                        <table>
-                                <thead>
-                                        <tr>
-                                                <th>Name</th>
-                                                <th>Category</th>
-                                                <th>Season</th>
-                                                <th>Region</th>
-                                                <th>Quantity</th>
-                                                <th>Price Per Unit</th>
-                                                <th>Total Price</th>
-                                                <th>Inventory</th>
-                                                <th>Storage</th>
-                                                <th>Logistics</th>
-                                                <th>Update</th>
-                                                <th>Delete</th>
-                                        </tr>
-                                </thead>
-                                <tbody>
-                                        <?php while ($row = $seeds->fetch_assoc()): ?>
+                        <!-- Seed Table -->
+                        <?php if ($seeds && $seeds->num_rows > 0): ?>
+                                <h2>Seed Inventory for Manager: <?= htmlspecialchars($managerInfo['employee_name']); ?></h2>
+                                <table>
+                                        <thead>
                                                 <tr>
-                                                        <td><?= htmlspecialchars($row["name"]); ?></td>
-                                                        <td><?= htmlspecialchars($row["category"]); ?></td>
-                                                        <td><?= htmlspecialchars($row["season"]); ?></td>
-                                                        <td><?= htmlspecialchars($row["region"]); ?></td>
-                                                        <td><?= htmlspecialchars($row["quantity"]); ?></td>
-                                                        <td><?= htmlspecialchars($row["price"]); ?></td>
-                                                        <td><?= htmlspecialchars($row["totalPrice"]); ?></td>
-                                                        <td><?= htmlspecialchars($row["inventory"]); ?></td>
-                                                        <td><?= htmlspecialchars($row["storage"]); ?></td>
-                                                        <td><?= htmlspecialchars($row["logistics"]); ?></td>
-
-                                                        <td>
-                                                                <a href="seedupdate.php?seed_id=<?= $row['id']; ?>"><button class="btn">Update</button></a>
-                                                        </td>
-                                                        <!-- <td>
-        <a href="?delete_seed=<?= $row['id']; ?>" onclick="return confirm('Are you sure you want to delete this seed?')">Delete</a>
-       </td> -->
-                                                        <td>
-                                                                <a href="?delete_seed=<?= $row['id']; ?>"
-                                                                        onclick="return confirmDelete(<?= $row['id']; ?>)"><button class="btn">Delete</button></a>
-                                                        </td>
-
+                                                        <th>Seed Name</th>
+                                                        <th>Category</th>
+                                                        <th>Quantity</th>
+                                                        <th>Price</th>
+                                                        <th>Total Price</th>
+                                                        <th>Inventory</th>
+                                                        <th>Storage</th>
+                                                        <th>Logistics</th>
                                                 </tr>
-                                        <?php endwhile; ?>
-                                </tbody>
-                        </table>
-                <?php elseif ($selectedManagerID): ?>
-                        <p>No seeds found for the selected manager.</p>
-                <?php endif; ?>
+                                        </thead>
+                                        <tbody>
+                                                <?php while ($row = $seeds->fetch_assoc()): ?>
+                                                        <tr>
+                                                                <td><?= htmlspecialchars($row['seed_name']); ?></td>
+                                                                <td><?= htmlspecialchars($row['category']); ?></td>
+                                                                <td><?= htmlspecialchars($row['quantity']); ?></td>
+                                                                <td><?= htmlspecialchars($row['price']); ?></td>
+                                                                <td><?= htmlspecialchars($row['totalPrice']); ?></td>
+                                                                <td><?= htmlspecialchars($row['inventory']); ?></td>
+                                                                <td><?= htmlspecialchars($row['storage']); ?></td>
+                                                                <td><?= htmlspecialchars($row['logistics']); ?></td>
+                                                        </tr>
+                                                <?php endwhile; ?>
+                                        </tbody>
+                                </table>
+                        <?php else: ?>
+                                <p>No seeds found for the selected manager.</p>
+                        <?php endif; ?>
+
+
+                        <script>
+                                // JavaScript to update the category field automatically when a seed is selected
+                                document.getElementById('seed_id').addEventListener('change', function() {
+                                        var selectedSeed = this.options[this.selectedIndex];
+                                        var category = selectedSeed.getAttribute('data-category');
+
+                                        // Update category field
+                                        var categoryField = document.getElementById('seedCategory');
+                                        categoryField.innerHTML = ""; // Clear previous options
+                                        var newOption = document.createElement("option");
+                                        newOption.value = category;
+                                        newOption.textContent = category;
+                                        categoryField.appendChild(newOption);
+                                        categoryField.disabled = false; // Enable the category select field
+
+                                        // Reload the page only when a new item is selected
+                                        window.location.reload();
+                                });
+
+                                // Optionally: Handle page reload preservation of the previous selection
+                                window.addEventListener('load', function() {
+                                        var selectedSeedId = localStorage.getItem('seed_id');
+                                        if (selectedSeedId) {
+                                                var seedSelect = document.getElementById('seed_id');
+                                                seedSelect.value = selectedSeedId;
+
+                                                // Update category based on saved seed ID
+                                                var selectedOption = seedSelect.options[seedSelect.selectedIndex];
+                                                var category = selectedOption.getAttribute('data-category');
+                                                var categoryField = document.getElementById('seedCategory');
+                                                categoryField.innerHTML = "";
+                                                var newOption = document.createElement("option");
+                                                newOption.value = category;
+                                                newOption.textContent = category;
+                                                categoryField.appendChild(newOption);
+                                                categoryField.disabled = false;
+                                        }
+                                });
+
+                                // Save the seed_id to localStorage when it changes
+                                document.getElementById('seed_id').addEventListener('change', function() {
+                                        localStorage.setItem('seed_id', this.value);
+                                });
+                        </script>
+
+                        <script>
+                                // Function to calculate total price based on quantity and price per unit
+                                function calculateTotalPrice() {
+                                        var quantity = document.getElementById('seedQuantity').value;
+                                        var price = document.getElementById('seedPrice').value;
+                                        var totalPriceField = document.getElementById('totalPrice');
+
+                                        // Calculate total price if both quantity and price are provided
+                                        if (quantity && price) {
+                                                var totalPrice = parseFloat(quantity) * parseFloat(price);
+                                                totalPriceField.value = totalPrice.toFixed(2); // Set the total price (fixed to 2 decimals)
+                                        } else {
+                                                totalPriceField.value = ''; // Clear the total price if input is invalid
+                                        }
+                                }
+
+                                // Add event listeners to update total price when quantity or price changes
+                                document.getElementById('seedQuantity').addEventListener('input', calculateTotalPrice);
+                                document.getElementById('seedPrice').addEventListener('input', calculateTotalPrice);
+                        </script>
+
+
+                </div>
         </div>
 
-        <!-- JavaScript for Delete Confirmation and Alert -->
-        <script>
-                function confirmDelete(seedID) {
-                        if (confirm('Are you sure you want to delete this seed?')) {
-                                // Redirect to delete the seed
-                                window.location.href = "?delete_seed=" + seedID;
-                        }
-                        return false; // Prevent the default behavior
-                }
 
-                // Show alert message after deletion
-                <?php if (isset($_SESSION['delete_message'])): ?>
-                        alert('<?php echo $_SESSION['delete_message']; ?>');
-                        <?php unset($_SESSION['delete_message']); ?>
-                <?php endif; ?>
-        </script>
 </body>
 
 </html>
