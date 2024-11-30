@@ -72,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["update_crop"])) {
   $stmt->bind_param("ssssdddsssi", $name, $category, $season, $region, $quantity, $price, $totalPrice, $inventory, $storage, $logistics, $cropID);
 
   if ($stmt->execute()) {
-    header("Location: index.php"); // Redirect back to the crops list
+    header("Location: index2.php"); // Redirect back to the crops list
     exit();
   } else {
     echo "Error: " . $stmt->error;
@@ -95,10 +95,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["update_crop"])) {
   // Update the crop details
   $sql = "UPDATE cropssstable SET name=?, category=?, season=?, region=?, quantity=?, price=?, totalPrice=?,inventory=?, storage=?, logistics=? WHERE id=?";
   $stmt = $conn->prepare($sql);
-  $stmt->bind_param("ssssdddddsi", $name, $category, $season, $region, $quantity, $price, $totalPrice, $inventory, $storage, $logistics, $cropID);
+  $stmt->bind_param("ssssdddsdsi", $name, $category, $season, $region, $quantity, $price, $totalPrice, $inventory, $storage, $logistics, $cropID);
 
   if ($stmt->execute()) {
-    header("Location: index.php"); // Redirect back to the crops list
+    header("Location: index2.php"); // Redirect back to the crops list
     exit();
   } else {
     echo "Error: " . $stmt->error;
@@ -118,93 +118,29 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["update_crop"])) {
 
 <body>
   <div class="updateform-container">
-    <h1>Update Crop</h1>
-    <a href="./index.php">
+    <h1>Update crop</h1>
+    <a href="./index2.php">
       <button class="btn">Back</button>
     </a>
     <form id="cropForm" method="POST" action="">
-
-
       <label for="cropName">Name:</label>
-      <select id="cropName" name="cropName">
-        <option value="Wheat">Wheat</option>
-        <option value="Rice">Rice</option>
-        <option value="Corn">Corn</option>
-        <option value="Soybean">Soybean</option>
-        <option value="Barley">Barley</option>
-        <option value="Millet">Millet</option>
-        <option value="Oats">Oats</option>
-        <option value="Sorghum">Sorghum</option>
-        <option value="Sunflower">Sunflower</option>
-        <option value="Canola">Canola</option>
-        <option value="Peas">Peas</option>
-        <option value="Lentils">Lentils</option>
-        <option value="Alfalfa">Alfalfa</option>
-        <option value="Clover">Clover</option>
-        <option value="Quinoa">Quinoa</option>
-        <option value="Chia">Chia</option>
-        <option value="Flaxseed">Flaxseed</option>
-        <option value="Hemp">Hemp</option>
-        <option value="Sesame">Sesame</option>
-        <option value="Safflower">Safflower</option>
-      </select><br>
-      <!-- <input type="text" id="cropName" name="cropName" value="<?= htmlspecialchars($crop['name']); ?>" required><br> -->
+      <input type="text" id="cropName" name="cropName" value="<?= htmlspecialchars($crop['name']); ?>" required><br>
 
       <label for="cropCategory">Category:</label>
       <select id="cropCategory" name="cropCategory" required>
-
-        <option value="">Select</option>
-        <option value="Grains & Cereals">Grains & Cereals</option>
-        <option value="Fruits">Fruits</option>
-        <option value="Vegetables">Vegetables</option>
-        <option value="Dairy Products">Dairy Products</option>
-        <option value="Meat & Poultry"> Meat & Poultry</option>
-        <option value="Seafood"> Seafood</option>
-        <option value=" Herbs & Spices"> Herbs & Spices</option>
-        <option value="Nuts & Seeds"> Nuts & Seeds</option>
-        <option value=" Beverages"> Beverages</option>
-        <option value="Oils & Fats"> Oils & Fats</option>
-
+        <option value="Grains & Cereals" <?= ($crop['category'] == 'Grains & Cereals') ? 'selected' : ''; ?>>Grains & Cereals</option>
+        <option value="Fruits" <?= ($crop['category'] == 'Fruits') ? 'selected' : ''; ?>>Fruits</option>
+        <option value="Vegetables" <?= ($crop['category'] == 'Vegetables') ? 'selected' : ''; ?>>Vegetables</option>
+        <!-- Add more options as needed -->
       </select><br>
 
       <label for="cropSeason">Season:</label>
-      <select id="cropSeason" name="cropSeason" required>
-        <option value="Summer">Summer</option>
-        <option value="Monsoon">Monsoon</option>
-        <option value="Autumn">Autumn</option>
-        <option value="Late Autumn">Late Autumn</option>
-        <option value="Winter">Winter</option>
-        <option value="Spring">Spring</option>
-        <option value="All Year Round">All Year Round</option>
-      </select>
-      <!-- <input type="text" id="cropSeason" name="cropSeason" value="<?= htmlspecialchars($crop['season']); ?>" required><br> -->
+      <input type="text" id="cropSeason" name="cropSeason" value="<?= htmlspecialchars($crop['season']); ?>" required><br>
 
       <label for="cropRegion">Region:</label>
-      <select id="cropRegion" name="cropRegion" required>
-        <option value="Dhaka">Dhaka</option>
-        <option value="Chittagong">Chittagong</option>
-        <option value="Rajshahi">Rajshahi</option>
-        <option value="Khulna">Khulna</option>
-        <option value="Barisal">Barisal</option>
-        <option value="Sylhet">Sylhet</option>
-        <option value="Rangpur">Rangpur</option>
-        <option value="Mymensingh">Mymensingh</option>
-        <option value="Comilla">Comilla</option>
-        <option value="Gazipur">Gazipur</option>
-        <option value="Narail">Narail</option>
-        <option value="Bogra">Bogra</option>
-        <option value="Jessore">Jessore</option>
-        <option value="Pabna">Pabna</option>
-        <option value="Dinajpur">Dinajpur</option>
-        <option value="Faridpur">Faridpur</option>
-        <option value="Tangail">Tangail</option>
-        <option value="Narayanganj">Narayanganj</option>
-        <option value="Jamalpur">Jamalpur</option>
-        <option value="Kushtia">Kushtia</option>
-      </select><br>
-      <!-- <input type="text" id="cropRegion" name="cropRegion" value="<?= htmlspecialchars($crop['region']); ?>" required><br> -->
+      <input type="text" id="cropRegion" name="cropRegion" value="<?= htmlspecialchars($crop['region']); ?>" required><br>
 
-      <label for="cropQuantity">Unit(Quantity):</label>
+      <label for="cropQuantity">Quantity:</label>
       <input type="number" id="cropQuantity" name="cropQuantity" value="<?= htmlspecialchars($crop['quantity']); ?>" required><br>
 
       <label for="cropPrice">Price:</label>
@@ -218,8 +154,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["update_crop"])) {
         <option value="low">Low (Below 100 units)</option>
         <option value="medium">Medium (100-500 units)</option>
         <option value="high">High (Above 500 units)</option>
-      </select><br>
-
+      </select>
       <!-- <input type="number" id="cropInventory" name="cropInventory" value="<?= htmlspecialchars($crop['inventory']); ?>" required><br> -->
 
       <label for="cropStorage">Storage:</label>
@@ -228,13 +163,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["update_crop"])) {
         <option value="dry_warehouse">Dry Warehouse</option>
         <option value="open_yard">Open Yard</option>
       </select>
-
-      <!-- <label for="cropStorage">Storage:</label>
- <select id="cropStorage" name="cropStorage" required>
-  <option value="cold_storage" <?= ($crop['storage'] == 'cold_storage') ? 'selected' : ''; ?>>Cold Storage</option>
-  <option value="dry_warehouse" <?= ($crop['storage'] == 'dry_warehouse') ? 'selected' : ''; ?>>Dry Warehouse</option>
-  <option value="open_yard" <?= ($crop['storage'] == 'open_yard') ? 'selected' : ''; ?>>Open Yard</option>
- </select><br> -->
       <!-- <input type="text" id="cropStorage" name="cropStorage" value="<?= htmlspecialchars($crop['storage']); ?>" required><br> -->
 
       <label for="cropLogistics">Logistics:</label>
@@ -243,10 +171,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["update_crop"])) {
         <option value="rail">Rail Transport</option>
         <option value="sea">Sea Freight</option>
         <option value="air">Air Freight</option>
-      </select><br>
+      </select>
       <!-- <input type="text" id="cropLogistics" name="cropLogistics" value="<?= htmlspecialchars($crop['logistics']); ?>" required><br> -->
 
-      <button type="submit" name="update_crop">Update Crop</button>
+      <button type="submit" name="update_crop">Update crop</button>
     </form>
   </div>
 

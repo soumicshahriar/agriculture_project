@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 29, 2024 at 07:24 PM
+-- Generation Time: Nov 30, 2024 at 01:33 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -56,6 +56,81 @@ CREATE TABLE `consumer_product` (
   `product_id` int(11) NOT NULL,
   `consumer_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `crops`
+--
+
+CREATE TABLE `crops` (
+  `crop_id` int(11) NOT NULL,
+  `crop_name` varchar(100) DEFAULT NULL,
+  `category` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `crops`
+--
+
+INSERT INTO `crops` (`crop_id`, `crop_name`, `category`) VALUES
+(1, 'Wheat', 'Grain'),
+(2, 'Rice', 'Grain'),
+(3, 'Corn', 'Grain'),
+(4, 'Barley', 'Grain'),
+(5, 'Oats', 'Grain'),
+(6, 'Soybean', 'Legume'),
+(7, 'Peanut', 'Legume'),
+(8, 'Lentil', 'Legume'),
+(9, 'Chickpea', 'Legume'),
+(10, 'Pigeon Pea', 'Legume'),
+(11, 'Tomato', 'Vegetable'),
+(12, 'Carrot', 'Vegetable'),
+(13, 'Spinach', 'Vegetable'),
+(14, 'Broccoli', 'Vegetable'),
+(15, 'Lettuce', 'Vegetable'),
+(16, 'Potato', 'Vegetable'),
+(17, 'Cabbage', 'Vegetable'),
+(18, 'Onion', 'Vegetable'),
+(19, 'Garlic', 'Vegetable'),
+(20, 'Cucumber', 'Vegetable'),
+(21, 'Apple', 'Fruit'),
+(22, 'Banana', 'Fruit'),
+(23, 'Mango', 'Fruit'),
+(24, 'Grapes', 'Fruit'),
+(25, 'Orange', 'Fruit'),
+(26, 'Strawberry', 'Fruit'),
+(27, 'Watermelon', 'Fruit'),
+(28, 'Pineapple', 'Fruit'),
+(29, 'Papaya', 'Fruit'),
+(30, 'Avocado', 'Fruit');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cropstable`
+--
+
+CREATE TABLE `cropstable` (
+  `id` int(11) NOT NULL,
+  `warehouse_manager_employee_id` int(11) DEFAULT NULL,
+  `season` varchar(50) DEFAULT NULL,
+  `region` varchar(100) DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL,
+  `price` decimal(10,2) DEFAULT NULL,
+  `totalPrice` decimal(10,2) DEFAULT NULL,
+  `inventory` varchar(20) DEFAULT NULL,
+  `storage` varchar(100) DEFAULT NULL,
+  `logistics` varchar(100) DEFAULT NULL,
+  `crop_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `cropstable`
+--
+
+INSERT INTO `cropstable` (`id`, `warehouse_manager_employee_id`, `season`, `region`, `quantity`, `price`, `totalPrice`, `inventory`, `storage`, `logistics`, `crop_id`) VALUES
+(0, 5, 'Summer', 'Dhaka', 150, 1000.00, 150000.00, 'medium', 'cold_storage', 'road', 1);
 
 -- --------------------------------------------------------
 
@@ -113,7 +188,9 @@ INSERT INTO `customer_purchase_history` (`id`, `consumer_id`, `product_id`, `pro
 (20, 1, 1, 'Rice', 1, 125.00, 125.00, '2024-11-29'),
 (21, 1, 1, 'Rice', 1, 125.00, 125.00, '2024-11-29'),
 (22, 1, 2, 'Wheat', 1, 110.00, 110.00, '2024-11-29'),
-(23, 1, 2, 'Wheat', 82, 110.00, 9020.00, '2024-11-29');
+(23, 1, 2, 'Wheat', 82, 110.00, 9020.00, '2024-11-29'),
+(24, 1, 1, 'Rice', 5, 125.00, 625.00, '2024-11-30'),
+(25, 1, 1, 'Rice', 15, 125.00, 1875.00, '2024-11-30');
 
 -- --------------------------------------------------------
 
@@ -140,7 +217,11 @@ CREATE TABLE `employee` (
 INSERT INTO `employee` (`employee_id`, `employee_name`, `phone`, `email`, `road_no`, `house_no`, `hire_date`, `role`, `office_id`) VALUES
 (1, 'soumic', '01704442185', 'soumicshahriar1@gmail.com', 'Block-c, road-5, Bashundhara Residential Area', '51', '2024-11-27', 'Market Manager', 1001),
 (2, 'shahriar', '01779552185', 'shahriar1@gmail.com', 'Block-c, road-5, Bashundhara Residential Area', '7', '2024-11-27', 'Agriculture Officer', 1002),
-(3, 'mizu', '01763086924', 'mizu@gmail.com', 'Block-c, road-2, Bashundhara Residential Area', '37', '2024-11-27', 'Food Quality Officer', 1001);
+(3, 'mizu', '01763086924', 'mizu@gmail.com', 'Block-c, road-2, Bashundhara Residential Area', '37', '2024-11-27', 'Food Quality Officer', 1001),
+(4, 'rifat', '01779552185', 'rifat@gmail.com', 'Block-c, road-2, Bashundhara Residential Area', '61', '2024-11-01', 'warehouse manager', 1002),
+(5, 'neela', '01763086924', 'neela@gmail.com', 'Block-c, road-2, Bashundhara Residential Area', '50', '2024-11-01', 'warehouse manager', 1001),
+(6, 'goutom', '01704442185', 'goutom@gmail.com', 'Block-c, road-2, Bashundhara Residential Area', '7', '2024-11-08', 'warehouse manager', 1002),
+(7, 'Ayush', '01779552185', 'ayush@gmail.com', 'Block-c, road-2, Bashundhara Residential Area', '51', '2024-11-08', 'warehouse manager', 1002);
 
 -- --------------------------------------------------------
 
@@ -343,7 +424,7 @@ CREATE TABLE `product_info` (
 --
 
 INSERT INTO `product_info` (`id`, `product_id`, `quantity`, `new_price`, `old_price`, `production_cost`, `production_date`, `expiration_date`) VALUES
-(24, 1, 261, 125.00, 115.00, 100.00, '2024-11-30', '2026-11-28'),
+(24, 1, 241, 125.00, 115.00, 100.00, '2024-11-30', '2026-11-28'),
 (25, 2, 0, 110.00, 110.00, 85.00, '2024-11-25', '2024-12-07'),
 (30, 3, 71, 100.00, NULL, 95.00, '2024-11-28', '2024-12-04'),
 (32, 4, -1, 150.00, 120.00, 100.00, '2024-12-02', '2024-12-07'),
@@ -429,6 +510,85 @@ CREATE TABLE `product_warehouse_manager_agri_officer` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `seeds`
+--
+
+CREATE TABLE `seeds` (
+  `seed_id` int(11) NOT NULL,
+  `seed_name` varchar(100) NOT NULL,
+  `category` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `seeds`
+--
+
+INSERT INTO `seeds` (`seed_id`, `seed_name`, `category`) VALUES
+(1, 'Tomato', 'Vegetable '),
+(2, 'Carrot ', 'Vegetable '),
+(3, 'Sunflower', 'Flower'),
+(4, 'Cucumber', 'Vegetable '),
+(5, 'Lettuce', 'Vegetable'),
+(6, 'Lavender', 'Flower'),
+(7, 'Basil', 'Herb'),
+(8, 'Pumpkin', 'Vegetable'),
+(9, 'Corn', 'Vegetable'),
+(10, 'Marigold', 'Flower'),
+(11, 'Pea', 'Vegetable'),
+(12, 'Watermelon', 'Fruit'),
+(13, 'Zinnia', 'Flower'),
+(14, 'Radish', 'Vegetable'),
+(15, 'Strawberry', 'Fruit'),
+(16, 'Eggplant', 'Vegetable'),
+(17, 'Mint', 'Herb'),
+(18, 'Oregano', 'Herb'),
+(19, 'Garlic', 'Herb'),
+(20, 'Bell Pepper', 'Vegetable'),
+(21, 'Nasturtium', 'Flower'),
+(22, 'Broccoli', 'Vegetable'),
+(23, 'Dill', 'Herb'),
+(24, 'Chard', 'Vegetable'),
+(25, 'Poppy', 'Flower'),
+(26, 'Parsley', 'Herb'),
+(27, 'Squash', 'Vegetable'),
+(28, 'Fennel', 'Herb'),
+(29, 'Peony', 'Flower'),
+(30, 'Melon', 'Fruit');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `seedstable`
+--
+
+CREATE TABLE `seedstable` (
+  `id` int(11) NOT NULL,
+  `warehouse_manager_employee_id` int(11) DEFAULT NULL,
+  `season` varchar(50) NOT NULL,
+  `region` varchar(50) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `totalPrice` decimal(10,2) NOT NULL,
+  `inventory` varchar(11) NOT NULL,
+  `storage` varchar(255) NOT NULL,
+  `logistics` varchar(255) NOT NULL,
+  `seed_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `seedstable`
+--
+
+INSERT INTO `seedstable` (`id`, `warehouse_manager_employee_id`, `season`, `region`, `quantity`, `price`, `totalPrice`, `inventory`, `storage`, `logistics`, `seed_id`) VALUES
+(13, 4, 'Summer', 'Dhaka', 100, 80.00, 8000.00, 'low', 'cold_storage', 'road', 8),
+(14, 4, 'Summer', 'Dhaka', 100, 80.00, 8000.00, 'low', 'cold_storage', 'road', 11),
+(15, 5, 'Summer', 'Dhaka', 10, 25.00, 250.00, 'low', 'cold_storage', 'rail', 9),
+(16, 4, 'Summer', 'Dhaka', 20, 45.00, 900.00, 'low', 'cold_storage', 'road', 3),
+(17, 4, 'Summer', 'Dhaka', 80, 25.00, 2000.00, 'low', 'cold_storage', 'road', 3);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `warehouse`
 --
 
@@ -448,9 +608,41 @@ CREATE TABLE `warehouse` (
 
 CREATE TABLE `warehouse_manager` (
   `warehouse_manager_employee_id` int(11) NOT NULL,
-  `check_quality` tinyint(1) DEFAULT NULL,
-  `add_barcode_tag` tinyint(1) DEFAULT NULL
+  `name` varchar(20) NOT NULL,
+  `check_quality` varchar(50) DEFAULT NULL,
+  `add_barcode_tag` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `warehouse_manager`
+--
+
+INSERT INTO `warehouse_manager` (`warehouse_manager_employee_id`, `name`, `check_quality`, `add_barcode_tag`) VALUES
+(1, 'soumic', 'yes', 'yes'),
+(2, 'shahriar', 'yes', 'yes'),
+(3, 'mizu', 'yes', 'no');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `warehouse_managers`
+--
+
+CREATE TABLE `warehouse_managers` (
+  `warehouse_manager_employee_id` int(11) NOT NULL,
+  `employee_id` int(11) DEFAULT NULL,
+  `check_quality` varchar(3) NOT NULL,
+  `add_barcode_tag` varchar(3) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `warehouse_managers`
+--
+
+INSERT INTO `warehouse_managers` (`warehouse_manager_employee_id`, `employee_id`, `check_quality`, `add_barcode_tag`) VALUES
+(4, 4, 'yes', 'yes'),
+(5, 5, 'yes', 'yes'),
+(6, 6, 'yes', 'yes');
 
 --
 -- Indexes for dumped tables
@@ -474,6 +666,20 @@ ALTER TABLE `consumer_phone_number`
 ALTER TABLE `consumer_product`
   ADD PRIMARY KEY (`product_id`,`consumer_id`),
   ADD KEY `consumer_id` (`consumer_id`);
+
+--
+-- Indexes for table `crops`
+--
+ALTER TABLE `crops`
+  ADD PRIMARY KEY (`crop_id`);
+
+--
+-- Indexes for table `cropstable`
+--
+ALTER TABLE `cropstable`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `warehouse_manager_employee_id` (`warehouse_manager_employee_id`),
+  ADD KEY `crop_id` (`crop_id`);
 
 --
 -- Indexes for table `customers`
@@ -606,6 +812,20 @@ ALTER TABLE `product_warehouse_manager_agri_officer`
   ADD KEY `agri_officer_employee_id` (`agri_officer_employee_id`);
 
 --
+-- Indexes for table `seeds`
+--
+ALTER TABLE `seeds`
+  ADD PRIMARY KEY (`seed_id`);
+
+--
+-- Indexes for table `seedstable`
+--
+ALTER TABLE `seedstable`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `warehouse_manager_employee_id` (`warehouse_manager_employee_id`),
+  ADD KEY `fk_seed_id` (`seed_id`);
+
+--
 -- Indexes for table `warehouse`
 --
 ALTER TABLE `warehouse`
@@ -618,6 +838,13 @@ ALTER TABLE `warehouse_manager`
   ADD PRIMARY KEY (`warehouse_manager_employee_id`);
 
 --
+-- Indexes for table `warehouse_managers`
+--
+ALTER TABLE `warehouse_managers`
+  ADD PRIMARY KEY (`warehouse_manager_employee_id`),
+  ADD KEY `employee_id` (`employee_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -625,7 +852,7 @@ ALTER TABLE `warehouse_manager`
 -- AUTO_INCREMENT for table `customer_purchase_history`
 --
 ALTER TABLE `customer_purchase_history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `product_info`
@@ -638,6 +865,24 @@ ALTER TABLE `product_info`
 --
 ALTER TABLE `product_info_all`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT for table `seeds`
+--
+ALTER TABLE `seeds`
+  MODIFY `seed_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+
+--
+-- AUTO_INCREMENT for table `seedstable`
+--
+ALTER TABLE `seedstable`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
+--
+-- AUTO_INCREMENT for table `warehouse_managers`
+--
+ALTER TABLE `warehouse_managers`
+  MODIFY `warehouse_manager_employee_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables
@@ -661,6 +906,13 @@ ALTER TABLE `consumer_phone_number`
 ALTER TABLE `consumer_product`
   ADD CONSTRAINT `consumer_product_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`),
   ADD CONSTRAINT `consumer_product_ibfk_2` FOREIGN KEY (`consumer_id`) REFERENCES `customers` (`id`);
+
+--
+-- Constraints for table `cropstable`
+--
+ALTER TABLE `cropstable`
+  ADD CONSTRAINT `cropstable_ibfk_1` FOREIGN KEY (`warehouse_manager_employee_id`) REFERENCES `warehouse_managers` (`employee_id`),
+  ADD CONSTRAINT `cropstable_ibfk_2` FOREIGN KEY (`crop_id`) REFERENCES `crops` (`crop_id`);
 
 --
 -- Constraints for table `customer_purchase_history`
@@ -765,10 +1017,23 @@ ALTER TABLE `product_warehouse_manager_agri_officer`
   ADD CONSTRAINT `product_warehouse_manager_agri_officer_ibfk_3` FOREIGN KEY (`agri_officer_employee_id`) REFERENCES `agri_officer` (`agri_officer_employee_id`);
 
 --
+-- Constraints for table `seedstable`
+--
+ALTER TABLE `seedstable`
+  ADD CONSTRAINT `fk_seed_id` FOREIGN KEY (`seed_id`) REFERENCES `seeds` (`seed_id`),
+  ADD CONSTRAINT `seedstable_ibfk_1` FOREIGN KEY (`warehouse_manager_employee_id`) REFERENCES `warehouse_managers` (`warehouse_manager_employee_id`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `warehouse_manager`
 --
 ALTER TABLE `warehouse_manager`
   ADD CONSTRAINT `warehouse_manager_ibfk_1` FOREIGN KEY (`warehouse_manager_employee_id`) REFERENCES `employee` (`employee_id`);
+
+--
+-- Constraints for table `warehouse_managers`
+--
+ALTER TABLE `warehouse_managers`
+  ADD CONSTRAINT `warehouse_managers_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
