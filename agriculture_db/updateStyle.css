@@ -1,0 +1,200 @@
+/* General Reset */
+* {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Body and Global Styles */
+body {
+ background-color: #f0f0f0;
+ color: #333;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ height: 100vh;
+ padding: 20px;
+ font-size: 16px;
+}
+
+h1 {
+ font-size: 3rem;
+ color: #0057b8;
+ margin-bottom: 30px;
+ text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Form Container Styling */
+form {
+ /* background: linear-gradient(135deg, #5ed1d7, #02f2ff, #00ffe5); */
+ background-color: #ddd;
+ padding: 40px;
+ width: 100%;
+ max-width: 500px;
+ margin: auto;
+ border: 1px solid black;
+ border-radius: 12px;
+ box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+ transition: all 0.3s ease-in-out;
+}
+
+form:hover {
+ transform: scale(1.05);
+ box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+}
+
+/* Label and Input Field Styling */
+label {
+ font-size: 1.1rem;
+ font-weight: bold;
+ color: #333;
+ margin-bottom: 8px;
+ display: block;
+ text-align: left;
+}
+
+input, select {
+ width: 100%;
+ padding: 10px;
+ margin-bottom: 15px;
+ border: 2px solid #ccc;
+ border-radius: 8px;
+ background-color: #fff;
+ font-size: 1rem;
+ color: #333;
+ transition: all 0.3s ease;
+}
+
+input[type="number"]:focus,
+input[type="text"]:focus,
+select:focus {
+ border-color: #007bff;
+ background-color: #f0f8ff;
+ outline: none;
+}
+
+input[type="number"], input[type="text"], select {
+ padding: 12px 15px;
+ background-color: #f7f7f7;
+ font-size: 1rem;
+ border-radius: 8px;
+ border: 1px solid #ddd;
+ margin-bottom: 20px;
+}
+
+input[type="number"]:focus, input[type="text"]:focus, select:focus {
+ border: 2px solid #4CAF50;
+}
+
+/* Button Styling */
+button {
+ background-color: #007bff;
+ color: #fff;
+ padding: 12px 25px;
+ border: none;
+ border-radius: 50px;
+ font-size: 1.1rem;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+ background-color: #0057b8;
+ transform: translateY(-2px);
+ box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+}
+
+/* Input Field Hover Effect */
+input[type="text"]:hover,
+input[type="number"]:hover,
+select:hover {
+ border: 2px solid #0099ff;
+ background-color: #e6f7ff;
+}
+
+/* Select Dropdown Styling */
+select {
+ background-color: #fff;
+ font-size: 1rem;
+ color: #333;
+ padding: 12px 15px;
+ border-radius: 8px;
+ border: 2px solid #ccc;
+ transition: all 0.3s ease;
+}
+
+select:focus {
+ border-color: #007bff;
+ background-color: #f0f8ff;
+ outline: none;
+}
+
+/* Layout Adjustments */
+form > div {
+ margin-bottom: 20px;
+}
+
+form input[type="number"], 
+form input[type="text"],
+form select {
+ font-size: 1rem;
+ padding: 10px;
+ border-radius: 8px;
+ background-color: #f7f7f7;
+ border: 1px solid #ddd;
+ margin-bottom: 20px;
+}
+
+form label {
+ font-size: 1rem;
+ font-weight: 600;
+ margin-bottom: 5px;
+}
+
+form button {
+ width: 100%;
+ font-size: 1.2rem;
+}
+
+/* Hover effects for labels */
+form label:hover {
+ color: #007bff;
+}
+
+/* Success/Error Message Styling */
+.success-message {
+ color: #4CAF50;
+ font-weight: bold;
+ margin-top: 20px;
+}
+
+.error-message {
+ color: #f44336;
+ font-weight: bold;
+ margin-top: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+ h1 {
+   font-size: 2.5rem;
+ }
+ form {
+   padding: 30px;
+ }
+}
+
+@media (max-width: 480px) {
+ h1 {
+   font-size: 2rem;
+ }
+ form {
+   padding: 20px;
+   width: 90%;
+ }
+ button {
+   font-size: 1rem;
+ }
+}

@@ -72,18 +72,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["update_seed"])) {
 }
 
 // Delete seed from seedstable
-if (isset($_GET["delete_seed"])) {
-        $seedID = $_GET["delete_seed"];
+if (isset($_GET['delete_seed'])) {
+        $seedID = $_GET['delete_seed'];
 
-        $sql = "DELETE FROM seedstable WHERE id='$seedID'";
+        // Delete query to remove the seed record from the database
+        $deleteQuery = "DELETE FROM seedstable WHERE id = '$seedID'";
 
-        if ($conn->query($sql) === TRUE) {
-                header("Location: index2.php"); // Refresh the page to update the table
-                exit();
+        if ($conn->query($deleteQuery) === TRUE) {
+                echo "<script>alert('Seed deleted successfully.'); window.location.href='index2.php';</script>";
         } else {
-                echo "Error: " . $sql . "<br>" . $conn->error;
+                echo "Error deleting record: " . $conn->error;
         }
 }
+
+
+
 
 // Fetch seeds for a selected manager
 $selectedManagerID = isset($_POST['managerID']) ? $_POST['managerID'] : null;
@@ -106,7 +109,7 @@ if ($selectedManagerID) {
 
         // Fetch seeds related to the selected manager
         $seedsQuery = "
-    SELECT s.seed_name, s.category, ss.quantity, ss.price, ss.totalPrice, ss.inventory, ss.storage, ss.logistics
+    SELECT ss.id, s.seed_name, s.category, ss.quantity, ss.price, ss.totalPrice, ss.inventory, ss.storage, ss.logistics
     FROM seedstable ss
     JOIN seeds s ON ss.seed_id = s.seed_id
     WHERE ss.warehouse_manager_employee_id = $selectedManagerID
@@ -191,11 +194,7 @@ if ($selectedManagerID) {
                                         ?>
                                 </select><br><br>
 
-                                <!-- <label for="seedCategory">Category:</label>
-                                <select id="seedCategory" name="seedCategory" required>
-                                        <option value="">Select</option> -->
-                                <!-- Categories will be populated based on selected seed -->
-                                <!-- </select><br> -->
+                                
 
                                 <label for="seedSeason">Season:</label>
                                 <select id="seedSeason" name="seedSeason" required>
@@ -257,6 +256,7 @@ if ($selectedManagerID) {
                                 <button type="submit" name="add_seed" class="btn">Submit Seed</button>
                         </form>
 
+
                         <!-- Seed Table -->
                         <?php if ($seeds && $seeds->num_rows > 0): ?>
                                 <h2>Seed Inventory for Manager: <?= htmlspecialchars($managerInfo['employee_name']); ?></h2>
@@ -271,6 +271,8 @@ if ($selectedManagerID) {
                                                         <th>Inventory</th>
                                                         <th>Storage</th>
                                                         <th>Logistics</th>
+                                                        <th>Update</th>
+                                                        <th>Delete</th>
                                                 </tr>
                                         </thead>
                                         <tbody>
@@ -284,6 +286,14 @@ if ($selectedManagerID) {
                                                                 <td><?= htmlspecialchars($row['inventory']); ?></td>
                                                                 <td><?= htmlspecialchars($row['storage']); ?></td>
                                                                 <td><?= htmlspecialchars($row['logistics']); ?></td>
+                                                                <td>
+                                                                        <a href="update_seed.php?id=<?= $row['id']; ?>" class="btn">Update</a>
+
+                                                                </td>
+                                                                <td>
+                                                                        <a href="?delete_seed=<?= $row['id']; ?>" class="btn" onclick="return confirm('Are you sure you want to delete this seed?')">Delete</a>
+
+                                                                </td>
                                                         </tr>
                                                 <?php endwhile; ?>
                                         </tbody>
@@ -291,6 +301,7 @@ if ($selectedManagerID) {
                         <?php else: ?>
                                 <p>No seeds found for the selected manager.</p>
                         <?php endif; ?>
+
 
 
                         <script>
