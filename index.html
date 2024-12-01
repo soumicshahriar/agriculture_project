@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGRI-Style Layout</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="logo">AGRI</div>
+        <input type="text" class="search-bar" placeholder="Search">
+        <button class="search-button">Go</button>
+        <nav>
+            <a href="signup_login_db/login.html">Login</a>
+            <a href="#">Contact us</a>
+            <a href="#">Cart</a>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <section class="banner">
+            <h1>Demand and Supply analysis for Agricultural Products</h1>
+            <img src="Images/Banner.jpg" alt="">
+        </section>
+
+        <!-- New product card section -->
+        <section class="product-section">
+            <h2>Our Products</h2>
+            <div class="container">
+                <div class="card">
+                    <img src="Images/Apple.jpg" alt="Apple">
+                    <h3>Apple</h3>
+                    <p>Status: In stock</p>
+                    <p class="price">৳50</p>
+                    <button class="add-to-cart">Add to cart</button>
+                </div>
+                <div class="card">
+                    <img src="Images/Banana.jpg" alt="Banana">
+                    <h3>Banana</h3>
+                    <p>Status: Out of stock</p>
+                    <p class="price">৳30</p>
+                    <button class="add-to-cart" disabled>Add to cart</button>
+                </div>
+                <div class="card">
+                    <img src="Images/Barley.jpg" alt="Barley">
+                    <h3>Barley</h3>
+                    <p>Status: In stock</p>
+                    <p class="price">৳25</p>
+                    <button class="add-to-cart">Add to cart</button>
+                </div>
+                <div class="card">
+                    <img src="Images/Corn.jpg" alt="Corn">
+                    <h3>Corn</h3>
+                    <p>Status: In stock</p>
+                    <p class="price">৳40</p>
+                    <button class="add-to-cart">Add to cart</button>
+                </div>
+                <div class="card">
+                    <img src="Images/Potato.jpg" alt="Potato">
+                    <h3>Potato</h3>
+                    <p>Status: In stock</p>
+                    <p class="price">৳20</p>
+                    <button class="add-to-cart">Add to cart</button>
+                </div>
+                <div class="card">
+                    <img src="Images/Wheat.jpg" alt="Wheat">
+                    <h3>Wheat</h3>
+                    <p>Status: In stock</p>
+                    <p class="price">৳15</p>
+                    <button class="add-to-cart">Add to cart</button>
+                </div>
+                <div class="card">
+                    <img src="Images/Soybean.jpg" alt="Soybean">
+                    <h3>Soybean</h3>
+                    <p>Status: In stock</p>
+                    <p class="price">৳15</p>
+                    <button class="add-to-cart">Add to cart</button>
+                </div>
+                <div class="card">
+                    <img src="Images/Strawberry.jpg" alt="Strawberry">
+                    <h3>Strawberry</h3>
+                    <p>Status: In stock</p>
+                    <p class="price">৳15</p>
+                    <button class="add-to-cart">Add to cart</button>
+                </div>
+                <div class="card">
+                    <img src="Images/Rice.jpg" alt="Rice">
+                    <h3>Rice</h3>
+                    <p>Status: In stock</p>
+                    <p class="price">৳15</p>
+                    <button class="add-to-cart">Add to cart</button>
+                </div>
+                <div class="card">
+                    <img src="Images/Oats.jpg" alt="Oats">
+                    <h3>Oats</h3>
+                    <p>Status: In stock</p>
+                    <p class="price">৳15</p>
+                    <button class="add-to-cart">Add to cart</button>
+                </div>
+                <div class="card">
+                    <img src="Images/Grapes.jpg" alt="Grapes">
+                    <h3>Grapes</h3>
+                    <p>Status: In stock</p>
+                    <p class="price">৳15</p>
+                    <button class="add-to-cart">Add to cart</button>
+                </div>
+                <div class="card">
+                    <img src="Images/Carrot.jpg" alt="Carrot">
+                    <h3>Carrot</h3>
+                    <p>Status: In stock</p>
+                    <p class="price">৳15</p>
+                    <button class="add-to-cart">Add to cart</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal for SignUp/Login -->
+    <div id="cartModal" class="modal" style="display: none;" >
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3> Sign Up for Add to Cart</h3>
+            <div class="modal-buttons">
+                <a href="signup_login_db/signup.html" class="modal-btn">Sign Up</a>
+                <button id="cancelBtn" class="modal-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal functionality
+        const modal = document.getElementById("cartModal");
+        const closeBtn = document.querySelector(".close-btn");
+        const cancelBtn = document.getElementById("cancelBtn");
+        const addToCartButtons = document.querySelectorAll(".add-to-cart");
+
+        // Show modal when "Add to cart" is clicked
+        addToCartButtons.forEach(button => {
+            button.addEventListener("click", function() {
+                modal.style.display = "block";
+            });
+        });
+
+        // Close modal when close button is clicked
+        closeBtn.addEventListener("click", function() {
+            modal.style.display = "none";
+        });
+
+        // Close modal when cancel button is clicked
+        cancelBtn.addEventListener("click", function() {
+            modal.style.display = "none";
+        });
+
+        // Close modal if user clicks outside the modal content
+        window.addEventListener("click", function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        });
+    </script>    
+</body>
+</html>

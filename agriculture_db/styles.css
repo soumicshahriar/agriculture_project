@@ -1,0 +1,281 @@
+* {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+
+}
+
+body {
+ width: 90%;
+ margin: auto;
+ text-align: center;
+ padding: 2%;
+}
+
+
+
+/* table style */
+table {
+ width: 100%;
+ border-collapse: collapse;
+ background: linear-gradient(270deg, #5ed1d7, #6379bb, #0df3aa, #185a9d, #f7d74a);
+ background-size: 400% 400%;
+ margin-bottom: 20px;
+
+
+}
+
+th,
+td {
+ background: linear-gradient(270deg, #5ed1d7, #003ef8, #000000, #101011, #00f8db);
+ background-size: 400% 400%;
+ border: 1px solid #ddd;
+ padding: 8px;
+ color: white;
+ text-align: center;
+}
+
+th {
+ background-color: #f2f2f2;
+}
+
+.btn {
+ padding: 2%;
+ border: 5px solid gray;
+ border-block-color: #ffffff;
+ border-radius: 50%;
+ background-color: transparent;
+
+}
+
+.btn:hover {
+ padding: 2%;
+ background-color: white;
+ border: 5px solid gray;
+ border-block-color: #03fbff;
+ border-radius: 50%;
+ transform: scale(1.02);
+ box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+
+}
+
+
+
+/* crop form */
+
+.form-container {
+ display: flex;
+ flex-direction: column;
+ text-align: center;
+ border-radius: 20%;
+ border: 5px solid gray;
+ border-block-color: #03fbff;
+ background: linear-gradient(270deg, #5ed1d7, #02f2ff, #00ffe5, #0dffeb, #00f8db);
+ background-size: 400% 400%;
+ width: 70%;
+ padding: 1%;
+ margin: auto;
+ margin-top: 5%;
+ margin-bottom: 5%;
+
+}
+.updateform-container {
+ display: flex;
+ flex-direction: column;
+ text-align: center;
+ border-radius: 20%;
+ border: 1px solid gray;
+ border-block-color: #03fbff;
+ /* background: linear-gradient(270deg, #5ed1d7, #02f2ff, #00ffe5, #0dffeb, #00f8db); */
+ /* background-size: 400% 400%; */
+ width: 80%;
+ padding: 1%;
+ margin: auto;
+ gap: 2%;
+ margin-top: 5%;
+ margin-bottom: 5%;
+
+}
+
+.form-container:hover {
+ transform: scale(1.02);
+ box-shadow: 0 2px 18px rgba(0, 0, 0, 0.15);
+ /* Slightly stronger shadow on hover */
+}
+
+#seedForm,
+#cropForm {
+ border-radius: 20%;
+ border: 5px solid gray;
+ border-block-color: #03fbff;
+ /* background: linear-gradient(270deg, #5ed1d7, #003ef8, #000000, #101011, #00f8db); */
+ background-size: 400% 400%;
+ width: 100%;
+ padding: 5%;
+
+
+}
+
+#form {
+ border-radius: 20%;
+ border: 5px solid gray;
+ border-block-color: #03fbff;
+ /* background: linear-gradient(270deg, #5ed1d7, #003ef8, #000000, #101011, #00f8db); */
+ background-size: 400% 400%;
+ width: 100%;
+ padding: 5%;
+
+
+}
+
+
+#seedName option {
+ background-color: #b4b4bd;
+}
+
+
+#cropName option {
+ background-color: #b4b4bd;
+}
+
+
+#seedForm label {
+ display: block;
+ margin-top: 10px;
+}
+
+#cropForm label {
+ display: block;
+ margin-top: 10px;
+}
+
+#seedForm input,
+#seedForm select {
+ display: flex;
+ background: linear-gradient(to bottom, rgb(128, 129, 135), rgb(0, 0, 0));
+ /* border-radius: 5px solid gray; */
+ font-size: 20px;
+ color: white;
+ padding: 5px;
+ width: 100%;
+ justify-items: center;
+ text-align: center;
+ /* border-radius: 45%; */
+ /* box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19); */
+}
+
+#seedForm input:hover {
+ background: linear-gradient(270deg, #02f2ff, #02f2ff, #02f2ff, #02f2ff, #02f2ff);
+ color: black;
+ background-color: gray;
+ border: 2px solid #03fbff;
+ border-block-color: gray;
+ /* border-radius: 50%; */
+ text-align: center;
+}
+
+#seedForm select:hover {
+ background: linear-gradient(270deg, #02f2ff, #02f2ff, #02f2ff, #02f2ff, #02f2ff);
+ color: black;
+ background-color: gray;
+ border: 2px solid #03fbff;
+ border-block-color: gray;
+ /* border-radius: 50%; */
+ text-align: center;
+}
+
+#cropForm input,
+#cropForm select {
+ display: flex;
+ background: linear-gradient(to bottom, rgb(128, 129, 135), rgb(0, 0, 0));
+ /* border-radius: 5px solid gray; */
+ font-size: 20px;
+ color: white;
+ padding: 5px;
+ width: 100%;
+ justify-items: center;
+ text-align: center;
+ /* border-radius: 45%; */
+ /* box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19); */
+}
+
+#cropForm input:hover {
+ background: linear-gradient(270deg, #02f2ff, #02f2ff, #02f2ff, #02f2ff, #02f2ff);
+ color: black;
+ background-color: gray;
+ border: 2px solid #03fbff;
+ border-block-color: gray;
+ /* border-radius: 50%; */
+ text-align: center;
+}
+
+#cropForm select:hover {
+ background: linear-gradient(270deg, #02f2ff, #02f2ff, #02f2ff, #02f2ff, #02f2ff);
+ color: black;
+ background-color: gray;
+ border: 2px solid #03fbff;
+ border-block-color: gray;
+ /* border-radius: 50%; */
+ text-align: center;
+}
+
+
+/* form animation */
+/* Fade-in animation for form */
+/* @keyframes fadeIn {
+ from {
+  opacity: 0;
+  transform: translateY(20px);
+ }
+
+ to {
+  opacity: 1;
+  transform: translateY(0);
+ }
+} */
+
+form {
+ /* animation: fadeIn 0.8s ease-out;
+ transition: transform 0.3s ease; */
+ padding: 20px;
+ border-radius: 8px;
+ background-color: #ffffff;
+ box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover effect for inputs and buttons */
+/* form input[type="number"],
+form select, */
+form button {
+ transition: all 0.3s ease;
+ padding: 2%;
+ margin: 2%;
+ box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+}
+
+/* Focus effect for inputs */
+form input[type="number"]:focus,
+form select:focus {
+ transform: scale(1.05);
+ border: 2px solid #007bff;
+ box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+}
+
+/* Hover effect for buttons */
+form button:hover {
+ background: linear-gradient(270deg, #02f2ff, #02f2ff, #02f2ff, #02f2ff, #02f2ff);
+ background-color: gray;
+ border: 5px solid #03fbff;
+ border-block-color: gray;
+ border-radius: 50%;
+ text-align: center;
+ padding: 2%;
+ /* width: 70%; */
+}
+
+/* Subtle hover effect on form */
+/* form:hover {
+ transform: scale(1.02);
+ box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+ Slightly stronger shadow on hover
+} */
