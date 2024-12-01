@@ -5,7 +5,7 @@ body {
  color: #333;
  margin: auto;
  padding: 0;
- width: 90%;
+ /* width: 90%; */
  text-align: center;
 }
 
@@ -62,7 +62,7 @@ table tr:hover {
 /* Form input and select fields */
 input[type="number"],
 input[type="date"],
-select{
+select {
  width: 100%;
  padding: 12px;
  margin: 10px 0;
@@ -137,3 +137,5 @@ p.error {
 p.success {
  color: green;
 }
+
+/* Style for the search card */
