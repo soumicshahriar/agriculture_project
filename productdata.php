@@ -1,6 +1,6 @@
 <?php
 // Database connection
-include('../config/connect.php');
+include('config/connect.php');
 
 // SQL query to fetch product data with JOIN - simplified without image path
 $query = "SELECT p.product_name, pi.quantity 
@@ -15,7 +15,7 @@ if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         // Change image path construction to match the HTML structure
         $imagePath = $row['product_name'] . '.jpg';
-        $row['image'] = file_exists('../Images/' . $imagePath) ? $imagePath : 'default.jpg';
+        $row['image'] = file_exists('Images/' . $imagePath) ? $imagePath : 'default.jpg';
         $products[] = $row;
     }
 

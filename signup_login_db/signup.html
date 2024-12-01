@@ -9,7 +9,7 @@
 <body>
     <div class="form-container">
         <h2>Create Account</h2>
-        <form action="signup_backend.php" method="POST">
+        <form id="signupForm">
             <div class="input-field">
                 <label for="f_name">First Name</label>
                 <input type="text" id="f_name" name="f_name" required>
@@ -34,5 +34,24 @@
         </form>
         <p>Already have an account? <a href="login.html">Login</a></p>
     </div>
+    <script>
+        const signupForm = document.getElementById('signupForm');
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(signupForm);
+            const response = await fetch('signup_login.php', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.text();
+            
+            alert(result);
+            if (result === "Sign-up successful!") {
+                window.location.href = "login.html";
+            }
+        });
+    </script>
 </body>
 </html>
