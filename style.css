@@ -7,18 +7,22 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
+    background-color: #D7EEE5;
     color: #333;
 }
 
-/* Header Styles */
+/* Updated Header Styles */
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: #232f3e;
-    padding: 10px 20px;
+    padding: 1rem 2rem;  /* Using rem for better scaling */
     color: white;
+    position: sticky;    /* Make header sticky */
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .logo {
@@ -28,10 +32,17 @@ body {
 
 .search-bar {
     flex: 1;
-    margin: 0 10px;
-    padding: 8px;
+    margin: 0 1rem;
+    padding: 0.75rem;
     border-radius: 5px;
     border: 1px solid #ccc;
+    transition: all 0.3s ease;  /* Smooth transition for focus state */
+}
+
+.search-bar:focus {
+    outline: none;
+    border-color: #febd69;
+    box-shadow: 0 0 5px rgba(254, 189, 105, 0.5);
 }
 
 .search-button {
@@ -88,10 +99,16 @@ nav a:hover {
 
 .card {
     background-color: white;
-    padding: 20px;
+    padding: 1.25rem;
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;  /* Smooth hover effect */
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .card h3 {
@@ -118,114 +135,172 @@ nav a:hover {
     color: #333;
 }
 
-.card button {
+.card button, .search-button, .modal-btn {
     background-color: #28a745;
     color: white;
-    padding: 8px 12px;
+    padding: 0.75rem 1.25rem;
     border: none;
     border-radius: 5px;
     font-size: 0.9rem;
     cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
 }
 
-.card button:hover {
-    background-color: #218838;
+.card button:hover, .search-button:hover, .modal-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.card button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+/* Add Modern Loading State */
+.card button:active, .search-button:active, .modal-btn:active {
+    transform: translateY(1px);
 }
 
-/* Product Section */
+/* Product Section Styles */
 .product-section {
-    margin-top: 30px;
+    padding: 20px;
+    background-color: #8cb3c2;
 }
 
-.product-section h2 {
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 15px;
     text-align: center;
-    margin-bottom: 20px;
-    font-size: 1.8rem;
+    transition: transform 0.3s ease;
+    border: 1px solid #ccc;
     color: #333;
 }
 
-.product-section .container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+.card:hover {
+    transform: translateY(-5px);
 }
 
-.product-section .card {
-    padding: 15px;
+.card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.card h3 {
+    margin: 10px 0;
+    color: #333;
+}
+
+.card p {
+    color: #666;
+    margin: 5px 0;
+}
+
+.card .quantity {
+    font-size: 1.2em;
+    color: #2ecc71;
+    font-weight: bold;
+}
+
+.card .add-to-cart {
+    background: #2ecc71;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s ease;
+}
+
+.card .add-to-cart:hover {
+    background: #27ae60;
 }
 
 /* Modal Styles */
 .modal {
     display: none; /* Hidden by default */
     position: fixed;
-    z-index: 1; /* Sit on top */
+    z-index: 9999; /* Increased z-index to ensure it's on top */
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0, 0, 0, 0.4); /* Black with opacity */
-    padding-top: 300px;
-    justify-content: center;
-    align-items: center;
-    display: flex; /* Center modal in the viewport */
-    transition: opacity 0.5s ease, visibility 0.5s ease; /* Smooth fade-in */
+    overflow: auto;
+    background-color: rgba(0,0,0,0.7); /* Darker background for better visibility */
 }
 
 .modal-content {
-    background-color: #fff;
-    padding: 40px; /* Increase padding for a bigger modal */
-    border: 1px solid #888;
-    width: 60%; /* Larger width */
-    max-width: 600px; /* Set a max-width */
-    text-align: center;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background-color: #fefefe;
+    position: relative;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
+    animation: modalFade 0.3s ease-in; /* Added animation */
 }
 
-.modal-btn {
-    display: inline-block;
-    background-color: #febd69;
-    color: white;
-    padding: 10px 20px;
-    margin: 10px;
-    text-decoration: none;
-    border-radius: 5px;
-}
-
-.modal-btn:hover {
-    background-color: #f79c42;
+/* Animation for modal */
+@keyframes modalFade {
+    from {transform: translateY(-50px); opacity: 0;}
+    to {transform: translateY(0); opacity: 1;}
 }
 
 .close-btn {
-    color: #aaa;
+    position: absolute;
+    right: 15px;
+    top: 10px;
     font-size: 28px;
     font-weight: bold;
-    position: absolute;
-    top: 10px;
-    right: 25px;
+    color: #333;
     cursor: pointer;
 }
 
-.close-btn:hover,
-.close-btn:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+.close-btn:hover {
+    color: #000;
 }
 
 .modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
     margin-top: 20px;
 }
 
-/* Ensuring modal responsiveness */
-@media (max-width: 768px) {
-    .modal-content {
-        width: 80%;
-    }
+.modal-btn {
+    padding: 10px 25px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    transition: all 0.3s ease;
 }
+
+.modal-btn:first-child {
+    background: #2ecc71;
+}
+
+.modal-btn:first-child:hover {
+    background: #27ae60;
+}
+
+.modal-btn:last-child {
+    background: #e74c3c;
+}
+
+.modal-btn:last-child:hover {
+    background: #c0392b;
+}
+
