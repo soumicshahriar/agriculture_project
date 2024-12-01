@@ -103,22 +103,133 @@ if ($conn->connect_error) {
 
  <!-- Script to control block visibility and sidebar toggle -->
  <script>
-  // Function to show the selected block and hide others
   function showBlock(blockId) {
-   // Get all blocks
+   // Hide all blocks and show the selected block
    const blocks = document.querySelectorAll('.block');
-
-   // Hide all blocks
    blocks.forEach(block => {
     block.classList.remove('active');
    });
-
-   // Show the selected block by adding the 'active' class
-   const selectedBlock = document.getElementById(blockId);
-   selectedBlock.classList.add('active');
+   document.getElementById(blockId).classList.add('active');
   }
 
-  // Sidebar toggle button functionality
+  // Initial Chart.js setup for different blocks
+  window.onload = function() {
+   // Product Information Chart
+   const productCtx = document.getElementById('productChart').getContext('2d');
+   new Chart(productCtx, {
+    type: 'bar',
+    data: {
+     labels: ['Jan', 'Feb', 'Mar', 'Apr'],
+     datasets: [{
+      label: 'Product Data',
+      data: [50, 100, 150, 200],
+      backgroundColor: 'rgba(75, 192, 192, 0.2)',
+      borderColor: 'rgba(75, 192, 192, 1)',
+      borderWidth: 1
+     }]
+    },
+    options: {
+     responsive: true
+    }
+   });
+
+   // Historical Production Chart
+   const historicalCtx = document.getElementById('historicalChart').getContext('2d');
+   new Chart(historicalCtx, {
+    type: 'line',
+    data: {
+     labels: ['2019', '2020', '2021', '2022'],
+     datasets: [{
+      label: 'Production Data',
+      data: [500, 600, 700, 800],
+      borderColor: 'rgba(153, 102, 255, 1)',
+      borderWidth: 1
+     }]
+    },
+    options: {
+     responsive: true
+    }
+   });
+
+   // Consumer Demand Chart
+   const consumerCtx = document.getElementById('consumerChart').getContext('2d');
+   new Chart(consumerCtx, {
+    type: 'pie',
+    data: {
+     labels: ['Low Demand', 'Medium Demand', 'High Demand'],
+     datasets: [{
+      label: 'Demand Data',
+      data: [30, 50, 20],
+      backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'],
+      borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
+      borderWidth: 1
+     }]
+    },
+    options: {
+     responsive: true
+    }
+   });
+
+   // Real-Time Supply Chart
+   const supplyCtx = document.getElementById('supplyChart').getContext('2d');
+   new Chart(supplyCtx, {
+    type: 'doughnut',
+    data: {
+     labels: ['Available', 'Low Stock', 'Out of Stock'],
+     datasets: [{
+      label: 'Supply Levels',
+      data: [70, 20, 10],
+      backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(255, 159, 64, 0.2)', 'rgba(255, 99, 132, 0.2)'],
+      borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 159, 64, 1)', 'rgba(255, 99, 132, 1)'],
+      borderWidth: 1
+     }]
+    },
+    options: {
+     responsive: true
+    }
+   });
+
+   // Market Price Chart
+   const marketPriceCtx = document.getElementById('marketPriceChart').getContext('2d');
+   new Chart(marketPriceCtx, {
+    type: 'bar',
+    data: {
+     labels: ['Jan', 'Feb', 'Mar', 'Apr'],
+     datasets: [{
+      label: 'Market Prices',
+      data: [100, 150, 120, 180],
+      backgroundColor: 'rgba(255, 99, 132, 0.2)',
+      borderColor: 'rgba(255, 99, 132, 1)',
+      borderWidth: 1
+     }]
+    },
+    options: {
+     responsive: true
+    }
+   });
+
+   // Analytical Tools Chart
+   const analyticalCtx = document.getElementById('analyticalChart').getContext('2d');
+   new Chart(analyticalCtx, {
+    type: 'radar',
+    data: {
+     labels: ['Scenario 1', 'Scenario 2', 'Scenario 3', 'Scenario 4'],
+     datasets: [{
+      label: 'Analysis Data',
+      data: [60, 70, 80, 90],
+      borderColor: 'rgba(153, 102, 255, 1)',
+      borderWidth: 1,
+      fill: true
+     }]
+    },
+    options: {
+     responsive: true
+    }
+   });
+  };
+
+  // Toggle Sidebar for Mobile/Tablet
+  // JavaScript to toggle sidebar visibility
   function toggleSidebar() {
    const sidebar = document.querySelector('.sidebar');
    const content = document.querySelector('.content');
@@ -126,13 +237,19 @@ if ($conn->connect_error) {
    content.classList.toggle('open');
   }
 
-  // Optionally: Show the first block by default when the page loads
-  window.onload = function() {
-   // Show the first block (default view when page loads)
-   showBlock('product-info');
-  };
-
-
+  document.querySelectorAll(".sidebar-link").forEach(link => {
+   link.addEventListener("click", (event) => {
+    event.preventDefault(); // prevent the default link behavior
+    let url = event.target.href; // get the link URL
+    // Use AJAX to load content without a full page reload
+    // Example AJAX request:
+    fetch(url)
+     .then(response => response.text())
+     .then(data => {
+      document.getElementById('content').innerHTML = data;
+     });
+   });
+  });
  </script>
 </body>
 
