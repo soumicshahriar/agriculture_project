@@ -1,0 +1,147 @@
+/* General Styles */
+body {
+ margin: 0;
+ font-family: Arial, sans-serif;
+}
+
+nav {
+ background-color: #343a40;
+ color: white;
+ padding: 10px 0;
+ position: fixed;
+ width: 100%;
+ top: 0;
+ z-index: 1000;
+}
+
+.sidebar {
+ background-color: #343a40;
+ color: white;
+ padding-top: 70px;
+ /* Spacing below the navbar */
+ height: 100vh;
+ width: 250px;
+ position: fixed;
+ top: 70px;
+ /* Sidebar starts below the navbar */
+ left: 0;
+ /* Visible by default on larger screens */
+ transition: left 0.3s ease;
+ /* Smooth sliding transition */
+}
+
+.sidebar ul {
+ list-style-type: none;
+ padding: 0;
+}
+
+.sidebar ul li {
+ padding: 15px;
+ cursor: pointer;
+}
+
+.sidebar ul li:hover {
+ background-color: #495057;
+}
+
+.content {
+ margin-left: 250px;
+ padding: 20px;
+ width: calc(100% - 250px);
+ transition: margin-left 0.3s ease;
+ /* Smooth transition for content */
+ margin-top: 60px;
+ /* Space for the navbar */
+}
+
+.block {
+ display: none;
+ margin-bottom: 20px;
+ padding: 20px;
+ border-radius: 8px;
+ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.block.active {
+ display: block;
+}
+
+/* Chart container */
+.chart-container {
+ width: 100%;
+ height: 400px;
+}
+
+
+/* Sidebar toggle button */
+.sidebar-toggle {
+ position: absolute;
+ top: 20px;
+ left: 20px;
+ background-color: #343a40;
+ color: white;
+ border: none;
+ padding: 10px;
+ cursor: pointer;
+ display: none;
+ /* Initially hidden on larger screens */
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+
+ /* On small screens, hide the sidebar off-screen initially */
+ .sidebar {
+  left: -250px;
+  /* Initially off-screen */
+  top: 100px;
+  /* Sidebar starts below the navbar */
+ }
+
+ .content {
+  margin-left: 0;
+  width: 100%;
+ }
+
+ /* Show the sidebar toggle button on mobile */
+ .sidebar-toggle {
+  display: block;
+  top: 55px;
+  width: 50px;
+  left: 0;
+
+ }
+
+ /* When sidebar is open, slide it in */
+ .sidebar.open {
+  left: 0;
+  /* Slide sidebar in from the left */
+ }
+
+ /* Adjust content area when sidebar is open */
+ .content.open {
+  margin-left: 250px;
+  /* Shift content to the right */
+ }
+}
+
+/* Large screens (desktops/tablets) */
+@media (min-width: 769px) {
+
+ /* Sidebar is visible by default and does not slide */
+ .sidebar {
+  left: 0;
+
+  /* Sidebar is fixed on the left */
+ }
+
+ /* Content will have space for the sidebar */
+ .content {
+  margin-left: 250px;
+ }
+
+ /* Hide the sidebar toggle button on larger screens */
+ .sidebar-toggle {
+  display: none;
+ }
+}
