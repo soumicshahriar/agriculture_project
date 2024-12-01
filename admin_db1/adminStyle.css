@@ -147,8 +147,8 @@ body {
 }
 /* Chart Container */
 .chart-container {
-    max-width: 600px;
-    margin: 50px auto;
+    width: 100%;
+    margin: 25px auto;
     text-align: center;
     background-color: #ffffff;
     padding: 20px;
@@ -162,6 +162,40 @@ body {
     font-size: 24px;
     color: #1a237e;
     font-weight: 600;
+}
+
+/* Pie Chart specific styles */
+#pieChart {
+    width: 100%;
+    height: 400px;
+    margin: 0 auto;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+    .chart-container {
+        max-width: 800px;
+        margin: 35px auto;
+    }
+    
+    #pieChart {
+        height: 500px;
+    }
+}
+
+@media (max-width: 767px) {
+    .chart-container {
+        margin: 20px auto;
+        padding: 15px;
+    }
+    
+    .chart-container h2 {
+        font-size: 20px;
+    }
+    
+    #pieChart {
+        height: 300px;
+    }
 }
 
 canvas {
