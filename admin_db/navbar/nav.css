@@ -1,0 +1,66 @@
+.navbar {
+ /* background-color: #333; */
+ /* Dark background for the navbar */
+ /* padding: 10px 20px; */
+ /* Padding for spacing */
+ box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+ border-radius: 5%;
+ margin-bottom: 3%;
+ /* Box shadow: horizontal, vertical, blur radius, color */
+}
+
+.navbar-p {
+ color: #fff;
+ font-size: 1em;
+}
+
+.container-fluid {
+
+ background-size: 400% 400%;
+ color: #fff;
+ /* padding: 1em; */
+ /* border: 5px solid gray;
+ border-block-color: #03fbff; */
+ border-radius: 10%;
+ font-size: 1.5em;
+}
+
+.nav-item {
+ color: black;
+ width: fit-content;
+ margin: 1%;
+
+}
+
+.nav-item a {
+ color: black;
+ width: fit-content;
+ /* padding: 1%; */
+ border: 2px solid black;
+ border-radius: 5%;
+ text-decoration: none;
+}
+
+.nav-item a:hover {
+ color: black;
+ width: fit-content;
+ border: 2px solid black;
+ border-radius: 10%;
+ transform: translate(0, 5px);
+ transition: all 0.2s;
+}
+
+.dropdown-menu {
+
+ color: #fff;
+
+ border: 1px solid black;
+ border-radius: 5%;
+
+}
+
+.dropdown-menu:hover {
+
+ border: 1px solid black;
+ border-radius: 5%;
+}
