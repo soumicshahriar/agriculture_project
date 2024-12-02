@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->store_result();
 
         if ($stmt->num_rows > 0) {
-            echo "Error: The email address is already registered!";
+            echo json_encode(["message" => "Error: The email address is already registered!"]);
         } else {
             // Insert the new user into the database
             $stmt->close();
@@ -33,9 +33,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param("sssss", $f_name, $l_name, $phone, $email, $password);
 
             if ($stmt->execute()) {
-                echo "Sign-up successful!";
+                echo json_encode(["message" => "Sign-up successful!"]);
             } else {
-                echo "Error: " . $stmt->error;
+                echo json_encode(["message" => "Error: " . $stmt->error]);
             }
         }
 
@@ -45,20 +45,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email = trim($_POST['email']);
         $password = trim($_POST['password']);
 
-        $stmt = $conn->prepare("SELECT password FROM customers WHERE email = ?");
+        $stmt = $conn->prepare("SELECT id, f_name, l_name, password FROM customers WHERE email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
-        $stmt->bind_result($db_password);
+        $stmt->bind_result($db_id, $db_f_name, $db_l_name, $db_password);
 
         if ($stmt->fetch() && $password === $db_password) {
-            echo "Login successful!";
+            // Corrected JSON response formatting
+            echo json_encode([
+                "message" => "Login successful!",
+                "id" => (int)$db_id, // Ensure ID is an integer
+                "f_name" => $db_f_name,
+                "l_name" => $db_l_name
+            ]);
         } else {
-            echo "Invalid email or password!";
+            echo json_encode(["message" => "Invalid email or password!"]);
         }
 
         $stmt->close();
     } else {
-        echo "Invalid request!";
+        echo json_encode(["message" => "Invalid request!"]);
     }
 }
 

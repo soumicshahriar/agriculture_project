@@ -33,14 +33,14 @@
                 body: formData
             });
 
-            const result = await response.text();
+            const result = await response.json();
 
-            if (result === "Login successful!") {
-                window.location.href = "/agriculture_project/consumer_db/index.php";
-              
-              
+            if (result.message === "Login successful!") {
+                sessionStorage.setItem('userId', result.id);
+                sessionStorage.setItem('userName', result.f_name + ' ' + result.l_name);
+                window.location.href = "../consumer_db/customer_d.html";
             } else {
-                alert(result);
+                alert(result.message);
             }
         });
     </script>
