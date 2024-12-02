@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 30, 2024 at 09:31 PM
+-- Generation Time: Dec 02, 2024 at 03:59 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -142,18 +142,18 @@ CREATE TABLE `customers` (
   `id` int(11) NOT NULL,
   `f_name` varchar(50) DEFAULT NULL,
   `l_name` varchar(50) DEFAULT NULL,
-  `consumer_demand` int(11) DEFAULT NULL,
-  `purchase_history` text DEFAULT NULL
+  `phone` varchar(11) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `password` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `customers`
 --
 
-INSERT INTO `customers` (`id`, `f_name`, `l_name`, `consumer_demand`, `purchase_history`) VALUES
-(1, 'soumic', 'shahriar', 5, 'gg'),
-(2, 's', 'm', 4, 'ff'),
-(3, 'hh', 'aa', 9, 'ff');
+INSERT INTO `customers` (`id`, `f_name`, `l_name`, `phone`, `email`, `password`) VALUES
+(0, 'soumic', 'shahriar', '01704442185', 'shahriar@gmail.com', 'shahriar1'),
+(1, 'soumic', 'shahriar', '01779552185', 'soumic@gmail.com', 'soumic1');
 
 -- --------------------------------------------------------
 
@@ -177,8 +177,6 @@ CREATE TABLE `customer_purchase_history` (
 --
 
 INSERT INTO `customer_purchase_history` (`id`, `consumer_id`, `product_id`, `product_name`, `quantity`, `price`, `total_price`, `purchase_date`) VALUES
-(12, 1, 1, '', 1, 125.00, 125.00, '2024-11-29'),
-(13, 1, 2, '', 1, 110.00, 110.00, '2024-11-29'),
 (14, 1, 1, 'Rice', 1, 125.00, 125.00, '2024-11-29'),
 (15, 1, 1, 'Rice', 1, 125.00, 125.00, '2024-11-29'),
 (16, 1, 1, 'Rice', 1, 125.00, 125.00, '2024-11-29'),
@@ -190,7 +188,19 @@ INSERT INTO `customer_purchase_history` (`id`, `consumer_id`, `product_id`, `pro
 (22, 1, 2, 'Wheat', 1, 110.00, 110.00, '2024-11-29'),
 (23, 1, 2, 'Wheat', 82, 110.00, 9020.00, '2024-11-29'),
 (24, 1, 1, 'Rice', 5, 125.00, 625.00, '2024-11-30'),
-(25, 1, 1, 'Rice', 15, 125.00, 1875.00, '2024-11-30');
+(25, 1, 1, 'Rice', 15, 125.00, 1875.00, '2024-11-30'),
+(26, 1, 2, 'Wheat', 2, 110.00, 220.00, '2024-12-02'),
+(27, 1, 1, 'Rice', 260, 125.00, 32500.00, '2024-12-02'),
+(28, 1, 2, 'Wheat', 98, 110.00, 10780.00, '2024-12-02'),
+(29, 1, 2, 'Wheat', 2, 110.00, 220.00, '2024-12-02'),
+(30, 1, 2, 'Wheat', 2, 110.00, 220.00, '2024-12-02'),
+(31, 1, 1, 'Rice', 1, 125.00, 125.00, '2024-12-02'),
+(32, 1, 2, 'Wheat', 5, 110.00, 550.00, '2024-12-02'),
+(33, 1, 1, 'Rice', 12, 240.00, 2880.00, '2024-12-02'),
+(34, 1, 2, 'Wheat', 15, 110.00, 1650.00, '2024-12-02'),
+(35, 1, 6, 'Cotton', 2, 122.00, 244.00, '2024-12-02'),
+(36, 1, 6, 'Cotton', 98, 122.00, 11956.00, '2024-12-02'),
+(37, 1, 5, 'Sugarcane', 200, 199.00, 39800.00, '2024-12-02');
 
 -- --------------------------------------------------------
 
@@ -393,6 +403,25 @@ INSERT INTO `product` (`product_id`, `product_name`, `category`, `seasonality`) 
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `product_demand_table`
+--
+
+CREATE TABLE `product_demand_table` (
+  `product_id` int(11) NOT NULL,
+  `count` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `product_demand_table`
+--
+
+INSERT INTO `product_demand_table` (`product_id`, `count`) VALUES
+(5, 3),
+(6, 2);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `product_farmer_agri_officer`
 --
 
@@ -424,11 +453,12 @@ CREATE TABLE `product_info` (
 --
 
 INSERT INTO `product_info` (`id`, `product_id`, `quantity`, `new_price`, `old_price`, `production_cost`, `production_date`, `expiration_date`) VALUES
-(24, 1, 241, 125.00, 115.00, 100.00, '2024-11-30', '2026-11-28'),
-(25, 2, 0, 110.00, 110.00, 85.00, '2024-11-25', '2024-12-07'),
-(30, 3, 71, 100.00, NULL, 95.00, '2024-11-28', '2024-12-04'),
-(32, 4, -1, 150.00, 120.00, 100.00, '2024-12-02', '2024-12-07'),
-(33, 6, 0, 130.00, 130.00, 120.00, '2024-11-28', '2024-12-02');
+(24, 1, 488, 240.00, 235.00, 110.00, '2024-11-30', '2026-11-28'),
+(30, 3, 500, 150.00, 150.00, 105.00, '2024-11-28', '2024-12-04'),
+(32, 4, 475, 170.00, 150.00, 100.00, '2024-12-02', '2024-12-07'),
+(38, 2, 510, 110.00, 110.00, 85.00, '2024-12-01', '2025-01-10'),
+(39, 5, 270, 200.00, 199.00, 180.00, '2024-12-01', '2025-01-10'),
+(40, 6, 650, 132.00, 132.00, 100.00, '2024-12-04', '2024-12-19');
 
 -- --------------------------------------------------------
 
@@ -449,17 +479,30 @@ CREATE TABLE `product_info_all` (
 --
 
 INSERT INTO `product_info_all` (`id`, `product_id`, `new_price`, `old_price`, `production_date`) VALUES
-(5, 3, 100.00, NULL, '2024-11-28'),
-(6, 8, 110.00, NULL, '2024-11-28'),
-(7, 4, 120.00, 110.00, '0000-00-00'),
-(8, 4, 150.00, 120.00, '2024-12-02'),
-(9, 2, 110.00, 110.00, '2024-11-25'),
-(10, 6, 130.00, NULL, '2024-11-28'),
-(11, 6, 130.00, NULL, '2024-11-28'),
-(12, 6, 130.00, NULL, '2024-11-28'),
-(13, 7, 130.00, 110.00, '2024-12-04'),
-(14, 6, 130.00, 130.00, '2024-11-28'),
-(15, 6, 130.00, 130.00, '2024-11-28');
+(57, 6, 120.00, NULL, '2024-12-04'),
+(58, 1, 240.00, 235.00, '2024-11-30'),
+(59, 6, 122.00, 120.00, '2024-12-04'),
+(60, 5, 199.00, 199.00, '2024-12-01'),
+(61, 7, 95.00, NULL, '2024-12-02'),
+(62, 6, 122.00, 122.00, '2024-12-04'),
+(63, 6, 132.00, 122.00, '2024-12-04'),
+(64, 6, 132.00, 132.00, '2024-12-04'),
+(65, 5, 199.00, 199.00, '2024-12-01'),
+(66, 5, 199.00, 199.00, '2024-12-01'),
+(67, 2, 110.00, 110.00, '2024-12-01'),
+(68, 2, 110.00, 110.00, '2024-12-01'),
+(69, 2, 110.00, 110.00, '2024-12-01'),
+(70, 2, 110.00, 110.00, '2024-12-01'),
+(71, 5, 199.00, 199.00, '2024-12-01'),
+(72, 5, 199.00, 199.00, '2024-12-01'),
+(73, 5, 199.00, 199.00, '2024-12-01'),
+(74, 5, 199.00, 199.00, '2024-12-01'),
+(75, 5, 199.00, 199.00, '2024-12-01'),
+(76, 2, 110.00, 110.00, '2024-12-01'),
+(77, 4, 150.00, 150.00, '2024-12-02'),
+(78, 6, 132.00, 132.00, '2024-12-04'),
+(79, 4, 170.00, 150.00, '2024-12-02'),
+(80, 5, 200.00, 199.00, '2024-12-01');
 
 -- --------------------------------------------------------
 
@@ -761,6 +804,12 @@ ALTER TABLE `product`
   ADD PRIMARY KEY (`product_id`);
 
 --
+-- Indexes for table `product_demand_table`
+--
+ALTER TABLE `product_demand_table`
+  ADD PRIMARY KEY (`product_id`);
+
+--
 -- Indexes for table `product_farmer_agri_officer`
 --
 ALTER TABLE `product_farmer_agri_officer`
@@ -852,19 +901,19 @@ ALTER TABLE `warehouse_managers`
 -- AUTO_INCREMENT for table `customer_purchase_history`
 --
 ALTER TABLE `customer_purchase_history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `product_info`
 --
 ALTER TABLE `product_info`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `product_info_all`
 --
 ALTER TABLE `product_info_all`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 
 --
 -- AUTO_INCREMENT for table `seeds`
@@ -966,6 +1015,12 @@ ALTER TABLE `market_manager`
 ALTER TABLE `market_manager_consumer`
   ADD CONSTRAINT `market_manager_consumer_ibfk_1` FOREIGN KEY (`market_manager_employee_id`) REFERENCES `market_manager` (`market_manager_employee_id`),
   ADD CONSTRAINT `market_manager_consumer_ibfk_2` FOREIGN KEY (`consumer_id`) REFERENCES `customers` (`id`);
+
+--
+-- Constraints for table `product_demand_table`
+--
+ALTER TABLE `product_demand_table`
+  ADD CONSTRAINT `product_demand_table_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`);
 
 --
 -- Constraints for table `product_farmer_agri_officer`
