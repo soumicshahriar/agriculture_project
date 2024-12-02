@@ -233,7 +233,33 @@ $result = $conn->query($sql);
     }
 
 
-   
+    // Handle demand button click
+    // Handle demand button click
+    function demandProduct(product_id) {
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "update_demand_count.php", true);
+      xhr.setRequestHeader("Content-Type", "application/json");
+
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          const response = JSON.parse(xhr.responseText);
+          if (response.status === "success") {
+            alert("Thank you for your demand! This product has been added to the demand list.");
+          } else {
+            alert("Error: " + response.message);
+          }
+        } else {
+          alert("Error: Unable to update product demand.");
+        }
+      };
+
+      // Send the product_id as JSON
+      xhr.send(JSON.stringify({
+        product_id: product_id
+      }));
+    }
+
+
     // purchase item
     function purchaseItems() {
       if (cartItems.length > 0) {
@@ -255,7 +281,7 @@ $result = $conn->query($sql);
               alert("Purchase successful!");
               console.log("Server response:", response);
               // updateProductQuantityInDatabase(product_id, quantity);
-              
+
               // Clear the cart and total price
               cartItems = [];
               totalCartPrice = 0;
@@ -281,8 +307,6 @@ $result = $conn->query($sql);
         alert("Your cart is empty.");
       }
     }
-
-
   </script>
 </head>
 
@@ -291,36 +315,38 @@ $result = $conn->query($sql);
   <h3>Products</h3>
 
   <!-- Display Data from PRODUCT and product_info Tables -->
-  <?php
-  if ($result->num_rows > 0) {
-    echo "<table border='1'>";
-    echo "<tr>
-                    <th>Product Name</th>
-                    <th>Category</th>
-                    <th>Quantity Available</th>
-                    <th>Price</th>
-                    <th>Quantity to Buy</th>
-                    <th>Action</th>
-                </tr>";
-    while ($row = $result->fetch_assoc()) {
-      echo "<tr id='product_row_" . $row['product_id'] . "'>
-                    <td>" . htmlspecialchars($row['product_name']) . "</td>
-                    <td>" . htmlspecialchars($row['category']) . "</td>
-                    <td class='product-quantity'>" . htmlspecialchars($row['quantity']) . "</td>
-                    <td>" . (is_null($row['new_price']) ? "NULL" : htmlspecialchars($row['new_price'])) . "</td>
-                    <td>
-                        <input type='number' id='quantity_" . $row['product_id'] . "' min='1' max='" . $row['quantity'] . "' value='1'/>
-                    </td>
-                    <td>
-                        <button class='add-to-cart-btn' onclick='addToCart(" . $row['product_id'] . ", \"" . addslashes($row['product_name']) . "\", \"" . addslashes($row['category']) . "\", " . $row['new_price'] . ")'>Add to Cart</button>
-                    </td>
-                </tr>";
-    }
-    echo "</table>";
-  } else {
-    echo "<p>No data found.</p>";
-  }
-  ?>
+  <table class="product-table">
+    <thead>
+      <tr>
+        <th>Product Name</th>
+        <th>Category</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Quantity to Purchase</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php while ($row = $result->fetch_assoc()): ?>
+        <tr id="product_row_<?= $row['product_id'] ?>">
+          <td><?= htmlspecialchars($row['product_name']) ?></td>
+          <td><?= htmlspecialchars($row['category']) ?></td>
+          <td class="product-quantity"><?= htmlspecialchars($row['quantity']) ?></td>
+          <td><?= (is_null($row['new_price']) ? "NULL" : htmlspecialchars($row['new_price'])) ?></td>
+          <td>
+            <input type="number" id="quantity_<?= $row['product_id'] ?>" min="1" max="<?= $row['quantity'] ?>" value="1" />
+          </td>
+          <td>
+            <?php if ($row['quantity'] > 0): ?>
+              <button class="add-to-cart-btn" onclick="addToCart(<?= $row['product_id'] ?>, '<?= addslashes($row['product_name']) ?>', '<?= addslashes($row['category']) ?>', <?= $row['new_price'] ?>)">Add to Cart</button>
+            <?php else: ?>
+              <button class="demand-btn" onclick="demandProduct(<?= $row['product_id'] ?>)">Demand</button>
+            <?php endif; ?>
+          </td>
+        </tr>
+      <?php endwhile; ?>
+    </tbody>
+  </table>
 
   <h3>Your Cart</h3>
   <!-- Cart Summary Table -->
