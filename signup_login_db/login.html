@@ -33,14 +33,14 @@
                 body: formData
             });
 
-            const result = await response.json();
+            const result = await response.text();
 
-            if (result.message === "Login successful!") {
-                sessionStorage.setItem('userId', result.id);
-                sessionStorage.setItem('userName', result.f_name + ' ' + result.l_name);
-                window.location.href = "../consumer_db/customer_d.html";
+            if (result === "Login successful!") {
+                window.location.href = "../consumer_db/index.php";
+              
+              
             } else {
-                alert(result.message);
+                alert(result);
             }
         });
     </script>
