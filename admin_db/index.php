@@ -5,7 +5,7 @@ include('../config/connect.php');
 // Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
-}
+}  
 
 // Query to get product names and their total quantities for consumer demand data
 $query = "SELECT product_name, SUM(quantity) AS total_quantity FROM customer_purchase_history GROUP BY product_name";
@@ -18,6 +18,28 @@ if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $productNames[] = $row['product_name'];
         $quantities[] = $row['total_quantity'];
+    }
+}
+
+// Query for bar chart: Market Price Data
+$queryBar = "
+    SELECT p.product_name, pi.new_price, pi.old_price, pi.production_cost
+    FROM product_info pi
+    INNER JOIN product p ON pi.product_id = p.product_id
+";
+$resultBar = $conn->query($queryBar);
+
+$productNamesBar = [];
+$newPrices = [];
+$oldPrices = [];
+$productionCosts = [];
+
+if ($resultBar->num_rows > 0) {
+    while ($row = $resultBar->fetch_assoc()) {
+        $productNamesBar[] = $row['product_name'];
+        $newPrices[] = $row['new_price'];
+        $oldPrices[] = $row['old_price'];
+        $productionCosts[] = $row['production_cost'];
     }
 }
 ?>
@@ -85,21 +107,13 @@ if ($result->num_rows > 0) {
             </div>
         </div>
 
-        <!-- Real-Time Supply Levels Block -->
-        <div id="real-time-supply" class="block">
-            <div class="block-header">Real-Time Supply Levels</div>
-            <div class="block-content">Inventory, storage, and logistics data.</div>
-            <div class="chart-container">
-                <canvas id="supplyChart"></canvas>
-            </div>
-        </div>
-
         <!-- Market Price Data Block -->
         <div id="market-price" class="block">
             <div class="block-header">Market Price Data</div>
             <div class="block-content">Current and historical prices.</div>
             <div class="chart-container">
-                <canvas id="marketPriceChart"></canvas>
+                <h2>Market Price, Production Cost and Historical Price</h2>
+                <canvas id="priceChart"></canvas>
             </div>
         </div>
 
@@ -144,7 +158,7 @@ if ($result->num_rows > 0) {
             showBlock('product-info');
         };
 
-        // Prepare data for the chart
+        // Prepare data for the consumer demand chart
         const productNames = <?php echo json_encode($productNames); ?>;
         const quantities = <?php echo json_encode($quantities); ?>;
 
@@ -164,20 +178,63 @@ if ($result->num_rows > 0) {
                         '#ffce56',
                         '#2ecc71'
                     ],
-                    borderColor: [
-                        '#ffffff'
-                    ],
+                    borderColor: ['#ffffff'],
                 }]
             },
             options: {
                 responsive: true,
                 plugins: {
-                    legend: {
-                        position: 'top',
+                    legend: { position: 'top' },
+                    tooltip: { enabled: true }
+                }
+            }
+        });
+
+        // Prepare data for the market price chart
+        const productNamesBar = <?php echo json_encode($productNamesBar); ?>;
+        const newPrices = <?php echo json_encode($newPrices); ?>;
+        const oldPrices = <?php echo json_encode($oldPrices); ?>;
+        const productionCosts = <?php echo json_encode($productionCosts); ?>;
+
+        // Create the bar chart for market price data
+        const barCtx = document.getElementById('priceChart').getContext('2d');
+        const priceChart = new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: productNamesBar,
+                datasets: [
+                    {
+                        label: 'New Price',
+                        data: newPrices,
+                        backgroundColor: '#36a2eb',
+                        borderColor: '#1a73e8',
+                        borderWidth: 1
                     },
-                    tooltip: {
-                        enabled: true
+                    {
+                        label: 'Old Price',
+                        data: oldPrices,
+                        backgroundColor: '#ffce56',
+                        borderColor: '#ffa000',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Production Cost',
+                        data: productionCosts,
+                        backgroundColor: '#ff6384',
+                        borderColor: '#d32f2f',
+                        borderWidth: 1
                     }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { beginAtZero: true, stacked: false },
+                    y: { beginAtZero: true }
+                },
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: { enabled: true }
                 }
             }
         });
