@@ -70,8 +70,8 @@ function createProductCard(product) {
     productCard.innerHTML = `
         <img src="Images/${product.image}" alt="${product.product_name}">
         <h3>${product.product_name}</h3>
-        <p>Quantity</p>
-        <p class="quantity">৳${product.quantity}</p>
+        <p class="quantity">Quantity:${product.quantity}</p>
+        <p> Price: ${product.new_price}</p>
         <button class="add-to-cart">Add to cart</button>
     `;
 

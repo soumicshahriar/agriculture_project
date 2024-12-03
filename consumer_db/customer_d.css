@@ -1,0 +1,119 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Header Styles */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+}
+
+.header .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: white;
+}
+
+.header .navbar {
+    display: flex;
+    gap: 15px;
+}
+
+.header .navbar a {
+    text-decoration: none;
+    color: white;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+    position: relative;
+}
+
+.header .navbar a:hover,
+.header .navbar a.active {
+    color: #FFD700;
+}
+
+.header .navbar a::after {
+    content: attr(style);
+    position: absolute;
+    top: 20px;
+    left: 0;
+    opacity: 0;
+    font-size: 12px;
+    color: white;
+    transition: opacity 0.3s ease;
+}
+
+.header .navbar a:hover::after {
+    opacity: 1;
+}
+
+#menu-icon {
+    display: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: white;
+}
+
+/* Home Section */
+.home {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 60px); /* Full viewport minus the header height */
+    background: linear-gradient(120deg, #a1ffce, #faffd1);
+    text-align: center;
+    padding: 20px;
+    color: #333;
+}
+
+.home h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.home p {
+    font-size: 1.2rem;
+    line-height: 1.5;
+    max-width: 800px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header .navbar {
+        display: none;
+        flex-direction: column;
+        background-color: #4CAF50;
+        position: absolute;
+        top: 60px;
+        right: 0;
+        width: 100%;
+    }
+
+    .header .navbar a {
+        padding: 10px;
+        text-align: center;
+        border-bottom: 1px solid white;
+    }
+
+    .header .navbar a:last-child {
+        border-bottom: none;
+    }
+
+    #menu-icon {
+        display: block;
+    }
+
+    .header .navbar.active {
+        display: flex;
+    }
+}

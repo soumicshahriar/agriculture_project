@@ -7,7 +7,20 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
-// Fetch data from PRODUCT and product_info tables
+// Number of products per page
+$productsPerPage = 5;
+
+// Get the current page number from the URL, default to page 1
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$page = $page > 0 ? $page : 1; // Ensure the page is a positive number
+
+// Calculate the starting point (offset) for the SQL query
+$startFrom = ($page - 1) * $productsPerPage;
+
+// Fetch search term if any
+$searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
+
+// Modify the SQL query to search by product_name if search term is provided
 $sql = "SELECT 
             pi.id,
             p.product_id, 
@@ -21,11 +34,28 @@ $sql = "SELECT
         FROM 
             PRODUCT p
         INNER JOIN 
-            product_info pi ON p.product_id = pi.product_id
-        ORDER BY p.product_id";
+            product_info pi ON p.product_id = pi.product_id";
 
+// Add search condition if a search term is provided
+if ($searchTerm) {
+  $sql .= " WHERE p.product_name LIKE '%" . $conn->real_escape_string($searchTerm) . "%'";
+}
+
+// $sql .= " ORDER BY p.product_id";
+// Add the LIMIT clause for pagination with OFFSET
+$sql .= " ORDER BY p.product_id LIMIT $startFrom, $productsPerPage";
 $result = $conn->query($sql);
 
+// Flag to check if no results were found
+$noResultsFound = $result->num_rows === 0;
+
+// Fetch the total number of products for pagination calculation
+$totalResult = $conn->query("SELECT COUNT(*) AS total FROM PRODUCT p INNER JOIN product_info pi ON p.product_id = pi.product_id WHERE p.product_name LIKE '%" . $conn->real_escape_string($searchTerm) . "%'");
+$totalRow = $totalResult->fetch_assoc();
+$totalProducts = $totalRow['total'];
+
+// Calculate the total number of pages
+$totalPages = ceil($totalProducts / $productsPerPage);
 ?>
 
 <!DOCTYPE html>
@@ -312,6 +342,12 @@ $result = $conn->query($sql);
 
 <body>
 
+  <!-- Search Form -->
+  <form method="GET" action="" id="searchForm">
+    <input type="text" name="search" placeholder="Search by product name..." value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '' ?>" />
+    <button type="submit">Search</button>
+  </form>
+
   <h3>Products</h3>
 
   <!-- Display Data from PRODUCT and product_info Tables -->
@@ -348,6 +384,27 @@ $result = $conn->query($sql);
     </tbody>
   </table>
 
+
+
+  <!-- Pagination Links -->
+  <div class="pagination">
+    <?php if ($page > 1): ?>
+      <a href="?page=1<?php echo isset($_GET['search']) ? '&search=' . urlencode($_GET['search']) : ''; ?>">First</a>
+      <a href="?page=<?php echo $page - 1; ?><?php echo isset($_GET['search']) ? '&search=' . urlencode($_GET['search']) : ''; ?>">Previous</a>
+    <?php endif; ?>
+
+    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+      <a href="?page=<?php echo $i; ?><?php echo isset($_GET['search']) ? '&search=' . urlencode($_GET['search']) : ''; ?>" <?php if ($i == $page) echo 'class="active"'; ?>>
+        <?php echo $i; ?>
+      </a>
+    <?php endfor; ?>
+
+    <?php if ($page < $totalPages): ?>
+      <a href="?page=<?php echo $page + 1; ?><?php echo isset($_GET['search']) ? '&search=' . urlencode($_GET['search']) : ''; ?>">Next</a>
+      <a href="?page=<?php echo $totalPages; ?><?php echo isset($_GET['search']) ? '&search=' . urlencode($_GET['search']) : ''; ?>">Last</a>
+    <?php endif; ?>
+  </div>
+
   <h3>Your Cart</h3>
   <!-- Cart Summary Table -->
   <table border="1" id="cartTable">
@@ -373,6 +430,12 @@ $result = $conn->query($sql);
   <!-- Purchase Button -->
   <button onclick="purchaseItems()">Purchase</button>
 
+  <script>
+    <?php if ($noResultsFound): ?>
+      alert("This product is not available yet. Please try another one.");
+      window.location.href = '../consumer_db/index.php';
+    <?php endif; ?>
+  </script>
 </body>
 
 </html>
