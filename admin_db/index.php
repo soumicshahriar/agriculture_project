@@ -397,7 +397,7 @@ if ($resultBar->num_rows > 0) {
             const startDate = document.getElementById('startDate').value;
             const endDate = document.getElementById('endDate').value;
 
-            // Create an XMLHttpRequest (AJAX) to send the data to filter_data.php
+            // Create an XMLHttpRequest (AJAX) to send the data to filter_data.phpp
             const xhr = new XMLHttpRequest();
             xhr.open('GET', 'filter_data.php?startDate=' + startDate + '&endDate=' + endDate, true);
             xhr.onreadystatechange = function() {
