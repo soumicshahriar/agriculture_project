@@ -3,7 +3,7 @@
 include('../config/connect.php');
 
 // SQL query to fetch product data with JOIN - simplified without image path
-$query = "SELECT p.product_name, pi.quantity 
+$query = "SELECT p.product_name, pi.quantity ,pi.new_price
           FROM product p
           LEFT JOIN product_info pi ON p.product_id = pi.product_id";
 $result = $conn->query($query);
