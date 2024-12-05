@@ -20,6 +20,8 @@ $startFrom = ($page - 1) * $productsPerPage;
 // Fetch search term if any
 $searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
 
+$priceRange = isset($_GET['price_range']) ? $_GET['price_range'] : '';
+
 // Modify the SQL query to search by product_name if search term is provided
 $sql = "SELECT 
             pi.id,
@@ -41,6 +43,18 @@ if ($searchTerm) {
   $sql .= " WHERE p.product_name LIKE '%" . $conn->real_escape_string($searchTerm) . "%'";
 }
 
+
+// Add price range filter based on the selected option
+if ($priceRange) {
+  if ($priceRange == 'low') {
+    $sql .= " AND pi.new_price <= 400";
+  } elseif ($priceRange == 'mid') {
+    $sql .= " AND pi.new_price > 400 AND pi.new_price <= 2000";
+  } elseif ($priceRange == 'high') {
+    $sql .= " AND pi.new_price > 2000";
+  }
+}
+
 // $sql .= " ORDER BY p.product_id";
 // Add the LIMIT clause for pagination with OFFSET
 $sql .= " ORDER BY p.product_id LIMIT $startFrom, $productsPerPage";
@@ -50,12 +64,30 @@ $result = $conn->query($sql);
 $noResultsFound = $result->num_rows === 0;
 
 // Fetch the total number of products for pagination calculation
+// $totalResult = $conn->query("SELECT COUNT(*) AS total FROM PRODUCT p INNER JOIN product_info pi ON p.product_id = pi.product_id WHERE p.product_name LIKE '%" . $conn->real_escape_string($searchTerm) . "%'");
+
+// Fetch the total number of products for pagination calculation
 $totalResult = $conn->query("SELECT COUNT(*) AS total FROM PRODUCT p INNER JOIN product_info pi ON p.product_id = pi.product_id WHERE p.product_name LIKE '%" . $conn->real_escape_string($searchTerm) . "%'");
+if ($priceRange) {
+  if ($priceRange == 'low') {
+    $totalResult = $conn->query("SELECT COUNT(*) AS total FROM PRODUCT p INNER JOIN product_info pi ON p.product_id = pi.product_id WHERE pi.new_price <= 400");
+  } elseif ($priceRange == 'mid') {
+    $totalResult = $conn->query("SELECT COUNT(*) AS total FROM PRODUCT p INNER JOIN product_info pi ON p.product_id = pi.product_id WHERE pi.new_price > 400 AND pi.new_price <= 2000");
+  } elseif ($priceRange == 'high') {
+    $totalResult = $conn->query("SELECT COUNT(*) AS total FROM PRODUCT p INNER JOIN product_info pi ON p.product_id = pi.product_id WHERE pi.new_price > 2000");
+  }
+}
+
+
+
 $totalRow = $totalResult->fetch_assoc();
 $totalProducts = $totalRow['total'];
 
 // Calculate the total number of pages
 $totalPages = ceil($totalProducts / $productsPerPage);
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -304,6 +336,7 @@ $totalPages = ceil($totalProducts / $productsPerPage);
         xhr.open("POST", "store_purchase.php", true);
         xhr.setRequestHeader("Content-Type", "application/json");
 
+
         xhr.onload = function() {
           if (xhr.status === 200) {
             const response = JSON.parse(xhr.responseText);
@@ -317,7 +350,10 @@ $totalPages = ceil($totalProducts / $productsPerPage);
               totalCartPrice = 0;
               document.getElementById("totalPrice").innerHTML = "Total Price: $0.00";
               // renderCartTable();
+              generatePDF();
               location.reload();
+              // Generate the PDF after successful purchase
+
             } else {
               alert("Failed to store purchase data: " + response.message);
               console.error("Error details:", response.message);
@@ -348,6 +384,17 @@ $totalPages = ceil($totalProducts / $productsPerPage);
     <button type="submit">Search</button>
   </form>
 
+
+  <!-- Price Range Dropdown -->
+  <form method="GET" action="" id="priceRangeForm">
+    <label for="price_range">Filter by Price Range:</label>
+    <select name="price_range" id="price_range" onchange="this.form.submit()">
+      <option value="">Select Price Range</option>
+      <option value="low" <?= isset($_GET['price_range']) && $_GET['price_range'] == 'low' ? 'selected' : '' ?>>Low (<= 400)</option>
+      <option value="mid" <?= isset($_GET['price_range']) && $_GET['price_range'] == 'mid' ? 'selected' : '' ?>>Mid (>400 <= 2000)</option>
+      <option value="high" <?= isset($_GET['price_range']) && $_GET['price_range'] == 'high' ? 'selected' : '' ?>>High (>2000)</option>
+    </select>
+  </form>
   <h3>Products</h3>
 
   <!-- Display Data from PRODUCT and product_info Tables -->
@@ -384,58 +431,61 @@ $totalPages = ceil($totalProducts / $productsPerPage);
     </tbody>
   </table>
 
-
-
-  <!-- Pagination Links -->
-  <div class="pagination">
-    <?php if ($page > 1): ?>
-      <a href="?page=1<?php echo isset($_GET['search']) ? '&search=' . urlencode($_GET['search']) : ''; ?>">First</a>
-      <a href="?page=<?php echo $page - 1; ?><?php echo isset($_GET['search']) ? '&search=' . urlencode($_GET['search']) : ''; ?>">Previous</a>
-    <?php endif; ?>
-
-    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-      <a href="?page=<?php echo $i; ?><?php echo isset($_GET['search']) ? '&search=' . urlencode($_GET['search']) : ''; ?>" <?php if ($i == $page) echo 'class="active"'; ?>>
-        <?php echo $i; ?>
-      </a>
-    <?php endfor; ?>
-
-    <?php if ($page < $totalPages): ?>
-      <a href="?page=<?php echo $page + 1; ?><?php echo isset($_GET['search']) ? '&search=' . urlencode($_GET['search']) : ''; ?>">Next</a>
-      <a href="?page=<?php echo $totalPages; ?><?php echo isset($_GET['search']) ? '&search=' . urlencode($_GET['search']) : ''; ?>">Last</a>
-    <?php endif; ?>
-  </div>
-
-  <h3>Your Cart</h3>
-  <!-- Cart Summary Table -->
-  <table border="1" id="cartTable">
-    <thead>
-      <tr>
-        <th>Product Name</th>
-        <th>Category</th>
-        <th>Quantity</th>
-        <th>Price</th>
-        <th>Total Price</th>
-        <th>Purchase Date</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Cart items will be added here dynamically -->
-    </tbody>
-  </table>
-
-  <!-- Total Price of Cart -->
-  <h4 id="totalPrice">Total Price: $0.00</h4>
-
-  <!-- Purchase Button -->
-  <button onclick="purchaseItems()">Purchase</button>
-
-  <script>
+  <div>
     <?php if ($noResultsFound): ?>
-      alert("This product is not available yet. Please try another one.");
-      window.location.href = '../consumer_db/index.php';
+      <p>No products found matching your criteria.</p>
     <?php endif; ?>
-  </script>
+
+    <!-- Pagination Links -->
+    <div class="pagination">
+      <?php if ($page > 1): ?>
+        <a href="?page=1<?php echo isset($_GET['search']) ? '&search=' . urlencode($_GET['search']) : ''; ?>">First</a>
+        <a href="?page=<?php echo $page - 1; ?><?php echo isset($_GET['search']) ? '&search=' . urlencode($_GET['search']) : ''; ?>">Previous</a>
+      <?php endif; ?>
+
+      <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+        <a href="?page=<?php echo $i; ?><?php echo isset($_GET['search']) ? '&search=' . urlencode($_GET['search']) : ''; ?>" <?php if ($i == $page) echo 'class="active"'; ?>>
+          <?php echo $i; ?>
+        </a>
+      <?php endfor; ?>
+
+      <?php if ($page < $totalPages): ?>
+        <a href="?page=<?php echo $page + 1; ?><?php echo isset($_GET['search']) ? '&search=' . urlencode($_GET['search']) : ''; ?>">Next</a>
+        <a href="?page=<?php echo $totalPages; ?><?php echo isset($_GET['search']) ? '&search=' . urlencode($_GET['search']) : ''; ?>">Last</a>
+      <?php endif; ?>
+    </div>
+
+    <h3>Your Cart</h3>
+    <!-- Cart Summary Table -->
+    <table border="1" id="cartTable">
+      <thead>
+        <tr>
+          <th>Product Name</th>
+          <th>Category</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Total Price</th>
+          <th>Purchase Date</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Cart items will be added here dynamically -->
+      </tbody>
+    </table>
+
+    <!-- Total Price of Cart -->
+    <h4 id="totalPrice">Total Price: $0.00</h4>
+
+    <!-- Purchase Button -->
+    <button onclick="purchaseItems()">Purchase</button>
+
+    <script>
+      <?php if ($noResultsFound): ?>
+        alert("This product is not available yet. Please try another one.");
+        window.location.href = '../consumer_db/index.php';
+      <?php endif; ?>
+    </script>
 </body>
 
 </html>

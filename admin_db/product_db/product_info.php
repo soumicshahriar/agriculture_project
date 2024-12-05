@@ -30,10 +30,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
     $stmt->bind_param("iidddss", $product_id, $quantity, $new_price, $old_price, $production_cost, $production_date, $expiration_date);
     if ($stmt->execute()) {
         // After successfully inserting into product_info, insert into product_info_all table
-        $sql_all = "INSERT INTO product_info_all (product_id, new_price, old_price, production_date) 
-                    VALUES (?, ?, ?, ?)";
+        $sql_all = "INSERT INTO product_info_all (product_id, new_price, old_price, quantity, production_date) 
+                    VALUES (?, ?, ?, ?, ?)";
         $stmt_all = $conn->prepare($sql_all);
-        $stmt_all->bind_param("ddds", $product_id, $new_price, $old_price, $production_date);
+        $stmt_all->bind_param("dddis", $product_id, $new_price, $old_price, $quantity, $production_date);
         if ($stmt_all->execute()) {
             echo "<p>Data added successfully!</p>";
         } else {
@@ -71,10 +71,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
     $stmt->bind_param("ddiissi", $current_price, $new_price, $quantity, $production_cost, $production_date, $expiration_date, $id);
     if ($stmt->execute()) {
         // Insert a new record into product_info_all to keep track of the change
-        $sql_all_insert = "INSERT INTO product_info_all (product_id, new_price, old_price, production_date) 
-                           VALUES (?, ?, ?, ?)";
+        $sql_all_insert = "INSERT INTO product_info_all (product_id, new_price, old_price, quantity, production_date) 
+                           VALUES (?, ?, ?, ?, ?)";
         $stmt_all = $conn->prepare($sql_all_insert);
-        $stmt_all->bind_param("ddds", $product_id, $new_price, $current_price, $production_date);
+        $stmt_all->bind_param("dddis", $product_id, $new_price, $current_price, $quantity, $production_date);
         if ($stmt_all->execute()) {
             // Redirect to reset the form
             header("Location: " . $_SERVER['PHP_SELF']); // Redirect to the same page
