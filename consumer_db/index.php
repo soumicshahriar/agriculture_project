@@ -324,8 +324,8 @@ $totalPages = ceil($totalProducts / $productsPerPage);
 
     // purchase item
     function purchaseItems() {
+      const consumer_id = sessionStorage.getItem('consumerId'); // Get consumer_id from session storage
       if (cartItems.length > 0) {
-        const consumer_id = 1; // Set the fixed consumer_id here
         const currentDate = new Date().toISOString().split('T')[0]; // Format as YYYY-MM-DD
         // Get the current date
 
