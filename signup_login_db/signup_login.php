@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param("sssss", $f_name, $l_name, $phone, $email, $password);
 
             if ($stmt->execute()) {
-                echo json_encode(["message" => "Sign-up successful!"]);
+                echo "Sign-up successful!"; 
             } else {
                 echo json_encode(["message" => "Error: " . $stmt->error]);
             }
@@ -56,7 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 "message" => "Login successful!",
                 "id" => (int)$db_id, // Ensure ID is an integer
                 "f_name" => $db_f_name,
-                "l_name" => $db_l_name
+                "l_name" => $db_l_name,
+                "consumer_id" => $db_id // Add consumer_id to the response
             ]);
         } else {
             echo json_encode(["message" => "Invalid email or password!"]);

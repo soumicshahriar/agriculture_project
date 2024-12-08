@@ -1,43 +1,58 @@
 <?php
-// Database connection
-include('../config/connect.php');
-
+session_start(); // Start the session
+include('../config/connect.php'); // Include the database connection
 
 // Fetch customer data
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id']) && !isset($_GET['get_name'])) {
     $customer_id = $_GET['id'] ?? $_SESSION['userId']; // Get customer ID from session or query parameter
 
-    $stmt = $conn->prepare("SELECT id, f_name, l_name, phone, email, password FROM customers WHERE id = ?");
+    $stmt = $conn->prepare("SELECT id, f_name, l_name, phone, email FROM customers WHERE id = ?");
     $stmt->bind_param("i", $customer_id);
     $stmt->execute();
     $result = $stmt->get_result();
     $customer = $result->fetch_assoc();
 
     if ($customer) {
-        echo json_encode($customer); // Send data as JSON
+        header('Content-Type: application/json');
+        echo json_encode($customer); // Send customer data as JSON
     } else {
-        echo "No customer found.";
+        echo json_encode(["error" => "No customer found."]);
     }
     $stmt->close();
+    exit;
 }
 
-// Fetch user name
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['get_name'])) {
-    $customer_id = $_SESSION['userId']; // Get customer ID from session
+// Fetch purchase history
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
+    $consumer_id = $_GET['id']; // Use id passed in the URL
 
-    $stmt = $conn->prepare("SELECT f_name, l_name FROM customers WHERE id = ?");
-    $stmt->bind_param("i", $customer_id);
+    // Ensure consumer_id is valid
+    if (!is_numeric($consumer_id)) {
+        echo json_encode(["error" => "Invalid consumer ID."]);
+        exit;
+    }
+
+    $stmt = $conn->prepare("SELECT product_name, quantity, price, total_price, purchase_date 
+                            FROM customer_purchase_history 
+                            WHERE consumer_id = ?");
+    if (!$stmt) {
+        echo json_encode(["error" => "Database prepare error."]);
+        exit;
+    }
+
+    $stmt->bind_param("i", $consumer_id);
     $stmt->execute();
     $result = $stmt->get_result();
-    $customer = $result->fetch_assoc();
 
-    if ($customer) {
-        $full_name = $customer['f_name'] . ' ' . $customer['l_name'];
-        echo json_encode(['name' => $full_name]); // Send full name as JSON
-    } else {
-        echo json_encode(['name' => 'Guest']); // Fallback name
+    $purchaseHistory = [];
+    while ($row = $result->fetch_assoc()) {
+        $purchaseHistory[] = $row;
     }
+
+    header('Content-Type: application/json');
+    echo json_encode($purchaseHistory); // Send purchase history as JSON
     $stmt->close();
+    exit;
 }
 
 // Update customer data
@@ -46,32 +61,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
     $f_name = $_POST['f_name'];
     $l_name = $_POST['l_name'];
     $phone = $_POST['phone'];
-    $password = $_POST['password'];
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash the password for security
 
     $stmt = $conn->prepare("UPDATE customers SET f_name = ?, l_name = ?, phone = ?, password = ? WHERE id = ?");
     $stmt->bind_param("ssssi", $f_name, $l_name, $phone, $password, $id);
 
     if ($stmt->execute()) {
-        echo "Profile updated successfully!";
+        echo json_encode(["success" => "Profile updated successfully!"]);
     } else {
-        echo "Error updating profile: " . $conn->error;
+        echo json_encode(["error" => "Error updating profile: " . $conn->error]);
     }
     $stmt->close();
+    exit;
 }
 
-// Fetch customer purchase history
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['get_purchase_history'])) {
-    $customer_id = $_SESSION['userId']; // Get customer ID from session
+// Process purchase
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['purchase'])) {
+    $consumer_id = $_SESSION['userId']; // Get consumer_id from session
+    $product_id = $_POST['product_id'];
+    $product_name = $_POST['product_name'];
+    $quantity = $_POST['quantity'];
+    $price = $_POST['price'];
+    $total_price = $quantity * $price;
+    $purchase_date = date('Y-m-d'); // Use the current date for purchase
 
-    $stmt = $conn->prepare("SELECT product_name, quantity, price, total_price, purchase_date FROM customer_purchase_history WHERE consumer_id = ?");
-    $stmt->bind_param("i", $customer_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $purchase_history = $result->fetch_all(MYSQLI_ASSOC); // Fetch all purchase history
+    $stmt = $conn->prepare("INSERT INTO customer_purchase_history 
+                            (consumer_id, product_id, product_name, quantity, price, total_price, purchase_date) 
+                            VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("iissdds", $consumer_id, $product_id, $product_name, $quantity, $price, $total_price, $purchase_date);
 
-    echo json_encode($purchase_history); // Send data as JSON
+    if ($stmt->execute()) {
+        echo json_encode(["success" => "Purchase processed successfully!"]);
+    } else {
+        echo json_encode(["error" => "Error processing purchase: " . $conn->error]);
+    }
     $stmt->close();
+    exit;
 }
 
+// If no valid endpoint was matched
+http_response_code(400);
+echo json_encode(["error" => "Invalid request."]);
 $conn->close();
 ?>
