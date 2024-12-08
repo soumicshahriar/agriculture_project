@@ -9,7 +9,7 @@
  color: white;
 }
 
-.navbar button{
+.navbar button {
  color: white;
  border: 1px solid white;
 }
@@ -26,7 +26,7 @@
  color: #3498db !important;
 }
 
-.nav-item.dropdown:hover > .dropdown-menu {
+.nav-item.dropdown:hover>.dropdown-menu {
  display: block;
 }
 
@@ -37,5 +37,3 @@
 .navbar-toggler-icon {
  background-color: white;
 }
-
-
