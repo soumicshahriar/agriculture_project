@@ -203,7 +203,7 @@ if ($resultBar->num_rows > 0) {
                 <input type="date" id="startDate" name="startDate" value="<?php echo $startDate; ?>">
                 <label for="endDate">End Date:</label>
                 <input type="date" id="endDate" name="endDate" value="<?php echo $endDate; ?>">
-                <button type="submit" class="btn btn-primary">Filter</button>
+                <button type="submit" class="btn">Filter</button>
             </form>
 
             <!-- Displaying the Table for Price Elasticity -->

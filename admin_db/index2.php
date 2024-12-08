@@ -7,93 +7,17 @@ if ($conn->connect_error) {
  die("Connection failed: " . $conn->connect_error);
 }
 
-// Get start and end date from the URL parameters (if any)
-$startDate = isset($_GET['startDate']) ? $_GET['startDate'] : '';
-$endDate = isset($_GET['endDate']) ? $_GET['endDate'] : '';
-
-
 // Query to get product names and their total quantities for consumer demand data
-
-// Build the query for filtering based on the date range
-$query = "
-    SELECT p.product_name, cph.price, SUM(cph.quantity) AS total_quantity, cph.purchase_date
-    FROM customer_purchase_history cph
-    JOIN product p ON cph.product_id = p.product_id
-";
-// If both start and end date are provided, add the WHERE clause
-if ($startDate && $endDate) {
- $query .= " WHERE cph.purchase_date BETWEEN '$startDate' AND '$endDate'";
-}
-
-// Continue the query with GROUP BY and ORDER BY
-$query .= "
- GROUP BY p.product_name, cph.price, cph.purchase_date
- ORDER BY p.product_name, cph.price, cph.purchase_date
-";
-
-
+$query = "SELECT product_name, SUM(quantity) AS total_quantity FROM customer_purchase_history GROUP BY product_name";
 $result = $conn->query($query);
-
-// Display message if a date range is selected
-if ($startDate && $endDate) {
- echo "<p>Showing data from $startDate to $endDate</p>";
-}
 
 $productNames = [];
 $quantities = [];
-$prices = [];
-$priceElasticities = [];
-$purchaseDates = []; // Array to store purchase dates
-
 
 if ($result->num_rows > 0) {
- $previousData = [];
  while ($row = $result->fetch_assoc()) {
-  $productName = $row['product_name'];
-  $price = $row['price'];
-  $quantity = $row['total_quantity'];
-  $purchaseDate = $row['purchase_date'];  // Fetch the purchase date
-
-  // Check if we already have data for this product for price elasticity calculation
-  if (isset($previousData[$productName])) {
-   $previousPrice = $previousData[$productName]['price'];
-   $previousQuantity = $previousData[$productName]['quantity'];
-
-   // Calculate % change in price and quantity
-   $priceChange = (($price - $previousPrice) / $previousPrice) * 100;
-   $quantityChange = (($quantity - $previousQuantity) / $previousQuantity) * 100;
-
-   // Calculate price elasticity of demand (PED)
-   if ($priceChange != 0) {
-    $ped = $quantityChange / $priceChange;
-   } else {
-    $ped = 0; // If no price change, PED is 0
-   }
-
-   // Store the data
-   $productNames[] = $productName;
-   $prices[] = $price;
-   $quantities[] = $quantity;
-   $purchaseDates[] = $purchaseDate;  // Store purchase date
-   $priceElasticities[] = round($ped, 2);  // Rounded to 2 decimal places
-  }
-
-  // Store current data for next iteration
-  $previousData[$productName] = ['price' => $price, 'quantity' => $quantity];
- }
-}
-
-// Query to get product names and their total quantities for consumer demand data
-$queryConsumerDemand = "SELECT product_name, SUM(quantity) AS total_quantity FROM customer_purchase_history GROUP BY product_name";
-$resultConsumerDemand = $conn->query($queryConsumerDemand);
-
-$consumerProductNames = [];
-$consumerQuantities = [];
-
-if ($resultConsumerDemand->num_rows > 0) {
- while ($row = $resultConsumerDemand->fetch_assoc()) {
-  $consumerProductNames[] = $row['product_name'];
-  $consumerQuantities[] = $row['total_quantity'];
+  $productNames[] = $row['product_name'];
+  $quantities[] = $row['total_quantity'];
  }
 }
 
@@ -135,7 +59,6 @@ if ($resultBar->num_rows > 0) {
 <body>
  <!-- Include Navbar -->
  <?php include 'navbar/nav.html'; ?>
-
 
  <!-- Sidebar Toggle Button -->
  <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
@@ -179,43 +102,6 @@ if ($resultBar->num_rows > 0) {
   <div id="consumer-demand" class="block">
    <div class="block-header">Unveiling Consumer Trends Through Purchase History Analysis</div>
    <div class="block-content">Consumption patterns, price elasticity.</div>
-
-   <!-- Date Filter Form -->
-   <form method="GET" class="date-filter-form">
-    <label for="startDate">Start Date:</label>
-    <input type="date" id="startDate" name="startDate" value="<?php echo $startDate; ?>">
-    <label for="endDate">End Date:</label>
-    <input type="date" id="endDate" name="endDate" value="<?php echo $endDate; ?>">
-    <button type="submit" class="btn btn-primary">Filter</button>
-   </form>
-
-   <!-- Displaying the Table for Price Elasticity -->
-   <table class="table table-bordered">
-    <thead>
-     <tr>
-      <th>Product Name</th>
-      <th>Price</th>
-      <th>Total Quantity</th>
-      <th>Purchase Date</th>
-      <th>Price Elasticity of Demand (PED)</th>
-     </tr>
-    </thead>
-    <tbody>
-     <?php
-     // Display the price elasticity data in table format
-     for ($i = 0; $i < count($productNames); $i++) {
-      echo "<tr>";
-      echo "<td>" . $productNames[$i] . "</td>";
-      echo "<td>" . $prices[$i] . "</td>";
-      echo "<td>" . $quantities[$i] . "</td>";
-      echo "<td>" . $purchaseDates[$i] . "</td>"; // Display purchase date
-      echo "<td>" . $priceElasticities[$i] . "</td>";
-      echo "</tr>";
-     }
-     ?>
-    </tbody>
-   </table>
-
    <div class="chart-container">
     <canvas id="consumerChart"></canvas>
    </div>

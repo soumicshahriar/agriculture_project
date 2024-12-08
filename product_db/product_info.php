@@ -178,7 +178,7 @@ if (isset($_GET['update'])) {
 </head>
 
 <body>
-    <h1>Add/Update Product Info</h1>
+    <h1 class="heading">Add/Update Product Info</h1>
 
     <!-- Product Info Form -->
     <form method="POST" action="">
@@ -225,7 +225,7 @@ if (isset($_GET['update'])) {
         <?php endif; ?>
     </form>
 
-    <h2>Product and Product Info Data</h2>
+    <h2 class="heading">Product and Product Info Data</h2>
 
     <!-- Display Data from PRODUCT and product_info Tables -->
     <?php
@@ -235,8 +235,8 @@ if (isset($_GET['update'])) {
                     <th>Product ID</th>
                     <th>Product Name</th>
                     <th>Category</th>
-                    <th>Quantity</th>
-                    <th>New Price</th>
+                    <th class='quantity'>Quantity</th>
+                    <th class='new-price'>New Price</th>
                     <th>Old Price</th>
                     <th>Production Date</th>
                     <th>Expiration Date</th>
@@ -248,8 +248,8 @@ if (isset($_GET['update'])) {
                     <td>" . htmlspecialchars($row['product_id']) . "</td>
                     <td>" . htmlspecialchars($row['product_name']) . "</td>
                     <td>" . htmlspecialchars($row['category']) . "</td>
-                    <td>" . htmlspecialchars($row['quantity']) . "</td>
-                    <td>" . (is_null($row['new_price']) ? "NULL" : htmlspecialchars($row['new_price'])) . "</td>
+                    <td class='quantity'>" . htmlspecialchars($row['quantity']) . "</td>
+                    <td class='new-price'>" . (is_null($row['new_price']) ? "NULL" : htmlspecialchars($row['new_price'])) . "</td>
                     <td>" . (is_null($row['old_price']) ? "NULL" : htmlspecialchars($row['old_price'])) . "</td>
                     <td>" . htmlspecialchars($row['production_date']) . "</td>
                     <td>" . htmlspecialchars($row['expiration_date']) . "</td>
