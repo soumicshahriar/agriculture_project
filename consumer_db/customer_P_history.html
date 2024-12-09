@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase History</title>
+    <link rel="stylesheet" href="customer_d.css">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .error-message, .no-data {
+            color: red;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Purchase History</h1>
+    <div id="history-container"></div>
+
+    <script>
+        function fetchPurchaseHistory() {
+            const userId = sessionStorage.getItem('userId'); // Assuming user ID is stored in sessionStorage
+            if (!userId) {
+                document.getElementById('history-container').innerHTML = '<p class="error-message">User not logged in!</p>';
+                return;
+            }
+
+            fetch(`customer_d.php?history=true&id=${userId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById('history-container').innerHTML = `<p class="error-message">${data.error}</p>`;
+                        return;
+                    }
+
+                    if (data.length === 0) {
+                        document.getElementById('history-container').innerHTML = `<p class="no-data">No purchase history available.</p>`;
+                        return;
+                    }
+
+                    let table = `<table>
+                                    <thead>
+                                        <tr>
+                                            <th>Product Name</th>
+                                            <th>Quantity</th>
+                                            <th>Price</th>
+                                            <th>Total Price</th>
+                                            <th>Purchase Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>`;
+                    data.forEach(item => {
+                        table += `<tr>
+                                    <td>${item.product_name}</td>
+                                    <td>${item.quantity}</td>
+                                    <td>${item.price}</td>
+                                    <td>${item.total_price}</td>
+                                    <td>${item.purchase_date}</td>
+                                  </tr>`;
+                    });
+                    table += '</tbody></table>';
+                    document.getElementById('history-container').innerHTML = table;
+                })
+                .catch(error => {
+                    console.error('Fetch Error:', error);
+                    document.getElementById('history-container').innerHTML = '<p class="error-message">Error loading purchase history.</p>';
+                });
+        }
+
+        // Load history on page load
+        window.onload = fetchPurchaseHistory;
+    </script>
+</body>
+</html>
