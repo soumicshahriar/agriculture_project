@@ -25,7 +25,50 @@
         <!-- Content will be loaded dynamically here -->
     </section>
 
-    <script>
+    <!-- Existing HTML code -->
+<script>
+    function loadContent(section) {
+        const contentDiv = document.getElementById('dynamic-content');
+        contentDiv.innerHTML = ''; // Clear previous content
+
+        if (section === 'cert') {
+            contentDiv.innerHTML = '<iframe src="index.php" frameborder="0" style="width: 100%; height: 100vh;"></iframe>';
+        } else if (section === 'profile') {
+            contentDiv.innerHTML = '<iframe src="customer_profile.html" frameborder="0" style="width: 100%; height: 100vh;"></iframe>';
+        } else if (section === 'history') {
+            contentDiv.innerHTML = '<iframe src="customer_P_history.html" frameborder="0" style="width: 100%; height: 100vh;"></iframe>';
+        }
+    }
+
+    document.querySelectorAll('.navbar a').forEach(link => {
+        link.addEventListener('click', (event) => {
+            event.preventDefault();
+            const section = link.getAttribute('data-section');
+            document.querySelectorAll('.navbar a').forEach(navLink => navLink.classList.remove('active'));
+            link.classList.add('active');
+            if (section === 'logout') {
+                handleLogout();
+            } else {
+                loadContent(section);
+            }
+        });
+    });
+
+    // Default load
+    loadContent('cert');
+
+            // Function to handle logout
+            function handleLogout() {
+            // Optional: Confirm logout action
+            if (confirm('Are you sure you want to logout?')) {
+                // Redirect to the logout endpoint
+                window.location.href = '../index.html'; // Update with your actual logout URL
+            }
+        }
+</script>
+
+
+    <!-- <script>
         // Function to load content dynamically
         function loadContent(section) {
             const contentDiv = document.getElementById('dynamic-content');
@@ -38,7 +81,7 @@
             } else if (section === 'profile') {
                 contentDiv.innerHTML = '<iframe src="customer_profile.html" frameborder="0" style="width: 100%; height: 100vh;"></iframe>';
             } else if (section === 'history') {
-                contentDiv.innerHTML = '<iframe src="customer_P_history.php" frameborder="0" style="width: 100%; height: 100vh;"></iframe>';
+                contentDiv.innerHTML = '<iframe src="customer_P_history.html" frameborder="0" style="width: 100%; height: 100vh;"></iframe>';
             }
         }
 
@@ -65,14 +108,7 @@
         loadContent('cert');
 
 
-        // Function to handle logout
-        function handleLogout() {
-            // Optional: Confirm logout action
-            if (confirm('Are you sure you want to logout?')) {
-                // Redirect to the logout endpoint
-                window.location.href = '../index.html'; // Update with your actual logout URL
-            }
-        }
-    </script>
+
+    </script> -->
 </body>
 </html>
