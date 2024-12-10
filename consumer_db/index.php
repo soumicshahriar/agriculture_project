@@ -327,7 +327,6 @@ $totalPages = ceil($totalProducts / $productsPerPage);
       const consumer_id = sessionStorage.getItem('consumerId'); // Get consumer_id from session storage
       if (cartItems.length > 0) {
         const currentDate = new Date().toISOString().split('T')[0]; // Format as YYYY-MM-DD
-        // Get the current date
 
         console.log('Cart Items:', cartItems); // Log cartItems before sending to the server
 
@@ -336,24 +335,13 @@ $totalPages = ceil($totalProducts / $productsPerPage);
         xhr.open("POST", "store_purchase.php", true);
         xhr.setRequestHeader("Content-Type", "application/json");
 
-
         xhr.onload = function() {
           if (xhr.status === 200) {
             const response = JSON.parse(xhr.responseText);
             if (response.status === "success") {
-              alert("Purchase successful!");
-              console.log("Server response:", response);
-              // updateProductQuantityInDatabase(product_id, quantity);
-
-              // Clear the cart and total price
-              cartItems = [];
-              totalCartPrice = 0;
-              document.getElementById("totalPrice").innerHTML = "Total Price: $0.00";
-              // renderCartTable();
+              alert("Purchase successful!"); // Show success message
+              // Call function to generate PDF and download it
               generatePDF();
-              location.reload();
-              // Generate the PDF after successful purchase
-
             } else {
               alert("Failed to store purchase data: " + response.message);
               console.error("Error details:", response.message);
@@ -372,6 +360,30 @@ $totalPages = ceil($totalProducts / $productsPerPage);
       } else {
         alert("Your cart is empty.");
       }
+    }
+
+    // Function to generate PDF
+    function generatePDF() {
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "generate_pdf.php", true);
+      xhr.setRequestHeader("Content-Type", "application/json");
+
+      xhr.responseType = 'blob'; // Set response type to blob for PDF
+
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          const blob = new Blob([xhr.response], { type: 'application/pdf' });
+          const link = document.createElement('a');
+          link.href = window.URL.createObjectURL(blob);
+          link.download = 'cart_summary.pdf';
+          link.click();
+        } else {
+          alert("Failed to generate PDF.");
+        }
+      };
+
+      // Send cartItems to generate PDF
+      xhr.send(JSON.stringify({ cartItems: cartItems }));
     }
   </script>
 </head>
