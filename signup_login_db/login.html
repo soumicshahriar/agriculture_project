@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Login</title>
+    <link rel="stylesheet" href="signup.css">
+</head>
+<body>
+    <div class="form-container">
+        <h2>Login to Your Account</h2>
+        <form id="loginForm">
+            <div class="input-field">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="input-field">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+    </div>
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(loginForm);
+            const response = await fetch('signup_login.php', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (result.message === "Login successful!") {
+                sessionStorage.setItem('userId', result.id);
+                sessionStorage.setItem('userName', result.f_name + ' ' + result.l_name);
+                sessionStorage.setItem('consumerId', result.consumer_id);
+                window.location.href = "../consumer_db/customer_d.html";
+            } else {
+                alert(result.message);
+            }
+        });
+    </script>
+</body>
+</html>

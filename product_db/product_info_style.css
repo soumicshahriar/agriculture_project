@@ -1,140 +1,231 @@
-/* General Page Styling */
+/* Body and General Layout */
 body {
- font-family: Arial, sans-serif;
- background-color: #f4f4f9;
+ font-family: 'Arial', sans-serif;
+ background-color: #939aa2;
+ /* Light blue gradient */
  color: #333;
- margin: auto;
+ margin: 0;
  padding: 0;
- width: 90%;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ justify-content: center;
+ min-height: 100vh;
  text-align: center;
+ /* Center all text */
 }
 
-h1 {
- text-align: center;
- color: #333;
- font-size: 2.5em;
- margin-bottom: 20px;
- text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
- /* Text shadow for the header */
-}
-
-/* Form container */
+/* Form Styling */
 form {
+ width: 80%;
+ margin: 30px auto;
+ padding: 25px;
  background-color: #fff;
- padding: 20px;
- margin: 20px auto;
- max-width: 600px;
- border-radius: 10px;
- box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 16px rgba(0, 0, 0, 0.1);
- transition: box-shadow 0.3s ease;
+ /* Keeps form clean and readable */
+ border: 1px solid #ddd;
+ border-radius: 8px;
+ box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Table styling */
-table {
+form h1 {
+ text-align: center;
+ margin-bottom: 20px;
+ color: #004080;
+ /* Dark blue to match background */
+ font-size: 1.8rem;
+ text-transform: uppercase;
+}
+
+/* General Input Field Styling */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select {
  width: 100%;
+ padding: 12px;
+ margin-bottom: 15px;
+ font-size: 1rem;
+ color: #004080;
+ /* Dark blue for readability */
+ background-color: #f3f8fc;
+ /* Light blue-gray for harmony */
+ border: 2px solid #bcd2e8;
+ border-radius: 5px;
+ transition: all 0.3s ease;
+ box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+ text-align: center;
+ /* Center-align text */
+}
+
+input:focus,
+select:focus {
+ border-color: #004080;
+ /* Dark blue on focus */
+ outline: none;
+ background-color: #eaf3fa;
+ /* Slightly lighter background */
+ box-shadow: 0 0 8px rgba(0, 102, 204, 0.2);
+}
+
+/* Buttons */
+form button {
+ width: 100%;
+ padding: 10px 15px;
+ font-size: 1rem;
+ font-weight: bold;
+ text-transform: uppercase;
+ color: #fff;
+ background-color: #0074d9;
+ /* Bright blue for call-to-action */
+ border: none;
+ border-radius: 5px;
+ cursor: pointer;
+ transition: background-color 0.3s ease;
+}
+
+form button:hover {
+ background-color: #005bb5;
+ /* Darker blue on hover */
+}
+
+/* Table Styling */
+table {
+ width: 90%;
+ margin: 20px auto;
  border-collapse: collapse;
- margin: 20px 0;
- box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+ overflow: hidden;
+ border-radius: 8px;
+ box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+ background-color: #fff;
 }
 
 table th,
 table td {
  padding: 12px;
- text-align: left;
+ text-align: center;
  border: 1px solid #ddd;
+ font-size: 1rem;
 }
 
 table th {
- background-color: #f8f8f8;
- color: #333;
+ background-color: #212e3b;
+ color: #fff;
  font-weight: bold;
+ text-transform: uppercase;
+ padding: 12px 15px;
+ border-bottom: 3px solid #003366;
+ box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.2), inset 0 3px 0 rgba(255, 255, 255, 0.2);
+ text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+ transition: all 0.3s ease;
 }
 
 table tr:nth-child(even) {
- background-color: #f2f2f2;
+ background-color: #f3f8fc;
+ /* Light blue-gray rows */
+}
+
+/* Highlight Quantity Column */
+table tr td:nth-child(4),
+/* Assuming Quantity is in the 4th column */
+table tr th:nth-child(4) {
+ background-color: #718394;
+ /* Light teal background */
+ font-weight: bold;
+ color: #f5f5f5;
+ /* Dark green for readability */
+ text-transform: uppercase;
+ padding: 12px 15px;
+ box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.2), inset 0 3px 0 rgba(255, 255, 255, 0.2);
+ transition: all 0.3s ease;
+}
+
+/* Highlight New Price Column */
+table tr td:nth-child(1),
+/* Assuming New Price is in the 5th column */
+table tr th:nth-child(1) {
+ background-color: #919497;
+ /* Soft orange background */
+ font-weight: bold;
+ color: #ffffff;
+ /* Dark orange for emphasis */
+ text-transform: uppercase;
+ padding: 12px 15px;
+ box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.2), inset 0 3px 0 rgba(255, 255, 255, 0.2);
+ transition: all 0.3s ease;
+}
+table tr td:nth-child(5),
+/* Assuming New Price is in the 5th column */
+table tr th:nth-child(5) {
+ background-color: #39424b;
+ /* Soft orange background */
+ font-weight: bold;
+ color: #ffffff;
+ /* Dark orange for emphasis */
+ text-transform: uppercase;
+ padding: 12px 15px;
+ box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.2), inset 0 3px 0 rgba(255, 255, 255, 0.2);
+ transition: all 0.3s ease;
 }
 
 table tr:hover {
- background-color: #f1f1f1;
- box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+ background-color: #b2bdc9;
+ /* Slightly lighter on hover */
+ transform: scale(1.01);
+ transition: transform 0.2s ease;
 }
 
-/* Form input and select fields */
-input[type="number"],
-input[type="date"],
-select,
-button {
- width: 100%;
- padding: 12px;
- margin: 10px 0;
- border: 1px solid #ccc;
- border-radius: 5px;
- box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
- font-size: 1em;
- background-color: #fff;
- transition: box-shadow 0.3s ease, border 0.3s ease;
-}
-
-/* Focus effects */
-input[type="number"]:focus,
-input[type="date"]:focus,
-select:focus,
-button:focus {
- border-color: #6c63ff;
- box-shadow: 0 0 8px rgba(108, 99, 255, 0.4);
- outline: none;
-}
-
-/* Button Styling */
-button {
- background-color: #6c63ff;
- color: #fff;
- border: none;
- cursor: pointer;
- font-size: 1.1em;
- border-radius: 5px;
- padding: 12px;
- box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
- transition: background-color 0.3s, box-shadow 0.3s ease;
-}
-
-button:hover {
- background-color: #5753d1;
- box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-/* Hover effect for actions in table */
-a {
- color: #6c63ff;
+/* Buttons in Table */
+table a {
+ display: inline-block;
  text-decoration: none;
+ color: #fff;
+ padding: 8px 12px;
+ margin: 0 5px;
+ border-radius: 5px;
+ font-size: 0.9rem;
  font-weight: bold;
- transition: color 0.3s ease;
+ text-transform: uppercase;
+ transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-a:hover {
- color: #4a40cc;
- text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+table a[href*="update"] {
+ background-color: #28a745;
+ /* Green for Update */
 }
 
-/* Card-like hover effect for rows */
-tr:hover td {
- background-color: #f9f9f9;
- box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+table a[href*="update"]:hover {
+ background-color: #1e7e34;
+ transform: scale(1.05);
 }
 
-/* Shadow for confirmation and alert messages */
-p {
- text-align: center;
- font-size: 1.2em;
- font-weight: bold;
- color: #333;
- text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+table a[href*="delete"] {
+ background-color: #dc3545;
+ /* Red for Delete */
 }
 
-p.error {
- color: red;
+table a[href*="delete"]:hover {
+ background-color: #b02a37;
+ transform: scale(1.05);
 }
 
-p.success {
- color: green;
+/* Responsive Design */
+@media (max-width: 768px) {
+ form {
+  width: 95%;
+  padding: 20px;
+ }
+
+ table {
+  width: 100%;
+  font-size: 0.9rem;
+ }
+
+ table th,
+ table td {
+  padding: 10px;
+ }
+
+ form button {
+  font-size: 0.9rem;
+ }
 }

@@ -1,0 +1,12 @@
+.card-title, .card-text{
+ text-align: center;
+ color: black;
+
+}
+.card{
+ border: 1px solid black;
+ padding: 2%;
+ margin: 2%;
+ 
+ 
+}

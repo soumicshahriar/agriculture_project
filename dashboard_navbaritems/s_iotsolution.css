@@ -1,0 +1,91 @@
+* {
+ margin: 0;
+ padding: 0;
+}
+
+body {
+ width: 100%;
+ margin: auto;
+ background: linear-gradient(145deg, #e9f2f9, #cfe0f5);
+}
+
+.container {
+ position: relative;
+ display: flex;
+ /* margin-top: -40px; */
+ min-height: 100vh;
+ /* background: #040124; */
+ align-items: center;
+ justify-content: center;
+}
+
+.container .img {
+ background: url(/dashboard_navbaritems/images/IoT.avif);
+ height: 600px;
+ width: 100%;
+ position: absolute;
+ background-size: cover;
+ background-position: center;
+ border: 1px solid black;
+ 
+
+}
+
+.container .overlay {
+ height: 600px;
+ opacity: 0.7;
+ width: 100%;
+ background: linear-gradient(270deg, #878a8a, #888b8b, #939797, #0dffeb, #00f8db);
+ position: absolute;
+ border: 4px solid gray;
+ border-block-color: #bebebe;
+ box-shadow: 8px 4px 5px rgb(40, 40, 40);
+}
+
+.text {
+ z-index: 2;
+ text-align: center;
+ color: white;
+}
+
+.card-body {
+ 
+ display: flex;
+ align-items: center;
+ padding: 3%;
+ margin: 5%;
+ border: 4px solid gray;
+ border-block-color: #bebebe;
+ box-shadow: 8px 4px 5px rgb(40, 40, 40);
+}
+
+.card {
+
+ 
+ align-items: center;
+ margin: 5%;
+ border: 4px solid gray;
+ border-block-color: #bebebe;
+ box-shadow: 8px 4px 5px rgb(40, 40, 40);
+}
+
+.card-p {
+ max-width: 50%;
+ padding: 5%;
+ align-items: center;
+ margin: 5%;
+ border: 4px solid gray;
+ border-block-color: #bebebe;
+ box-shadow: 8px 4px 5px rgb(40, 40, 40);
+}
+
+.card-p2 {
+ max-width: 50%;
+ padding: 5%;
+ align-items: center;
+ margin: 5%;
+ margin-left: 50%;
+ border: 4px solid gray;
+ border-block-color: #bebebe;
+ box-shadow: 8px 4px 5px rgb(40, 40, 40);
+}

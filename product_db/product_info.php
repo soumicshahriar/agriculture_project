@@ -23,27 +23,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
     $production_date = $_POST['production_date'];
     $expiration_date = $_POST['expiration_date'];
 
-    // Insert data into product_info table
-    $sql = "INSERT INTO product_info (product_id, quantity, new_price, old_price, production_cost, production_date, expiration_date) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("iidddss", $product_id, $quantity, $new_price, $old_price, $production_cost, $production_date, $expiration_date);
-    if ($stmt->execute()) {
-        // After successfully inserting into product_info, insert into product_info_all table
-        $sql_all = "INSERT INTO product_info_all (product_id, new_price, old_price, production_date) 
-                    VALUES (?, ?, ?, ?)";
-        $stmt_all = $conn->prepare($sql_all);
-        $stmt_all->bind_param("ddds", $product_id, $new_price, $old_price, $production_date);
-        if ($stmt_all->execute()) {
-            echo "<p>Data added successfully!</p>";
-        } else {
-            echo "<p>Error inserting into product_info_all: " . $stmt_all->error . "</p>";
-        }
-        $stmt_all->close();
+    // Check if the product_id already exists in product_info
+    $check_sql = "SELECT * FROM product_info WHERE product_id = ?";
+    $stmt_check = $conn->prepare($check_sql);
+    $stmt_check->bind_param("i", $product_id);
+    $stmt_check->execute();
+    $stmt_check_result = $stmt_check->get_result();
+
+
+    if ($stmt_check_result->num_rows > 0) {
+        // If product exists in product_info table, show the message in a pop-up
+        echo "<script>alert('Product already exists in the product_info table. You can edit the product instead of adding a new one.');</script>";
     } else {
-        echo "<p>Error: " . $stmt->error . "</p>";
+        // If product doesn't exist, proceed to insert into product_info table
+        $sql = "INSERT INTO product_info (product_id, quantity, new_price, old_price, production_cost, production_date, expiration_date) 
+                VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("iidddss", $product_id, $quantity, $new_price, $old_price, $production_cost, $production_date, $expiration_date);
+        if ($stmt->execute()) {
+            // After successfully inserting into product_info, insert into product_info_all table
+            $sql_all = "INSERT INTO product_info_all (product_id, new_price, old_price, quantity, production_date) 
+                        VALUES (?, ?, ?, ?, ?)";
+            $stmt_all = $conn->prepare($sql_all);
+            $stmt_all->bind_param("dddis", $product_id, $new_price, $old_price, $quantity, $production_date);
+            if ($stmt_all->execute()) {
+                echo "<script>alert('Data added successfully!');</script>";
+            } else {
+                echo "<p>Error inserting into product_info_all: " . $stmt_all->error . "</p>";
+            }
+            $stmt_all->close();
+        } else {
+            echo "<p>Error: " . $stmt->error . "</p>";
+        }
+        $stmt->close();
     }
-    $stmt->close();
+    $stmt_check->close();
 }
 
 // Handle update
@@ -70,15 +84,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ddiissi", $current_price, $new_price, $quantity, $production_cost, $production_date, $expiration_date, $id);
     if ($stmt->execute()) {
+
         // Insert a new record into product_info_all to keep track of the change
-        $sql_all_insert = "INSERT INTO product_info_all (product_id, new_price, old_price, production_date) 
-                           VALUES (?, ?, ?, ?)";
+        $sql_all_insert = "INSERT INTO product_info_all (product_id, new_price, old_price, quantity, production_date) 
+                           VALUES (?, ?, ?, ?, ?)";
         $stmt_all = $conn->prepare($sql_all_insert);
-        $stmt_all->bind_param("ddds", $product_id, $new_price, $current_price, $production_date);
+        $stmt_all->bind_param("dddis", $product_id, $new_price, $current_price, $quantity, $production_date);
+
         if ($stmt_all->execute()) {
             // Redirect to reset the form
-            header("Location: " . $_SERVER['PHP_SELF']); // Redirect to the same page
-            exit(); // Stop further code execution after redirect
+
+            // Success message alert, page will refresh after clicking "OK"
+            echo "
+            <script>
+                // Show success alert
+                // alert('Data updated successfully!');
+
+                // Refresh the page after the user clicks OK
+                alert('Data updated successfully!');
+setTimeout(function() {
+    window.location.href = '../product_db/product_info.php'; // Redirect to another page
+}, 0);
+           
+            </script>";
+
+            // header("Location: " . $_SERVER['PHP_SELF']); // Redirect to the same page
+            // exit(); // Stop further code execution after redirect
         } else {
             echo "<p>Error inserting into product_info_all: " . $stmt_all->error . "</p>";
         }
@@ -98,7 +129,7 @@ if (isset($_GET['delete'])) {
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $id);
     if ($stmt->execute()) {
-        echo "<p>Data deleted successfully!</p>";
+        echo "<script>alert('Data deleted successfully!');</script>";
     } else {
         echo "<p>Error: " . $stmt->error . "</p>";
     }
@@ -134,7 +165,6 @@ if (isset($_GET['update'])) {
     $product_data = $stmt->get_result()->fetch_assoc();
     $stmt->close();
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -148,7 +178,7 @@ if (isset($_GET['update'])) {
 </head>
 
 <body>
-    <h1>Add/Update Product Info</h1>
+    <h1 class="heading">Add/Update Product Info</h1>
 
     <!-- Product Info Form -->
     <form method="POST" action="">
@@ -195,7 +225,7 @@ if (isset($_GET['update'])) {
         <?php endif; ?>
     </form>
 
-    <h2>Product and Product Info Data</h2>
+    <h2 class="heading">Product and Product Info Data</h2>
 
     <!-- Display Data from PRODUCT and product_info Tables -->
     <?php
@@ -205,8 +235,8 @@ if (isset($_GET['update'])) {
                     <th>Product ID</th>
                     <th>Product Name</th>
                     <th>Category</th>
-                    <th>Quantity</th>
-                    <th>New Price</th>
+                    <th class='quantity'>Quantity</th>
+                    <th class='new-price'>New Price</th>
                     <th>Old Price</th>
                     <th>Production Date</th>
                     <th>Expiration Date</th>
@@ -218,18 +248,16 @@ if (isset($_GET['update'])) {
                     <td>" . htmlspecialchars($row['product_id']) . "</td>
                     <td>" . htmlspecialchars($row['product_name']) . "</td>
                     <td>" . htmlspecialchars($row['category']) . "</td>
-                    <td>" . htmlspecialchars($row['quantity']) . "</td>
-                    <td>" . (is_null($row['new_price']) ? "NULL" : htmlspecialchars($row['new_price'])) . "</td>
+                    <td class='quantity'>" . htmlspecialchars($row['quantity']) . "</td>
+                    <td class='new-price'>" . (is_null($row['new_price']) ? "NULL" : htmlspecialchars($row['new_price'])) . "</td>
                     <td>" . (is_null($row['old_price']) ? "NULL" : htmlspecialchars($row['old_price'])) . "</td>
                     <td>" . htmlspecialchars($row['production_date']) . "</td>
                     <td>" . htmlspecialchars($row['expiration_date']) . "</td>
                     <td>
                         <a href='?update=" . $row['id'] . "'>Edit</a> 
-                        
                     </td>
                     <td>
                         <a href='?delete=" . $row['id'] . "' onclick=\"return confirm('Are you sure?');\">Delete</a>
-                        
                     </td>
                   </tr>";
         }
@@ -238,7 +266,6 @@ if (isset($_GET['update'])) {
         echo "<p>No data found.</p>";
     }
     ?>
-
 </body>
 
 </html>

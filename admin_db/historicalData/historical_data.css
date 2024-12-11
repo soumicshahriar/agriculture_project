@@ -1,0 +1,241 @@
+/* Body and General Layout */
+
+
+/* Table Styling */
+table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+table th,
+table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+}
+
+table th {
+    background-color: #212e3b;
+    color: #fff;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 12px 15px;
+    border-bottom: 3px solid #003366;
+    box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.2), inset 0 3px 0 rgba(255, 255, 255, 0.2);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+table tr:nth-child(even) {
+    background-color: #f3f8fc;
+    /* Light blue-gray rows */
+}
+
+/* Highlight Quantity Column */
+/* Highlight Quantity Column */
+table tr td:nth-child(4),
+/* Assuming Quantity is in the 4th column */
+table tr th:nth-child(4) {
+    background-color: #718394;
+    /* Light teal background */
+    font-weight: bold;
+    color: #f5f5f5;
+    /* Dark green for readability */
+    text-transform: uppercase;
+    padding: 12px 15px;
+    box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.2), inset 0 3px 0 rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+/* Highlight New Price Column */
+table tr td:nth-child(1),
+/* Assuming New Price is in the 5th column */
+table tr th:nth-child(1) {
+    background-color: #919497;
+    /* Soft orange background */
+    font-weight: bold;
+    color: #ffffff;
+    /* Dark orange for emphasis */
+    text-transform: uppercase;
+    padding: 12px 15px;
+    box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.2), inset 0 3px 0 rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+table tr td:nth-child(3),
+/* Assuming New Price is in the 5th column */
+table tr th:nth-child(3) {
+    background-color: #39424b;
+    /* Soft orange background */
+    font-weight: bold;
+    color: #ffffff;
+    /* Dark orange for emphasis */
+    text-transform: uppercase;
+    padding: 12px 15px;
+    box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.2), inset 0 3px 0 rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+table tr:hover {
+    background-color: #b2bdc9;
+    /* Slightly lighter on hover */
+    transform: scale(1.01);
+    transition: transform 0.2s ease;
+}
+
+/* Buttons in Table */
+table a {
+    display: inline-block;
+    text-decoration: none;
+    color: #fff;
+    padding: 8px 12px;
+    margin: 0 5px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+table a[href*="update"] {
+    background-color: #28a745;
+    /* Green for Update */
+}
+
+table a[href*="update"]:hover {
+    background-color: #1e7e34;
+    transform: scale(1.05);
+}
+
+table a[href*="delete"] {
+    background-color: #dc3545;
+    /* Red for Delete */
+}
+
+table a[href*="delete"]:hover {
+    background-color: #b02a37;
+    transform: scale(1.05);
+}
+
+/* Button Styling */
+button {
+    background-color: #212e3b;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1em;
+    border-radius: 5px;
+    padding: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, box-shadow 0.3s ease;
+}
+
+button:hover {
+    background-color: #5753d1;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+
+/* Filter Container */
+.filter-container {
+    width: 80%;
+    /* Makes the filter container take up 80% of the screen width */
+    max-width: 600px;
+    /* Ensures it doesn't stretch too wide on large screens */
+    background-color: #ffffff;
+    /* White background for the filter container */
+    padding: 20px;
+    /* Adds padding inside the container */
+    margin: 20px auto;
+    /* Centers it horizontally and adds top/bottom margin */
+    border-radius: 8px;
+    /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Light shadow around the container */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Filter Form */
+.filter-container form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* Input Fields */
+.filter-container label {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.filter-container input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease;
+}
+
+.filter-container input[type="date"]:focus {
+    border-color: #5fa8d3;
+    /* Blue border on focus */
+    outline: none;
+    /* Remove outline */
+}
+
+/* Filter Button */
+.filter-container input[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background-color: #212e3b;
+    /* Dark blue background */
+    color: white;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.filter-container input[type="submit"]:hover {
+    background-color: #1a2532;
+    /* Slightly darker blue on hover */
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    form {
+        width: 95%;
+        padding: 20px;
+    }
+
+    table {
+        width: 100%;
+        font-size: 0.9rem;
+    }
+
+    table th,
+    table td {
+        padding: 10px;
+    }
+
+    form button {
+        font-size: 0.9rem;
+    }
+}

@@ -1,0 +1,169 @@
+/* General Page Styling */
+body {
+ font-family: Arial, sans-serif;
+ background-color: #f4f4f9;
+ color: #333;
+ margin: auto;
+ padding: 0;
+ /* width: 90%; */
+ text-align:end;
+}
+
+h1 {
+ text-align: center;
+ color: #333;
+ font-size: 2.5em;
+ margin-bottom: 20px;
+ text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+ /* Text shadow for the header */
+}
+
+/* Form container */
+form {
+ background-color: #fff;
+ padding: 20px;
+ margin: 20px auto;
+ max-width: 600px;
+ border-radius: 10px;
+ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 16px rgba(0, 0, 0, 0.1);
+ transition: box-shadow 0.3s ease;
+}
+
+/* Table styling */
+/* Table Styling */
+table {
+ width: 90%;
+ margin: 20px auto;
+ border-collapse: collapse;
+ overflow: hidden;
+ border-radius: 8px;
+ box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+ background-color: #fff;
+}
+
+table th,
+table td {
+ padding: 12px;
+ text-align: center;
+ border: 1px solid #ddd;
+ font-size: 1rem;
+}
+
+table th {
+ background-color: #2c3e50;
+ color: #fff;
+ font-weight: bold;
+ text-transform: uppercase;
+ padding: 12px 15px;
+ border-bottom: 3px solid #003366;
+ box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.2), inset 0 3px 0 rgba(255, 255, 255, 0.2);
+ text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+ transition: all 0.3s ease;
+}
+
+table tr:nth-child(even) {
+ background-color: #f3f8fc;
+ /* Light blue-gray rows */
+}
+
+/* Highlight Quantity Column */
+
+table tr:hover {
+ background-color: #88b5fa;
+ /* Slightly lighter on hover */
+ transform: scale(1.01);
+ transition: transform 0.2s ease;
+}
+
+/* Buttons in Table */
+table a {
+ display: inline-block;
+ text-decoration: none;
+ color: #fff;
+ padding: 8px 12px;
+ margin: 0 5px;
+ border-radius: 5px;
+ font-size: 0.9rem;
+ font-weight: bold;
+ text-transform: uppercase;
+ transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+
+
+table a[href*="update"] {
+ background-color: #28a745;
+ /* Green for Update */
+}
+
+table a[href*="update"]:hover {
+ background-color: #1e7e34;
+ transform: scale(1.05);
+}
+
+table a[href*="delete"] {
+ background-color: #dc3545;
+ /* Red for Delete */
+}
+
+table a[href*="delete"]:hover {
+ background-color: #b02a37;
+ transform: scale(1.05);
+}
+
+
+/* Button Styling */
+button {
+ background-color: #2c3e50;
+ color: #ffffff;
+ border: none;
+ cursor: pointer;
+ font-size: 1.1em;
+ border-radius: 5px;
+ padding: 8px;
+ box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+ transition: background-color 0.3s, box-shadow 0.3s ease;
+}
+
+button:hover {
+ background-color: #5753d1;
+ box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Hover effect for actions in table */
+a {
+ color: #6c63ff;
+ text-decoration: none;
+ font-weight: bold;
+ transition: color 0.3s ease;
+}
+
+a:hover {
+ color: #000000;
+ text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Card-like hover effect for rows */
+tr:hover td {
+ background-color: #f9f9f9;
+ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Shadow for confirmation and alert messages */
+p {
+ text-align: center;
+ font-size: 1.2em;
+ font-weight: bold;
+ color: #333;
+ text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+p.error {
+ color: red;
+}
+
+p.success {
+ color: green;
+}
+
+/* Style for the search card */
