@@ -1,4 +1,3 @@
-
 /* Reset some basic styles for consistency */
 * {
     margin: 0;
@@ -97,11 +96,11 @@ table td {
 
 /* Table Action Buttons */
 button[type="submit"] {
-    background-color: #28a745;
+    background-color: #16a085;
 }
 
 button[type="submit"]:hover {
-    background-color: #218838;
+    background-color: #3c70ea;
 }
 
 /* Modal styles */
