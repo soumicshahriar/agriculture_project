@@ -49,7 +49,7 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'home';
           break;
         case 'home':
         default:
-          include('home.php');
+          include('../admin_db2/home/home.php');
           break;
       }
       ?>

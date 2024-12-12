@@ -6,7 +6,7 @@ body {
  margin: auto;
  padding: 0;
  /* width: 90%; */
- text-align:end;
+ text-align: end;
 }
 
 h1 {
@@ -92,22 +92,22 @@ table a {
 
 
 table a[href*="update"] {
- background-color: #28a745;
+ background-color: #475ef2;
  /* Green for Update */
 }
 
 table a[href*="update"]:hover {
- background-color: #1e7e34;
+ background-color: #c0c7ff;
  transform: scale(1.05);
 }
 
 table a[href*="delete"] {
- background-color: #dc3545;
+ background-color: #16a085;
  /* Red for Delete */
 }
 
 table a[href*="delete"]:hover {
- background-color: #b02a37;
+ background-color: #1abc9c;
  transform: scale(1.05);
 }
 
