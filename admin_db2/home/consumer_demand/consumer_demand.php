@@ -69,7 +69,6 @@ try {
     echo "<title>Price Elasticity of Demand (PED)</title>";
     echo "<link rel='stylesheet'  href='/admin_db2/home/consumer_demand/styles.css'>"; // Linking the CSS file
 
-
     // Chart.js script
     echo "<script src='https://cdn.jsdelivr.net/npm/chart.js'></script>";
     echo "</head>";
@@ -97,7 +96,7 @@ try {
     }
     echo "</select>";
 
-    echo "<button type='submit'>Filter</button>";
+    echo "<button type='submit'>Calculate PED</button>";
     echo "</form>";
 
     // Display results in a table
