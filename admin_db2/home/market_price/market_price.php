@@ -116,7 +116,7 @@ $conn->close();
    <input type="date" name="start_date" value="<?php echo $start_date_filter; ?>" placeholder="Start Date">
    <input type="date" name="end_date" value="<?php echo $end_date_filter; ?>" placeholder="End Date">
 
-   <button type="submit" class="filter-button">Apply Filters</button>
+   <button type="submit" class="filter-button">Historical & Current Price</button>
   </form>
  </div>
 
