@@ -187,7 +187,9 @@ if ($resultBar->num_rows > 0) {
         <div id="historical-production" class="block">
             <div class="block-header">Historical Production Data</div>
             <div class="block-content">Yields, acreage, and costs over time.</div>
+            
             <div class="chart-container">
+
                 <canvas id="historicalChart"></canvas>
             </div>
         </div>
