@@ -489,8 +489,33 @@ $totalPages = ceil($totalProducts / $productsPerPage);
     <!-- Total Price of Cart -->
     <h4 id="totalPrice">Total Price: $0.00</h4>
 
+
+    <style>
+        /* Styling specifically for the Purchase button */
+        .purchase-button {
+            background-color: #4CAF50; /* Green background */
+            color: white; /* White text */
+            border: none; /* Remove default border */
+            padding: 10px 20px; /* Add padding */
+            font-size: 20px; /* Adjust font size */
+            border-radius: 5px; /* Rounded corners */
+            cursor: pointer; /* Pointer cursor on hover */
+            transition: background-color 0.3s ease; /* Smooth hover effect */
+        }
+
+        .purchase-button:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+
+        .purchase-button:active {
+            background-color: #3e8e41; /* Even darker green on click */
+        }
+    </style>
     <!-- Purchase Button -->
-    <button onclick="purchaseItems()">Purchase</button>
+    <section id="dynamic-content">
+        <!-- Content will be loaded dynamically here -->
+        <button class="purchase-button" onclick="purchaseItems()">Purchase</button>
+    </section>
 
     <script>
       <?php if ($noResultsFound): ?>
