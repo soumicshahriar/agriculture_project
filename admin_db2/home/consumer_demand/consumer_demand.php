@@ -67,7 +67,7 @@ try {
     echo "<meta charset='UTF-8'>";
     echo "<meta name='viewport' content='width=device-width, initial-scale=1.0'>";
     echo "<title>Price Elasticity of Demand (PED)</title>";
-    echo "<link rel='stylesheet'  href='/admin_db2/home/consumer_demand/styles.css'>"; // Linking the CSS file
+    echo "<link rel='stylesheet'  href='../admin_db2/home/consumer_demand/styles.css'>"; // Linking the CSS file
 
     // Chart.js script
     echo "<script src='https://cdn.jsdelivr.net/npm/chart.js'></script>";
