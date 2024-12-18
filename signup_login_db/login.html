@@ -36,38 +36,47 @@
             const result = await response.json();
 
             if (result.message === "Login successful!") {
-                // Store session data
-                sessionStorage.setItem('consumerId', result.consumer_id); // This should match the ID used in your database.
-                sessionStorage.setItem('userId', result.id || result.employee_id);
-                sessionStorage.setItem('userName', result.f_name 
-                    ? `${result.f_name} ${result.l_name}` 
-                    : result.employee_name);
-                
-                // Redirect based on user role
-                if (result.role) {
-                    switch (result.role) {
-                        case 'Market Manager':
-                            window.location.href = '../agriculture_db/index.php';
-                            break;
-                        case 'Admin':
-                            window.location.href = '../admin_db2/index.php';
-                            break;
-                        case 'Warehouse Manager':
-                            window.location.href = '../product_db/product_info.php';
-                            break;
+    // Store session data based on user type
+    if (result.consumer_id) {
+        // Handle customer login
+        sessionStorage.setItem('userId', result.consumer_id);
+        sessionStorage.setItem('userName', `${result.f_name} ${result.l_name}`);
+        sessionStorage.setItem('consumerId', result.consumer_id);
+    } else if (result.employee_id) {
+        // Handle employee login
+        sessionStorage.setItem('userId', result.employee_id);
+        sessionStorage.setItem('userName', result.employee_name);
+        sessionStorage.setItem('role', result.role); // Save role for future use
+    } else {
+        alert("Unexpected user data. Contact support.");
+        return; // Stop further execution
+    }
 
-                        default:
-                            alert("Unknown role. Contact support.");
-                            break;
-                    }
-                } else {
-                    // Default behavior for customers
-                    window.location.href = '../consumer_db/customer_d.html';
-                }
-            } else {
-                // Display error message
-                alert(result.message);
-            }
+    // Redirect based on user role
+    if (result.role) {
+        switch (result.role) {
+            case 'Market Manager':
+                window.location.href = '../agriculture_db/index.php';
+                break;
+            case 'Admin':
+                window.location.href = '../admin_db2/index.php';
+                break;
+            case 'Warehouse Manager':
+                window.location.href = '../product_db/product_info.php';
+                break;
+            default:
+                alert("Unknown role. Contact support.");
+                break;
+        }
+    } else {
+        // Default behavior for customers
+        window.location.href = '../consumer_db/customer_d.html';
+    }
+} else {
+    // Display error message
+    alert(result.message);
+}
+
         });
     </script>
 </body>

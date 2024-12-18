@@ -51,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
     <script>alert('Data added successfully!');
 
     setTimeout(function() {
-    window.location.href = '/admin_db2/index.php'; // Redirect to another page
+    window.location.href = '../admin_db2/index.php'; // Redirect to another page
 }, 0);
     </script>";
    } else {

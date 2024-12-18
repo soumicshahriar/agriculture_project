@@ -40,44 +40,50 @@
             }
         }
 
-        // Function to fetch customer data (name)
-        function fetchCustomerData() {
-            const customerId = getSessionCustomerId(); // Dynamically set customer ID from session
+// Function to fetch customer data (name)
+function fetchCustomerData() {
+    const customerId = getSessionCustomerId(); // Retrieve customer ID from session
 
-            if (!customerId) {
-                console.error('Customer ID is missing. User might not be logged in.');
-                document.getElementById('customer-name').textContent = "Customer Name"; // Fallback message
-                return;
+    if (!customerId) {
+        console.error('Customer ID is missing. User might not be logged in.');
+        document.getElementById('customer-name').textContent = "Guest User"; // Fallback message for guest users
+        return;
+    }
+
+    // Fetch customer data based on the ID
+    fetch(`customer_d.php?id=${customerId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
             }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Customer Data:', data); // Debugging line
+            if (data.f_name && data.l_name) {
+                const customerName = `${data.f_name} ${data.l_name}`;
+                document.getElementById('customer-name').textContent = customerName;
+            } else {
+                console.warn('Customer name not found in the response.');
+                document.getElementById('customer-name').textContent = "Valued Customer"; // Default text if no name found
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching customer data:', error);
+            document.getElementById('customer-name').textContent = "Error Loading Name"; // Fallback text for fetch failure
+        });
+}
 
-            // Fetch customer data based on the ID
-            fetch(`customer_d.php?id=${customerId}`)
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Customer Data:', data); // Debugging line
-                    if (data.f_name && data.l_name) {
-                        const customerName = `${data.f_name} ${data.l_name}`;
-                        document.getElementById('customer-name').textContent = customerName;
-                    } else {
-                        document.getElementById('customer-name').textContent = "Customer Name"; // Default text if no name found
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching customer data:', error);
-                    document.getElementById('customer-name').textContent = "Customer Name"; // Fallback text
-                });
-        }
+// Fetch and display customer data
+fetchCustomerData();
 
-        // Fetch and display customer data
-        fetchCustomerData();
+// Function to get customer ID from session storage
+function getSessionCustomerId() {
+    const customerId = sessionStorage.getItem('userId'); // Ensure this key matches your login logic
+    console.log('Retrieved Customer ID:', customerId); // Debugging line
+    return customerId ? parseInt(customerId, 10) : null; // Return as an integer or null if not found
+}
 
-        // Function to get customer ID from session (example implementation)
-        function getSessionCustomerId() {
-            // Example: Retrieve customer ID from session storage
-            const customerId = sessionStorage.getItem('customerId'); // Assuming you store it in session storage
-            console.log('Retrieved Customer ID:', customerId); // Debugging line
-            return customerId ? parseInt(customerId, 10) : null; // Return as an integer or null if not found
-        }
 
         // Add event listeners to navbar links
         document.querySelectorAll('.navbar a').forEach(link => {
