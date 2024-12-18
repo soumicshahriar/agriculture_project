@@ -10,9 +10,7 @@
 <body>
     <!-- ************************* Navbar ************************* -->
     <header class="header">
-        
-        
-        <h1>coustomer name</h1>
+        <h1 id="customer-name">Customer Name</h1> <!-- This will be dynamically populated -->
         <i class='bx bx-menu' id="menu-icon"></i>
         <nav class="navbar">
             <a href="#" data-section="cert" style="--vlr:1" class="active">Cert</a>
@@ -31,70 +29,82 @@
         // Function to load content dynamically
         function loadContent(section) {
             const contentDiv = document.getElementById('dynamic-content');
-            // Clear previous content
-            contentDiv.innerHTML = '';
+            contentDiv.innerHTML = ''; // Clear previous content
 
-            // Dynamically load content
             if (section === 'cert') {
                 contentDiv.innerHTML = '<iframe src="index.php" frameborder="0" style="width: 100%; height: 100vh;"></iframe>';
             } else if (section === 'profile') {
                 contentDiv.innerHTML = '<iframe src="customer_profile.html" frameborder="0" style="width: 100%; height: 100vh;"></iframe>';
             } else if (section === 'history') {
-                contentDiv.innerHTML = '<iframe src="customer_purchase_history.html" frameborder="0" style="width: 100%; height: 100vh;"></iframe>';
+                contentDiv.innerHTML = '<iframe src="customer_P_history.html" frameborder="0" style="width: 100%; height: 100vh;"></iframe>';
             }
+        }
+
+        // Function to fetch customer data (name)
+        function fetchCustomerData() {
+            const customerId = getSessionCustomerId(); // Dynamically set customer ID from session
+
+            if (!customerId) {
+                console.error('Customer ID is missing. User might not be logged in.');
+                document.getElementById('customer-name').textContent = "Customer Name"; // Fallback message
+                return;
+            }
+
+            // Fetch customer data based on the ID
+            fetch(`customer_d.php?id=${customerId}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Customer Data:', data); // Debugging line
+                    if (data.f_name && data.l_name) {
+                        const customerName = `${data.f_name} ${data.l_name}`;
+                        document.getElementById('customer-name').textContent = customerName;
+                    } else {
+                        document.getElementById('customer-name').textContent = "Customer Name"; // Default text if no name found
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching customer data:', error);
+                    document.getElementById('customer-name').textContent = "Customer Name"; // Fallback text
+                });
+        }
+
+        // Fetch and display customer data
+        fetchCustomerData();
+
+        // Function to get customer ID from session (example implementation)
+        function getSessionCustomerId() {
+            // Example: Retrieve customer ID from session storage
+            const customerId = sessionStorage.getItem('customerId'); // Assuming you store it in session storage
+            console.log('Retrieved Customer ID:', customerId); // Debugging line
+            return customerId ? parseInt(customerId, 10) : null; // Return as an integer or null if not found
         }
 
         // Add event listeners to navbar links
         document.querySelectorAll('.navbar a').forEach(link => {
             link.addEventListener('click', (event) => {
-                event.preventDefault(); // Prevent default anchor behavior
+                event.preventDefault();
                 const section = link.getAttribute('data-section');
-
-                // Highlight the active link
                 document.querySelectorAll('.navbar a').forEach(navLink => navLink.classList.remove('active'));
                 link.classList.add('active');
-
-                // Load the corresponding content or handle logout
                 if (section === 'logout') {
-                    handleLogout(); // Call the logout function
+                    handleLogout();
                 } else {
                     loadContent(section);
                 }
             });
         });
 
-        // Load default content (Cert section)
+        // Default load
         loadContent('cert');
-
-        // Function to fetch valid name from the server
-        async function fetchValidName() {
-            try {
-                const response = await fetch('customer_d.php?get_name=true'); // Call the updated endpoint
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.json();
-                return data.name; // Assuming the response contains a 'name' field
-            } catch (error) {
-                console.error('Error fetching valid name:', error);
-                return 'Guest'; // Fallback name
-            }
-        }
-
-        // Display user's name
-        document.addEventListener('DOMContentLoaded', async () => {
-            const userName = await fetchValidName();
-            
-            document.querySelector('.header .logo').textContent = userName; // Update logo with user's name
-            document.querySelector('h1').textContent = userName; // Update h1 with user's name
-        });
 
         // Function to handle logout
         function handleLogout() {
             // Optional: Confirm logout action
             if (confirm('Are you sure you want to logout?')) {
+                // Remove customer ID from session storage
+                sessionStorage.removeItem('customerId');
                 // Redirect to the logout endpoint
-                window.location.href = '../index.html'; // Update with your actual logout URL
+                window.location.href = '../index.html'; 
             }
         }
     </script>

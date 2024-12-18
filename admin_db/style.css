@@ -1,291 +1,163 @@
-<?php
-// Include the database connection file
-include('../config/connect.php');
-
-// Check connection
-if ($conn->connect_error) {
- die("Connection failed: " . $conn->connect_error);
-}
-?>
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
- <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <title>Admin Dashboard</title>
- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
- <link rel="stylesheet" href="style.css">
- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-</head>
-
-<body>
- <!-- Include Navbar -->
- <?php include 'navbar/nav.html'; ?>
-
- <!-- Sidebar Toggle Button -->
- <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
-
- <!-- Sidebar -->
- <div class="sidebar">
-  <ul>
-   <li onclick="showBlock('product-info')">Product Information</li>
-   <li onclick="showBlock('historical-production')">Historical Production Data</li>
-   <li onclick="showBlock('consumer-demand')">Consumer Demand Data</li>
-   <li onclick="showBlock('real-time-supply')">Real-Time Supply Levels</li>
-   <li onclick="showBlock('market-price')">Market Price Data</li>
-   <li onclick="showBlock('analytical-tools')">Analytical Tools</li>
-  </ul>
- </div>
-
- <!-- Main Content -->
- <div class="content">
-  <!-- Product Information Block -->
-  <div id="product-info" class="block">
-   <div class="block-header">Comprehensive Product Information</div>
-   <div class="block-content">Details on type, variety, and seasonality.</div>
-   <div class="block-content"><?php
-                              // Include another PHP file
-                              include('../admin_db/product_table/product_info.php');
-                              ?></div>
-   <div class="chart-container">
-    <canvas id="productChart"></canvas>
-   </div>
-  </div>
-
-  <!-- Historical Production Data Block -->
-  <div id="historical-production" class="block">
-   <div class="block-header">Historical Production Data</div>
-   <div class="block-content">Yields, acreage, and costs over time.</div>
-   <div class="chart-container">
-    <canvas id="historicalChart"></canvas>
-   </div>
-  </div>
-
-  <!-- Consumer Demand Data Block -->
-  <div id="consumer-demand" class="block">
-   <div class="block-header">Consumer Demand Data</div>
-   <div class="block-content">Consumption patterns, price elasticity.</div>
-   <div class="chart-container">
-    <canvas id="consumerChart"></canvas>
-   </div>
-  </div>
-
-  <!-- Real-Time Supply Levels Block -->
-  <div id="real-time-supply" class="block">
-   <div class="block-header">Real-Time Supply Levels</div>
-   <div class="block-content">Inventory, storage, and logistics data.</div>
-   <div class="chart-container">
-    <canvas id="supplyChart"></canvas>
-   </div>
-  </div>
-
-  <!-- Market Price Data Block -->
-  <div id="market-price" class="block">
-   <div class="block-header">Market Price Data</div>
-   <div class="block-content">Current and historical prices.</div>
-   <div class="chart-container">
-    <canvas id="marketPriceChart"></canvas>
-   </div>
-  </div>
-
-  <!-- Analytical Tools Block -->
-  <div id="analytical-tools" class="block">
-   <div class="block-header">Analytical Tools</div>
-   <div class="block-content">Charts, forecasting, and scenario analysis.</div>
-   <div class="chart-container">
-    <canvas id="analyticalChart"></canvas>
-   </div>
-  </div>
- </div>
-
- <!-- Script to control block visibility and sidebar toggle -->
- <script>
-  // Function to show the selected block and hide others
-  function showBlock(blockId) {
-   // Get all blocks
-   const blocks = document.querySelectorAll('.block');
-
-   // Hide all blocks
-   blocks.forEach(block => {
-    block.classList.remove('active');
-   });
-
-   // Show the selected block by adding the 'active' class
-   const selectedBlock = document.getElementById(blockId);
-   selectedBlock.classList.add('active');
-  }
-
-  // Sidebar toggle button functionality
-  function toggleSidebar() {
-   const sidebar = document.querySelector('.sidebar');
-   const content = document.querySelector('.content');
-   sidebar.classList.toggle('open');
-   content.classList.toggle('open');
-  }
-
-  // Optionally: Show the first block by default when the page loads
-  window.onload = function() {
-   // Show the first block (default view when page loads)
-   showBlock('product-info');
-  };
-
-
- </script>
-</body>
-
-</html>
-
-
---------------------------------------------------------------------------
-
 /* General Styles */
-body {
- margin: 0;
- font-family: Arial, sans-serif;
+/* General Styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
 }
 
-nav {
- background-color: #343a40;
- color: white;
- padding: 10px 0;
- position: fixed;
- width: 100%;
- top: 0;
- z-index: 1000;
+body {
+    background: linear-gradient(145deg, #e9f2f9, #cfe0f5);
+    color: #333;
+    line-height: 1.6;
 }
+
+/* Container for all content */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+
 
 .sidebar {
- background-color: #343a40;
- color: white;
- padding-top: 70px;
- /* Spacing below the navbar */
- height: 100vh;
- width: 250px;
- position: fixed;
- top: 70px;
- /* Sidebar starts below the navbar */
- left: 0;
- /* Visible by default on larger screens */
- transition: left 0.3s ease;
- /* Smooth sliding transition */
+    background-color: #2c3e50;
+    color: white;
+    padding-top: 70px;
+    /* Spacing below the navbar */
+    height: 100vh;
+    width: 250px;
+    position: fixed;
+    top: 70px;
+    /* Sidebar starts below the navbar */
+    left: 0;
+    /* Visible by default on larger screens */
+    transition: left 0.3s ease;
+    /* Smooth sliding transition */
 }
 
 .sidebar ul {
- list-style-type: none;
- padding: 0;
+    list-style-type: none;
+    padding: 0;
 }
 
 .sidebar ul li {
- padding: 15px;
- cursor: pointer;
+    padding: 15px;
+    cursor: pointer;
+    background-color: #212e3b;
 }
 
-.sidebar ul li:hover {
- background-color: #495057;
+/* .sidebar ul li:hover {
+    background-color: #5584b3;
+} */
+.sidebar li:hover {
+    background-color: #34495e;
 }
 
 .content {
- margin-left: 250px;
- padding: 20px;
- width: calc(100% - 250px);
- transition: margin-left 0.3s ease;
- /* Smooth transition for content */
- margin-top: 60px;
- /* Space for the navbar */
+    margin-left: 250px;
+    padding: 20px;
+    width: calc(100% - 250px);
+    transition: margin-left 0.3s ease;
+    /* Smooth transition for content */
+    margin-top: 60px;
+    /* Space for the navbar */
 }
 
 .block {
- display: none;
- margin-bottom: 20px;
- padding: 20px;
- border-radius: 8px;
- box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #9badbd;
+    display: none;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .block.active {
- display: block;
+    display: block;
 }
 
 /* Chart container */
 .chart-container {
- width: 100%;
- height: 400px;
+    width: 100%;
+    height: 400px;
 }
 
 
 /* Sidebar toggle button */
 .sidebar-toggle {
- position: absolute;
- top: 20px;
- left: 20px;
- background-color: #343a40;
- color: white;
- border: none;
- padding: 10px;
- cursor: pointer;
- display: none;
- /* Initially hidden on larger screens */
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: #2c3e50;
+    color: rgb(255, 255, 255);
+    border: 1px solid white;
+    padding: 10px;
+    cursor: pointer;
+    display: none;
+    /* Initially hidden on larger screens */
 }
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {
 
- /* On small screens, hide the sidebar off-screen initially */
- .sidebar {
-  left: -250px;
-  /* Initially off-screen */
-  top: 100px;
-  /* Sidebar starts below the navbar */
- }
+    /* On small screens, hide the sidebar off-screen initially */
+    .sidebar {
+        left: -250px;
+        /* Initially off-screen */
+        top: 100px;
+        /* Sidebar starts below the navbar */
+    }
 
- .content {
-  margin-left: 0;
-  width: 100%;
- }
+    .content {
+        margin-left: 0;
+        width: 100%;
+    }
 
- /* Show the sidebar toggle button on mobile */
- .sidebar-toggle {
-  display: block;
-  top: 55px;
-  width: 50px;
-  left: 0;
+    /* Show the sidebar toggle button on mobile */
+    .sidebar-toggle {
+        display: block;
+        top: 55px;
+        width: 50px;
+        left: 0;
 
- }
+    }
 
- /* When sidebar is open, slide it in */
- .sidebar.open {
-  left: 0;
-  /* Slide sidebar in from the left */
- }
+    /* When sidebar is open, slide it in */
+    .sidebar.open {
+        left: 0;
+        /* Slide sidebar in from the left */
+    }
 
- /* Adjust content area when sidebar is open */
- .content.open {
-  margin-left: 250px;
-  /* Shift content to the right */
- }
+    /* Adjust content area when sidebar is open */
+    .content.open {
+        margin-left: 250px;
+        /* Shift content to the right */
+    }
 }
 
-/* Large screens (desktops/tablets) */
+/* Large screens (desktops/.tablets) */
 @media (min-width: 769px) {
 
- /* Sidebar is visible by default and does not slide */
- .sidebar {
-  left: 0;
+    /* Sidebar is visible by default and does not slide */
+    .sidebar {
+        left: 0;
 
-  /* Sidebar is fixed on the left */
- }
+        /* Sidebar is fixed on the left */
+    }
 
- /* Content will have space for the sidebar */
- .content {
-  margin-left: 250px;
- }
+    /* Content will have space for the sidebar */
+    .content {
+        margin-left: 250px;
+    }
 
- /* Hide the sidebar toggle button on larger screens */
- .sidebar-toggle {
-  display: none;
- }
+    /* Hide the sidebar toggle button on larger screens */
+    .sidebar-toggle {
+        display: none;
+    }
 }
 
 /* Pie Chart specific styles */
@@ -301,7 +173,7 @@ nav {
         max-width: 800px;
         margin: 35px auto;
     }
-    
+
     #pieChart {
         height: 500px;
     }
@@ -312,11 +184,11 @@ nav {
         margin: 20px auto;
         padding: 15px;
     }
-    
+
     .chart-container h2 {
         font-size: 20px;
     }
-    
+
     #pieChart {
         height: 300px;
     }
@@ -324,4 +196,124 @@ nav {
 
 canvas {
     max-width: 100%;
+}
+
+/* .Table Styling */
+.table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.table th,
+.table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+}
+
+.table th {
+    background-color: #212e3b;
+    color: #fff;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 12px 15px;
+    border-bottom: 3px solid #003366;
+    box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.2), inset 0 3px 0 rgba(255, 255, 255, 0.2);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+.table tr:nth-child(even) {
+    background-color: #f3f8fc;
+    /* Light blue-gray rows */
+}
+
+/* Highlight Quantity Column */
+/* Highlight Quantity Column */
+.table tr td:nth-child(8),
+/* Assuming Quantity is in the 4th column */
+.table tr th:nth-child(8) {
+    background-color: #718394;
+    /* Light teal background */
+    font-weight: bold;
+    color: #f5f5f5;
+    /* Dark green for readability */
+    text-transform: uppercase;
+    padding: 12px 15px;
+    box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.2), inset 0 3px 0 rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+/* Highlight New Price Column */
+.table tr td:nth-child(1),
+/* Assuming New Price is in the 5th column */
+.table tr th:nth-child(1) {
+    background-color: #919497;
+    /* Soft orange background */
+    font-weight: bold;
+    color: #ffffff;
+    /* Dark orange for emphasis */
+    text-transform: uppercase;
+    padding: 12px 15px;
+    box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.2), inset 0 3px 0 rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.table tr td:nth-child(5),
+/* Assuming New Price is in the 5th column */
+.table tr th:nth-child(5) {
+    background-color: #39424b;
+    /* Soft orange background */
+    font-weight: bold;
+    color: #ffffff;
+    /* Dark orange for emphasis */
+    text-transform: uppercase;
+    padding: 12px 15px;
+    box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.2), inset 0 3px 0 rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.table tr:hover {
+    background-color: #b2bdc9;
+    /* Slightly lighter on hover */
+    transform: scale(1.01);
+    transition: transform 0.2s ease;
+}
+
+/* Buttons in .Table */
+.table a {
+    display: inline-block;
+    text-decoration: none;
+    color: #fff;
+    padding: 8px 12px;
+    margin: 0 5px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Button Styling */
+form button{
+    background-color: #212e3b;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1em;
+    border-radius: 5px;
+    padding: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, box-shadow 0.3s ease;
+}
+
+form button:hover {
+    background-color: #5753d1;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }

@@ -1,153 +1,5 @@
-/* Reset and base styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    background-color: #ffffff;
-    font-family: 'Segoe UI', system-ui, sans-serif;
-}
-
-/* Dashboard Container */
-.dashboard-container {
-    padding: 25px;
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
-/* Header Section */
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 35px;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 12px;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-}
-
-.header h1 {
-    color: #1a237e;
-    font-size: 24px;
-    font-weight: 600;
-}
-
-/* Button Styles */
-.auth-buttons {
-    display: flex;
-    gap: 12px;
-}
-
-.btn {
-    padding: 12px 24px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 14px;
-    transition: all 0.3s ease;
-}
-
-.btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.create-account {
-    background-color: #2e7d32;
-    color: white;
-}
-
-.login {
-    background-color: #1976d2;
-    color: white;
-}
-
-.logout {
-    background-color: #d32f2f;
-    color: white;
-}
-
-/* Dashboard Grid */
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 25px;
-    margin-bottom: 35px;
-}
-
-.dashboard-card {
-    background-color: #ffffff;
-    padding: 25px;
-    border-radius: 12px;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    text-decoration: none;
-    color: inherit;
-    transition: all 0.3s ease;
-}
-
-.dashboard-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    border-color: #d1d5db;
-}
-
-.dashboard-card h3 {
-    color: #1a237e;
-    margin-bottom: 10px;
-    font-size: 18px;
-}
-
-.dashboard-card p {
-    color: #64748b;
-    font-size: 14px;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .dashboard-container {
-        padding: 15px;
-    }
-
-    .header {
-        flex-direction: column;
-        text-align: center;
-        gap: 20px;
-        padding: 15px;
-    }
-
-    .dashboard-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-    body {
-        background-color: #ffffff;
-    }
-
-    .header, .dashboard-card {
-        background-color: #ffffff;
-        border: 1px solid #e5e7eb;
-    }
-
-    .header h1, .dashboard-card h3 {
-        color: #1a237e;
-    }
-
-    .dashboard-card p {
-        color: #64748b;
-    }
-}
-/* Chart Container */
+/* Forecasting Chart Section */
 .chart-container {
-    width: 100%;
     margin: 25px auto;
     text-align: center;
     background-color: #ffffff;
@@ -164,22 +16,15 @@ body {
     font-weight: 600;
 }
 
-/* Pie Chart specific styles */
-#pieChart {
-    width: 100%;
+canvas {
+    max-width: 100%;
     height: 400px;
-    margin: 0 auto;
 }
 
-/* Responsive adjustments */
 @media (min-width: 768px) {
     .chart-container {
         max-width: 800px;
         margin: 35px auto;
-    }
-    
-    #pieChart {
-        height: 500px;
     }
 }
 
@@ -188,16 +33,8 @@ body {
         margin: 20px auto;
         padding: 15px;
     }
-    
+
     .chart-container h2 {
         font-size: 20px;
     }
-    
-    #pieChart {
-        height: 300px;
-    }
-}
-
-canvas {
-    max-width: 100%;
 }
