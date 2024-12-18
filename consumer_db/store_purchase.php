@@ -18,47 +18,60 @@ $purchase_date = $data['purchase_date']; // The current date sent from JS
 $conn->begin_transaction();
 
 try {
- // Loop through each cart item and insert into purchase tables
- foreach ($cartItems as $item) {
-  $product_id = $item['product_id'];
-  $product_name = $item['product_name'];
-  $quantity = $item['quantity'];
-  $price = $item['price'];
-  $total_price = $item['total_price'];
+    // Loop through each cart item and insert into purchase tables
+    foreach ($cartItems as $item) {
+        $product_id = $item['product_id'];
+        $product_name = $item['product_name'];
+        $quantity = $item['quantity'];
+        $price = $item['price'];
+        $total_price = $item['total_price'];
 
-  // Prepare the INSERT query
-  $sql = "INSERT INTO customer_purchase_history (consumer_id, product_id, product_name, quantity, price, total_price, purchase_date) 
+        // Prepare the INSERT query
+        $sql = "INSERT INTO customer_purchase_history (consumer_id, product_id, product_name, quantity, price, total_price, purchase_date) 
                 VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-  if ($stmt = $conn->prepare($sql)) {
-   $stmt->bind_param("iisidss", $consumer_id, $product_id, $product_name, $quantity, $price, $total_price, $purchase_date);
+        if ($stmt = $conn->prepare($sql)) {
+            $stmt->bind_param("iisidss", $consumer_id, $product_id, $product_name, $quantity, $price, $total_price, $purchase_date);
 
-   // Execute the statement
-   $stmt->execute();
-  } else {
-   // Output error if the statement fails to prepare
-   throw new Exception("Failed to prepare SQL statement: " . $conn->error);
-  }
+            // Execute the statement
+            $stmt->execute();
+        } else {
+            // Output error if the statement fails to prepare
+            throw new Exception("Failed to prepare SQL statement: " . $conn->error);
+        }
 
-  // Update product quantity in the product_info table
-  $update_sql = "UPDATE product_info SET quantity = quantity - ? WHERE product_id = ?";
-  if ($update_stmt = $conn->prepare($update_sql)) {
-   $update_stmt->bind_param("ii", $quantity, $product_id);
-   $update_stmt->execute();
-  } else {
-   throw new Exception("Failed to prepare update query: " . $conn->error);
-  }
- }
 
- // Commit transaction
- $conn->commit();
+        // Insert into historical_data table
+        $historical_sql = "INSERT INTO historical_data (product_id, quantity, price, total_price, date) 
+   VALUES ( ?, ?, ?, ?, ?)";
+        if ($historical_stmt = $conn->prepare($historical_sql)) {
+            $historical_stmt->bind_param("iidss",  $product_id, $quantity, $price, $total_price, $purchase_date);
+            $historical_stmt->execute();
+        } else {
+            throw new Exception("Failed to prepare historical data insertion query: " . $conn->error);
+        }
 
- // Return success response
- echo json_encode(['status' => 'success']);
+
+
+        // Update product quantity in the product_info table
+        $update_sql = "UPDATE product_info SET quantity = quantity - ? WHERE product_id = ?";
+        if ($update_stmt = $conn->prepare($update_sql)) {
+            $update_stmt->bind_param("ii", $quantity, $product_id);
+            $update_stmt->execute();
+        } else {
+            throw new Exception("Failed to prepare update query: " . $conn->error);
+        }
+    }
+
+    // Commit transaction
+    $conn->commit();
+
+    // Return success response
+    echo json_encode(['status' => 'success']);
 } catch (Exception $e) {
- // Rollback in case of an error
- $conn->rollback();
- echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+    // Rollback in case of an error
+    $conn->rollback();
+    echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
 }
 
 // Close connection
