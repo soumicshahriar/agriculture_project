@@ -26,6 +26,7 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'home';
         <li><a href="?page=real_time_supply" class="<?php echo ($page == 'real_time_supply') ? 'active' : ''; ?>">Real-Time Supply</a></li>
         <li><a href="?page=market_price" class="<?php echo ($page == 'market_price') ? 'active' : ''; ?>">Market Price</a></li>
       </ul>
+      <a href="../index.html" class="logout-btn">Logout</a>
     </nav>
 
     <!-- Main Content -->
@@ -42,7 +43,7 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'home';
           include('../admin_db2/consumer_demand/consumer_demand.php');
           break;
         case 'real_time_supply':
-          include('real_time_supply.php');
+          include('../admin_db2/real_time_supply/real_time_supply.php');
           break;
         case 'market_price':
           include('../admin_db2/market_price/market_price.php');
