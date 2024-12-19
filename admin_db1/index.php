@@ -80,6 +80,7 @@ for ($i = 1; $i <= $futureDays; $i++) {
     <link rel="stylesheet" href="/navbar/nav.css">
     <link rel="stylesheet" href="adminStyle.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 <body>
     <div class="dashboard-container">

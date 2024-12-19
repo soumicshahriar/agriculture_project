@@ -291,7 +291,7 @@ $conn->close();
 
         <div class="container">
                 <!-- Card for employee count -->
-                <a class="card" href="/employee_db/employeeInfo.php">
+                <a class="card" href="../employee_db/employeeInfo.php">
                         <div class="card">
                                 <h2><?php echo $employeeCount; ?></h2>
                                 <p>Employees</p>

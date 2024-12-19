@@ -1,12 +1,7 @@
 <?php
-// Database credentials
-$host = "localhost";
-$username = "root";
-$password = "";
-$database = "agriculture_product_data";
 
-// Connect to the database
-$conn = new mysqli($host, $username, $password, $database);
+// Include the database connection file
+include('../config/connect.php');
 
 // Check connection
 if ($conn->connect_error) {
@@ -175,11 +170,40 @@ if (isset($_GET['update'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Info Form</title>
     <link rel="stylesheet" href="../product_db/product_info_style.css">
+    <style>
+        /* Add this CSS to position the logout button */
+        .logout-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: transparent;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .logout-btn {
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .logout-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 
 <body>
     <h1 class="heading">Add/Update Product Info</h1>
-
+    <!-- Logout Button -->
+    <button type="button" class="logout-button">
+        <a href="../index.html" class="logout-btn">Logout</a>
+    </button>
+    
     <!-- Product Info Form -->
     <form method="POST" action="">
         <input type="hidden" name="id" value="<?= $product_data ? htmlspecialchars($product_data['id']) : '' ?>">
