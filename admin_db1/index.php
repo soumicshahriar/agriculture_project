@@ -39,6 +39,36 @@ if ($resultBar->num_rows > 0) {
         $productionCosts[] = $row['production_cost'];
     }
 }
+
+// Query for Forecasting Graph: Daily Sales Data
+$queryForecast = "
+    SELECT purchase_date, SUM(total_price) AS daily_sales
+    FROM customer_purchase_history
+    GROUP BY purchase_date
+    ORDER BY purchase_date
+";
+$resultForecast = $conn->query($queryForecast);
+
+$datesForecast = [];
+$salesForecast = [];
+
+if ($resultForecast->num_rows > 0) {
+    while ($row = $resultForecast->fetch_assoc()) {
+        $datesForecast[] = $row['purchase_date'];
+        $salesForecast[] = $row['daily_sales'];
+    }
+}
+
+// Calculate future sales estimates
+$futureDays = 7; // Number of future days to estimate
+$lastDate = new DateTime(end($datesForecast));
+$averageDailySales = array_sum($salesForecast) / count($salesForecast);
+
+for ($i = 1; $i <= $futureDays; $i++) {
+    $lastDate->modify('+1 day');
+    $datesForecast[] = $lastDate->format('Y-m-d');
+    $salesForecast[] = $averageDailySales; // Simple average projection
+}
 ?>
 
 <!DOCTYPE html>
@@ -50,6 +80,7 @@ if ($resultBar->num_rows > 0) {
     <link rel="stylesheet" href="/navbar/nav.css">
     <link rel="stylesheet" href="adminStyle.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 <body>
     <div class="dashboard-container">
@@ -95,6 +126,12 @@ if ($resultBar->num_rows > 0) {
             <h2>Market Price Data</h2>
             <canvas id="priceChart"></canvas>
         </div>
+
+        <!-- Forecasting Chart Section -->
+        <div class="chart-container">
+            <h2>Sales Forecast</h2>
+            <canvas id="forecastChart"></canvas>
+        </div>
     </div>
 
     <script>
@@ -102,7 +139,6 @@ if ($resultBar->num_rows > 0) {
         const productNamesPie = <?php echo json_encode($productNamesPie); ?>;
         const quantitiesPie = <?php echo json_encode($quantitiesPie); ?>;
 
-        // Create the pie chart
         const pieCtx = document.getElementById('productChart').getContext('2d');
         const productChart = new Chart(pieCtx, {
             type: 'pie',
@@ -112,11 +148,7 @@ if ($resultBar->num_rows > 0) {
                     label: 'Quantity',
                     data: quantitiesPie,
                     backgroundColor: [
-                        '#ff6384',
-                        '#36a2eb',
-                        '#cc65fe',
-                        '#ffce56',
-                        '#2ecc71'
+                        '#ff6384', '#36a2eb', '#cc65fe', '#ffce56', '#2ecc71'
                     ],
                     borderColor: ['#ffffff'],
                     borderWidth: 1
@@ -124,14 +156,7 @@ if ($resultBar->num_rows > 0) {
             },
             options: {
                 responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    tooltip: {
-                        enabled: true
-                    }
-                }
+                plugins: { legend: { position: 'top' }, tooltip: { enabled: true } }
             }
         });
 
@@ -141,55 +166,44 @@ if ($resultBar->num_rows > 0) {
         const oldPrices = <?php echo json_encode($oldPrices); ?>;
         const productionCosts = <?php echo json_encode($productionCosts); ?>;
 
-        // Create the bar chart
         const barCtx = document.getElementById('priceChart').getContext('2d');
         const priceChart = new Chart(barCtx, {
             type: 'bar',
             data: {
                 labels: productNamesBar,
                 datasets: [
-                    {
-                        label: 'New Price',
-                        data: newPrices,
-                        backgroundColor: '#36a2eb',
-                        borderColor: '#1a73e8',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Old Price',
-                        data: oldPrices,
-                        backgroundColor: '#ffce56',
-                        borderColor: '#ffa000',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Production Cost',
-                        data: productionCosts,
-                        backgroundColor: '#ff6384',
-                        borderColor: '#d32f2f',
-                        borderWidth: 1
-                    }
+                    { label: 'New Price', data: newPrices, backgroundColor: '#36a2eb' },
+                    { label: 'Old Price', data: oldPrices, backgroundColor: '#ffce56' },
+                    { label: 'Production Cost', data: productionCosts, backgroundColor: '#ff6384' }
                 ]
             },
             options: {
                 responsive: true,
-                scales: {
-                    x: {
-                        beginAtZero: true,
-                        stacked: false
-                    },
-                    y: {
-                        beginAtZero: true
-                    }
-                },
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    tooltip: {
-                        enabled: true
-                    }
-                }
+                scales: { y: { beginAtZero: true } },
+                plugins: { legend: { position: 'top' }, tooltip: { enabled: true } }
+            }
+        });
+
+        // Data for the forecasting chart
+        const datesForecast = <?php echo json_encode($datesForecast); ?>;
+        const salesForecast = <?php echo json_encode($salesForecast); ?>;
+
+        const forecastCtx = document.getElementById('forecastChart').getContext('2d');
+        const forecastChart = new Chart(forecastCtx, {
+            type: 'line',
+            data: {
+                labels: datesForecast,
+                datasets: [{
+                    label: 'Daily Sales',
+                    data: salesForecast,
+                    borderColor: '#4caf50',
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: { y: { beginAtZero: true } },
+                plugins: { legend: { position: 'top' }, tooltip: { enabled: true } }
             }
         });
     </script>

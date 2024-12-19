@@ -10,16 +10,18 @@ if ($conn->connect_error) {
 
 // Check request type
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Sign-up functionality
+    // Sign-up functionality (for customers only)
     if (isset($_POST['f_name'], $_POST['l_name'], $_POST['phone'], $_POST['email'], $_POST['password'])) {
         $f_name = trim($_POST['f_name']);
         $l_name = trim($_POST['l_name']);
         $phone = trim($_POST['phone']);
         $email = trim($_POST['email']);
-        $password = trim($_POST['password']); // Storing password as plain text (NOT RECOMMENDED)
+        $password = trim($_POST['password']); 
 
         // Check if email already exists
         $stmt = $conn->prepare("SELECT email FROM customers WHERE email = ?");
+        $stmt = $conn->prepare("SELECT email FROM employee WHERE email = ?");
+
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $stmt->store_result();
@@ -41,10 +43,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $stmt->close();
     } elseif (isset($_POST['email'], $_POST['password'])) {
-        // Login functionality
         $email = trim($_POST['email']);
         $password = trim($_POST['password']);
 
+        // Check for customers
         $stmt = $conn->prepare("SELECT id, f_name, l_name, password FROM customers WHERE email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
@@ -60,7 +62,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 "consumer_id" => $db_id // Add consumer_id to the response
             ]);
         } else {
-            echo json_encode(["message" => "Invalid email or password!"]);
+            $stmt->close();
+
+            // Check for employees
+            $stmt = $conn->prepare("SELECT employee_id, employee_name, role, password FROM employee WHERE email = ?");
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $stmt->bind_result($db_employee_id, $db_employee_name, $db_role, $db_password);
+
+            if ($stmt->fetch() && $password === $db_password) {
+                echo json_encode([
+                    "message" => "Login successful!",
+                    "employee_id" => (int)$db_employee_id,
+                    "employee_name" => $db_employee_name,
+                    "role" => $db_role
+                ]);
+            } else {
+                echo json_encode(["message" => "Invalid email or password!"]);
+            }
         }
 
         $stmt->close();
@@ -70,4 +89,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $conn->close();
-?>

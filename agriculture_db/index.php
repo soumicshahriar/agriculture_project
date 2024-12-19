@@ -127,6 +127,31 @@ if ($selectedManagerID) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>crop Management</title>
         <link rel="stylesheet" href="styles.css">
+        <style>
+        /* Add this CSS to position the logout button */
+        .logout-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: transparent;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .logout-btn {
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .logout-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
 
 </head>
 
@@ -147,7 +172,12 @@ if ($selectedManagerID) {
                                 <?php endwhile; ?>
                         </select>
                         <button type="submit">Load Manager Info</button>
+                        
+                        
                 </form>
+                <button type="submit" class="logout-button">
+                       <a href="../index.html" class="logout-btn">Logout</a>
+               </button>
 
 
                 <!-- Display Manager Information -->

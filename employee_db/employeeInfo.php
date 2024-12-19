@@ -58,6 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
     $employee_name = $_POST['employee_name'];
     $phone = $_POST['phone'];
     $email = $_POST['email'];
+    $password=$_POST['password'];
     $road_no = $_POST['road_no'];
     $house_no = $_POST['house_no'];
     $hire_date = $_POST['hire_date'];
@@ -77,10 +78,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
         echo "An employee with the same email or phone already exists.";
     } else {
         // Insert the new employee into the database
-        $insert_query = "INSERT INTO employee (employee_name, phone, email, road_no, house_no, hire_date, role, office_id)
-                         VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $insert_query = "INSERT INTO employee (employee_name, phone, email, road_no, house_no, hire_date, role, office_id,password)
+                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($insert_query);
-        $stmt->bind_param("ssssssss", $employee_name, $phone, $email, $road_no, $house_no, $hire_date, $role, $office_id);
+        $stmt->bind_param("sssssssss", $employee_name, $phone, $email, $road_no, $house_no, $hire_date, $role, $office_id,$password);
 
         if ($stmt->execute()) {
             // Insert into warehouse_managers table (for check_quality and add_barcode_tag)
@@ -183,6 +184,10 @@ $result = $conn->query($sql);
                 <label for="email">Email:</label>
                 <input type="email" name="email" required>
 
+                <label for="password">Password:</label>
+                <input type="password" name="password" required>
+
+
                 <label for="road_no">Road No:</label>
                 <input type="text" name="road_no" required>
 
@@ -194,7 +199,7 @@ $result = $conn->query($sql);
 
                 <label for="role">Role:</label>
                 <select name="role" required>
-                    <option value="warehouse manager">warehouse manager</option>
+                    <option value="warehouse manager">Warehouse Manager</option>
                     <option value="Market Manager">Market Manager</option>
                     <?php
                     if ($roles_result->num_rows > 0) {

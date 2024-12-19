@@ -54,7 +54,7 @@ if (isset($_GET['delete'])) {
     if ($stmt->execute()) {
         echo "<script>alert('Data deleted successfully!');
         setTimeout(function() {
-    window.location.href = '/admin_db2/index.php'; // Redirect to another page
+    window.location.href = '../admin_db2/index.php'; // Redirect to another page
 }, 0);
         
         </script>
@@ -94,7 +94,7 @@ $all_products_result = $conn->query($sql_all_products);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Info Form</title>
-    <link rel="stylesheet" href="/admin_db2/product_table/product_info_style.css">
+    <link rel="stylesheet" href="../admin_db2/product_table/product_info_style.css">
 
     <style>
         /* Container for all the cards */
@@ -207,10 +207,10 @@ $all_products_result = $conn->query($sql_all_products);
                     <td>" . htmlspecialchars($product_info['production_date']) . "</td>
                     <td>" . htmlspecialchars($product_info['expiration_date']) . "</td>
                     <td>
-                        <a href='/admin_db2/product_db/product.php?update=" . $product_info['id'] . "'>Edit</a> 
+                        <a href='../admin_db2/product_db/product.php?update=" . $product_info['id'] . "'>Edit</a> 
                     </td>
                     <td>
-                        <a href='/admin_db2/product_table/product_info.php?delete=" . $product_info['id'] . "' onclick=\"return confirm('Are you sure?');\">Delete</a>
+                        <a href='../admin_db2/product_table/product_info.php?delete=" . $product_info['id'] . "' onclick=\"return confirm('Are you sure?');\">Delete</a>
                     </td>
                 </tr>";
             }
@@ -229,10 +229,10 @@ $all_products_result = $conn->query($sql_all_products);
                         <td>" . htmlspecialchars($row['production_date']) . "</td>
                         <td>" . htmlspecialchars($row['expiration_date']) . "</td>
                         <td>
-                            <a href='/admin_db2/product_db/product.php?update=" . $row['id'] . "'>Edit</a> 
+                            <a href='../admin_db2/product_db/product.php?update=" . $row['id'] . "'>Edit</a> 
                         </td>
                         <td>
-                            <a href='/admin_db2/product_table/product_info.php?delete=" . $row['id'] . "' onclick=\"return confirm('Are you sure?');\">Delete</a>
+                            <a href='../admin_db2/product_table/product_info.php?delete=" . $row['id'] . "' onclick=\"return confirm('Are you sure?');\">Delete</a>
                         </td>
                     </tr>";
                 }

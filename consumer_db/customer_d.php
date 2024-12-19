@@ -79,7 +79,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
     $f_name = $_POST['f_name'];
     $l_name = $_POST['l_name'];
     $phone = $_POST['phone'];
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash the password for security
+    $password = $_POST['password']; // Storing password as plain text 
+
 
     $stmt = $conn->prepare("UPDATE customers SET f_name = ?, l_name = ?, phone = ?, password = ? WHERE id = ?");
     if (!$stmt) {
