@@ -181,6 +181,7 @@ if (isset($_GET['update'])) {
     <a href="/admin_db/index.php"><button style="margin-top: 25px;">back</button></a>
     <h1>Add/Update Product Info</h1>
 
+
     <!-- Product Info Form -->
     <form method="POST" action="">
         <input type="hidden" name="id" value="<?= $product_data ? htmlspecialchars($product_data['id']) : '' ?>">
