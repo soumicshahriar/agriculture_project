@@ -121,7 +121,7 @@ table a[href*="update"]:hover {
  transform: scale(1.05);
 }
 
-table a[href*="delete"] {
+table a[href*="delete_btn"] {
  background-color: #dc3545;
  /* Red for Delete */
 }
@@ -132,6 +132,9 @@ table a[href*="delete"]:hover {
 }
 
 /* Button Styling */
+.delete_btn{
+ background-color: #dc3545;
+}
 button {
  background-color: #212e3b;
  color: #fff;

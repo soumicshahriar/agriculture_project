@@ -432,7 +432,7 @@ $totalPages = ceil($totalProducts / $productsPerPage);
     <h4 id="totalPrice">Total Price: $0.00</h4>
 
     <!-- Purchase Button -->
-    <button onclick="purchaseItems()">Purchase</button>
+    <button style="margin-bottom:5px;" onclick="purchaseItems()">Purchase</button>
 
     <script>
         <?php if ($noResultsFound): ?>

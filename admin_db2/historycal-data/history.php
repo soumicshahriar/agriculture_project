@@ -8,8 +8,6 @@
   <link rel="stylesheet" href="/admin_db2/historycal-data/style.css">
   <!-- Include Chart.js library -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
 </head>
 
 <body>
@@ -21,15 +19,17 @@
 
   <!-- Date Filter Form -->
   <div class="filter-container">
-    <form method="GET" action="">
+    <form method="POST" action="">
       <input type="hidden" name="page" value="history">
       <label for="start_date">Start Date:</label>
-      <input type="date" id="start_date" name="start_date" value="<?php echo isset($_GET['start_date']) ? $_GET['start_date'] : ''; ?>">
+      <input type="date" id="start_date" name="start_date" value="<?php echo isset($_POST['start_date']) ? $_POST['start_date'] : ''; ?>">
 
       <label for="end_date">End Date:</label>
-      <input type="date" id="end_date" name="end_date" value="<?php echo isset($_GET['end_date']) ? $_GET['end_date'] : ''; ?>">
+      <input type="date" id="end_date" name="end_date" value="<?php echo isset($_POST['end_date']) ? $_POST['end_date'] : ''; ?>">
 
-      <input type="submit" value="Filter">
+      <input type="submit" name="filter" value="Filter">
+      <br>
+      <input style="background-color: red;" type="submit" name="delete" value="Delete">
     </form>
   </div>
 
@@ -48,11 +48,28 @@
     die("Connection failed: " . $conn->connect_error);
   }
 
+  // Handle delete action
+  if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
+    if (!empty($_POST['start_date']) && !empty($_POST['end_date'])) {
+      $start_date = $conn->real_escape_string($_POST['start_date']);
+      $end_date = $conn->real_escape_string($_POST['end_date']);
+
+      $delete_sql = "DELETE FROM historical_data WHERE date BETWEEN '$start_date' AND '$end_date'";
+      if ($conn->query($delete_sql) === TRUE) {
+        echo "<p>Records deleted successfully for the selected date range.</p>";
+      } else {
+        echo "<p>Error deleting records: " . $conn->error . "</p>";
+      }
+    } else {
+      echo "<p>Please specify both start and end dates for deletion.</p>";
+    }
+  }
+
   // Define the query condition for filtering by date range
   $whereClause = "";
-  if (isset($_GET['start_date']) && !empty($_GET['start_date']) && isset($_GET['end_date']) && !empty($_GET['end_date'])) {
-    $start_date = $conn->real_escape_string($_GET['start_date']);
-    $end_date = $conn->real_escape_string($_GET['end_date']);
+  if (isset($_POST['filter']) && !empty($_POST['start_date']) && !empty($_POST['end_date'])) {
+    $start_date = $conn->real_escape_string($_POST['start_date']);
+    $end_date = $conn->real_escape_string($_POST['end_date']);
     $whereClause = " WHERE h.date BETWEEN '$start_date' AND '$end_date'";  // Filter by date range
   }
 
@@ -183,8 +200,6 @@
       }
     }
   </script>
-
-  
 
 </body>
 

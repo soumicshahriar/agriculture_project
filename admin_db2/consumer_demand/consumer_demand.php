@@ -14,6 +14,26 @@ try {
     $filter_year = isset($_POST['year']) ? $_POST['year'] : date('Y');    // Default to current year
     $filter_product_name = isset($_POST['product_name']) ? $_POST['product_name'] : ''; // Filter by product name
 
+    // Handle delete operation
+    if (isset($_POST['delete'])) {
+        $delete_month = $_POST['delete_month'];
+        $delete_year = $_POST['delete_year'];
+
+        $delete_sql = "DELETE FROM customer_purchase_history 
+                       WHERE MONTH(purchase_date) = :delete_month 
+                       AND YEAR(purchase_date) = :delete_year";
+
+        $delete_stmt = $conn->prepare($delete_sql);
+        $delete_stmt->bindParam(':delete_month', $delete_month, PDO::PARAM_INT);
+        $delete_stmt->bindParam(':delete_year', $delete_year, PDO::PARAM_INT);
+
+        if ($delete_stmt->execute()) {
+            echo "<p style='color: green;'>Records for month $delete_month and year $delete_year have been successfully deleted.</p>";
+        } else {
+            echo "<p style='color: red;'>Failed to delete records for month $delete_month and year $delete_year.</p>";
+        }
+    }
+
     // SQL query to calculate PED with filters for month, year, and product name
     $sql = "
         WITH PriceQuantityChange AS (
@@ -67,7 +87,7 @@ try {
     echo "<meta charset='UTF-8'>";
     echo "<meta name='viewport' content='width=device-width, initial-scale=1.0'>";
     echo "<title>Price Elasticity of Demand (PED)</title>";
-    echo "<link rel='stylesheet' type='text/css' href='/admin_db2/consumer_demand/style.css'>"; // Linking the CSS file
+    echo "<link rel='stylesheet' type='text/css' href='../admin_db2/consumer_demand/style.css'>"; // Linking the CSS file
 
     // Chart.js script
     echo "<script src='https://cdn.jsdelivr.net/npm/chart.js'></script>";
@@ -97,6 +117,13 @@ try {
     echo "</select>";
 
     echo "<button type='submit'>Filter</button>";
+    echo "</form>";
+
+    // Add a delete button for the selected month and year
+    echo "<form method='POST' action='' onsubmit='return confirm(\"Are you sure you want to delete all records for the selected month and year?\")'>";
+    echo "<input type='hidden' name='delete_month' value='$filter_month'>";
+    echo "<input type='hidden' name='delete_year' value='$filter_year'>";
+    echo "<button type='submit' name='delete' style='background-color: red; color: white;'>Delete Records for $filter_month/$filter_year</button>";
     echo "</form>";
 
     // Display results in a table

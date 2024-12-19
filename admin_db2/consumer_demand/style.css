@@ -129,7 +129,7 @@ table tr:hover {
 table a {
  display: inline-block;
  text-decoration: none;
- color: #fff;
+ background: #fff;
  padding: 8px 12px;
  margin: 0 5px;
  border-radius: 5px;
@@ -262,7 +262,7 @@ canvas {
  border-radius: 8px;
  background-color: #ffffff;
  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
- 
+
 }
 
 
