@@ -51,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
     <script>alert('Data added successfully!');
 
     setTimeout(function() {
-    window.location.href = '../admin_db2/index.php'; // Redirect to another page
+    window.location.href = '../index.php'; // Redirect to another page
 }, 0);
     </script>";
    } else {
@@ -109,7 +109,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
                 // Refresh the page after the user clicks OK
                 alert('Data updated successfully!');
 setTimeout(function() {
-    window.location.href = '/admin_db2/index.php'; // Redirect to another page
+    window.location.href = '../index.php'; // Redirect to another page
 }, 0);
            
             </script>";
@@ -180,11 +180,11 @@ if (isset($_GET['update'])) {
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
  <title>Product Info Form</title>
- <link rel="stylesheet" href="/admin_db2/product_db/style.css">
+ <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
- <a href="/admin_db2/index.php"><button style="margin-top: 25px;">back</button></a>
+ <a href="../admin_db2/index.php"><button style="margin-top: 25px;">back</button></a>
  <h1>Add/Update Product Info</h1>
 
  <!-- Product Info Form -->

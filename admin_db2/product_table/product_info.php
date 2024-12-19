@@ -54,7 +54,7 @@ if (isset($_GET['delete'])) {
     if ($stmt->execute()) {
         echo "<script>alert('Data deleted successfully!');
         setTimeout(function() {
-    window.location.href = '../admin_db2/index.php'; // Redirect to another page
+    window.location.href = '../index.php'; // Redirect to another page
 }, 0);
         
         </script>
@@ -168,7 +168,7 @@ $all_products_result = $conn->query($sql_all_products);
         <input type="text" id="search" name="search" placeholder="Enter Product Name" required>
         <button type="submit">Search</button>
     </form>
-    <a href="/admin_db2/product_db/product.php"><button style="margin-right:auto">Add Product</button></a>
+    <a href="../admin_db2/product_db/product.php"><button style="margin-right:auto">Add Product</button></a>
     <!-- Overlay Background for the Card -->
     <div class="overlay <?php echo (count($search_result) > 0) ? 'show' : ''; ?>"></div>
 

@@ -67,8 +67,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
     $check_quality = $_POST['check_quality'];  // New field for check quality
     $add_barcode_tag = $_POST['add_barcode_tag'];  // New field for barcode tag
 
+    
+
     // Check if an employee with the same email or phone exists
     $check_query = "SELECT * FROM employee WHERE email = ? OR phone = ?";
+    $check_query = "SELECT * FROM customers WHERE email = ? OR phone = ?";
     $stmt = $conn->prepare($check_query);
     $stmt->bind_param("ss", $email, $phone);
     $stmt->execute();
@@ -103,7 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
 }
 
 // Build the SQL query to join employee and warehouse_managers table
-$sql = "SELECT e.*, wm.check_quality, wm.add_barcode_tag 
+$sql = "SELECT DISTINCT e.*, wm.check_quality, wm.add_barcode_tag 
         FROM employee e
         LEFT JOIN warehouse_managers wm ON e.employee_id = wm.employee_id
         WHERE 1=1";
@@ -134,7 +137,7 @@ $result = $conn->query($sql);
 
     <h1>Employee Information</h1>
     <!-- Include the navbar -->
-    <button><a style="text-decoration: none; color:white;" href="/admin_db2/index.php">Back</a></button>
+    <button><a style="text-decoration: none; color:white;" href="../admin_db2/index.php">Back</a></button>
     <!-- Filter Form -->
     <form method="GET" action="">
         <label for="role">Filter by Role:</label>

@@ -75,7 +75,7 @@ $conn->close();
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
  <title>Product Data</title>
- <link rel="stylesheet" href="/admin_db2/market_price/style.css">
+ <link rel="stylesheet" href="../admin_db2/market_price/style.css">
  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
@@ -248,7 +248,7 @@ $conn->close();
 
      // Send AJAX request to delete the row based on the 'id'
      const xhr = new XMLHttpRequest();
-     xhr.open('POST', '/admin_db2/market_price/delete.php', true);
+     xhr.open('POST', '../admin_db2/market_price/delete.php', true);
      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
      xhr.onreadystatechange = function() {
       if (xhr.readyState === 4 && xhr.status === 200) {
